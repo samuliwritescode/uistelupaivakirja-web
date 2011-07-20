@@ -68,7 +68,23 @@ public class RestfulController
 
     @RequestMapping(value="/{doctype}", method=RequestMethod.POST)
     @ResponseBody
-    public DOMSource putTrips(@RequestBody String content, @PathVariable String doctype)
+    public DOMSource postTrips(
+        @RequestBody String content, 
+        @PathVariable String doctype)
+    {
+        return putOrPostTrips(content, doctype, true);
+    }
+    
+    @RequestMapping(value="/{doctype}", method=RequestMethod.PUT)
+    @ResponseBody
+    public DOMSource putTrips(
+        @RequestBody String content, 
+        @PathVariable String doctype)
+    {
+        return putOrPostTrips(content, doctype, false);
+    }
+    
+    private DOMSource putOrPostTrips(String content, String doctype, boolean append)
     {
         RestfulModel.EType type = parseTypes(doctype);
         
@@ -78,7 +94,16 @@ public class RestfulController
             InputStream in = new ByteArrayInputStream(content.getBytes("ISO-8859-1"));            
             XMLReader reader = new XMLReader(model, in);
             TrollingObjectCollection objects = reader.getTrollingObjects();
-            Integer commitId = model.setTrollingObjects(type, objects);
+                        
+            Integer commitId = null;
+            if(append)
+            {
+                commitId = model.appendTrollingObjects(type, objects);
+            }else
+            {
+               commitId = model.setTrollingObjects(type, objects); 
+            }
+            
             response.setContent(commitId.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,6 +112,7 @@ public class RestfulController
         
         return response.getBody();
     }
+    
     
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(RestfulException.class)

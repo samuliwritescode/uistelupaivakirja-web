@@ -17,9 +17,9 @@
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Revision;
-import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel.EType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,6 +45,6 @@ public class TrollingObjectCollection {
     }
             
     public Collection<TrollingObject> getObjects() {
-        return m_collection;
+        return Collections.unmodifiableList(m_collection);        
     }
 }

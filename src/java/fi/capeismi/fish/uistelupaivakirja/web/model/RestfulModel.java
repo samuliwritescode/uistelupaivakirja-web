@@ -150,7 +150,93 @@ public class RestfulModel {
         dao.setObjectIdentifier(id);
         return new TrollingObject(dao);
     }
+    
+    private Integer getMaxId(Session ses, Revision rev)
+    {
+        SQLQuery q = ses.createSQLQuery("select max(object_identifier) from trollingobject where revision_id=:rev");        
+        q.setParameter("rev", rev);
+        
+        if(q.list().size() == 0)
+        {
+            return new Integer(1);
+        }
+        
+        return (Integer)q.list().get(0);
+    }
 
+    public Integer appendTrollingObjects(EType type, TrollingObjectCollection objects)
+    {       
+        TrollingObjectCollection collection = getTrollingObjects(type);
+        for(TrollingObject o: collection.getObjects())
+        {
+            Trollingobject dao = o.getDAO();
+            dao.setId(null);
+            for(Object kv: dao.getKeyvalues())
+            {
+                ((Keyvalue)kv).setId(null);
+                
+            }
+            
+            for(Object proplist: dao.getPropertylists())
+            {
+                ((Propertylist)proplist).setId(null);
+                for(Object propitem: ((Propertylist)proplist).getPropertylistitems())
+                {
+                    ((Propertylistitem)propitem).setId(null);
+                }
+            }
+        }
+        setTrollingObjects(type, collection);
+        
+        Session ses = getSession();
+        Integer retval = new Integer(0);
+        ses.beginTransaction();
+        try {
+            User user = getUser(ses, m_user);
+            Revision revision = getLatestRevision(ses, type, user);
+            retval = revision.getId();
+            int maxId = getMaxId(ses, revision).intValue();
+
+            for(TrollingObject object: objects.getObjects())
+            {
+                Trollingobject dao = object.getDAO();                
+                dao.setRevision(revision);
+                maxId++;
+                dao.setObjectIdentifier(maxId);
+                ses.persist(dao);
+
+                Set kvs = dao.getKeyvalues();
+                for(Object o: kvs)
+                {
+                    Keyvalue kv = (Keyvalue)o;           
+                    ses.persist(kv);
+                }
+                
+                Set proplists = dao.getPropertylists();
+                for(Object o: proplists)
+                {
+                    Propertylist proplist = (Propertylist)o;
+                    ses.persist(proplist);
+                    
+                    Set propitems = proplist.getPropertylistitems();
+                    for(Object o2: propitems)
+                    {
+                        Propertylistitem item = (Propertylistitem)o2;
+                        ses.persist(item);
+                    }
+                }
+
+            }        
+
+            ses.getTransaction().commit();
+        } catch (Exception e) {
+            ses.getTransaction().rollback();
+            e.printStackTrace();
+            throw new RestfulException(e.toString());
+        }
+        
+        return retval; 
+    }
     
     public Integer setTrollingObjects(EType type, TrollingObjectCollection objects)
     {                

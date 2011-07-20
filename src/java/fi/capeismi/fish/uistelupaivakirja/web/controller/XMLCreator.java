@@ -53,6 +53,7 @@ public class XMLCreator {
             Element root = doc.createElement("TrollingObjects");            
             doc.appendChild(root);
             int revision = this.objects.getRevision().getId().intValue();
+            int maxId = 0;
             
             for(TrollingObject trollingobject: this.objects.getObjects())
             {
@@ -61,10 +62,11 @@ public class XMLCreator {
                 object.setAttribute("id", new Integer(trollingobject.getId()).toString());
                 createTrollingObject(doc, object, trollingobject);
                 root.appendChild(object);
+                maxId = trollingobject.getId();
             }
                   
             root.setAttribute("revision", new Integer(revision).toString());
-            root.setAttribute("MaxId", "1");
+            root.setAttribute("MaxId", new Integer(maxId).toString());
             return new DOMSource(doc);
             
         } catch (Exception e) {
