@@ -135,7 +135,7 @@ public class XMLReader {
         for(int loop=0; loop < children.getLength(); loop++)
         {
             Node node = children.item(loop);
-            if(node.getNodeType() == Node.ELEMENT_NODE)
+            if(node.getNodeType() == Node.ELEMENT_NODE && node.hasChildNodes())
             {
                 String value = node.getChildNodes().item(0).getNodeValue();
                 if(value == null)
