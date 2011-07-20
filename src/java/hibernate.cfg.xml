@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.current_session_context_class">org.hibernate.context.ThreadLocalSessionContext</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/trolling</property>
+    <property name="hibernate.connection.username">root</property>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Trollingobject.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Revision.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Propertylistitem.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/User.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Keyvalue.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Propertylist.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

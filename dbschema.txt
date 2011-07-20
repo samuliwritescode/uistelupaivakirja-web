@@ -1,0 +1,56 @@
+DROP DATABASE IF EXISTS trolling;
+CREATE DATABASE trolling;
+USE trolling;
+
+CREATE TABLE user (
+ID INTEGER not null auto_increment primary key,
+USERNAME VARCHAR(255),
+PASSWORD VARCHAR(255)
+)ENGINE=InnoDB;
+
+CREATE TABLE revision (
+ID INTEGER not null auto_increment primary key,
+CREATION_DATE DATETIME,
+USER_ID INTEGER not null,
+    FOREIGN KEY(USER_ID)
+    REFERENCES user(ID)
+)ENGINE=InnoDB;
+
+CREATE TABLE trollingobject (
+ID INTEGER not null auto_increment primary key,
+REVISION_ID INTEGER NOT NULL,
+OBJECT_IDENTIFIER INTEGER NOT NULL,
+TYPE VARCHAR(32) NOT NULL,
+    FOREIGN KEY(REVISION_ID)
+    REFERENCES revision(ID)
+);
+
+CREATE TABLE keyvalue (
+ID INTEGER not null auto_increment primary key,
+TROLLING_ID INTEGER NOT NULL,
+KEYNAME VARCHAR(255) NOT NULL,
+VALUE TEXT CHARACTER SET utf8,
+    FOREIGN KEY(TROLLING_ID)
+    REFERENCES trollingobject(ID)
+);
+
+CREATE TABLE propertylist (
+ID INTEGER not null auto_increment primary key,
+TROLLING_ID INTEGER NOT NULL,
+    FOREIGN KEY(TROLLING_ID)
+    REFERENCES trollingobject(ID)
+);
+
+CREATE TABLE propertylistitem (
+ID INTEGER not null auto_increment primary key,
+PROPERTYLIST_ID INTEGER NOT NULL,
+KEYNAME VARCHAR(255) NOT NULL,
+VALUE TEXT,
+    FOREIGN KEY(PROPERTYLIST_ID)
+    REFERENCES propertylist(ID)
+);
+
+INSERT INTO user(USERNAME, PASSWORD) VALUES(
+'cape',
+MD5('kek')
+);

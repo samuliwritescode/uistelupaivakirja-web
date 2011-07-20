@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 19, 2011 4:55:37 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject" table="trollingobject" catalog="trolling">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="revision" class="fi.capeismi.fish.uistelupaivakirja.web.dao.Revision" fetch="select">
+            <column name="REVISION_ID" not-null="true" />
+        </many-to-one>
+        <property name="objectIdentifier" type="int">
+            <column name="OBJECT_IDENTIFIER" not-null="true" />
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="32" not-null="true" />
+        </property>
+        <set name="keyvalues" inverse="true" order-by="keyname asc">
+            <key>
+                <column name="TROLLING_ID" not-null="true" />
+            </key>
+            <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Keyvalue" />
+        </set>
+        <set name="propertylists" inverse="true" order-by="id asc">
+            <key>
+                <column name="TROLLING_ID" not-null="true" />
+            </key>
+            <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Propertylist" />
+        </set>
+    </class>
+</hibernate-mapping>
