@@ -134,6 +134,10 @@ public class DAOStore {
                 ses.delete(o);
             }
             
+            if(collectionDAO.getRevision() != oldRevision) {
+                throw new RestfulException("Cannot commit. Conflict with revision");
+            }
+                
             collectionDAO.setUser(getUser());
             collectionDAO.setRevision(oldRevision+1);
             ses.persist(collectionDAO);
