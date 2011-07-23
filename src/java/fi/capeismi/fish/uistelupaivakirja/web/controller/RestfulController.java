@@ -149,23 +149,8 @@ public class RestfulController
     }
     
     private static RestfulModel.EType parseTypes(String type)
-    {
-        if(type.equalsIgnoreCase("trips"))
-        {
-            return RestfulModel.EType.trip;
-        }
-        else if(type.equalsIgnoreCase("places"))
-        {
-            return RestfulModel.EType.place;
-        }
-        else if(type.equalsIgnoreCase("lures"))
-        {
-            return RestfulModel.EType.lure;
-        }
-        else
-        {
-            return RestfulModel.EType.unknown;
-        }
+    {     
+        return RestfulModel.parseType(type.substring(0, type.length()-1));
     }
 
 }

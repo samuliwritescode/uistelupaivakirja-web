@@ -19,6 +19,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import java.util.List;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -56,7 +57,7 @@ public class DAOStore {
                 return (Type)o;
             }
             
-            ses.getTransaction().commit();        
+            ses.getTransaction().commit();
         } 
         catch(Exception e)
         {
@@ -67,6 +68,10 @@ public class DAOStore {
     }
     
     public Collection getCollection(String typename) {
+        if(typename.equalsIgnoreCase("spinneritem")) {
+            return getSpinnerItems();
+        }
+        
         Type type = getType(typename);
         return getCollection(type);
     }    
@@ -198,6 +203,36 @@ public class DAOStore {
     private static Session getSession() {
         SessionFactory fac = TrollingHibernateUtil.getSessionFactory();
         return fac.getCurrentSession();
+    }
+
+    public Collection getSpinnerItems() {
+        Session ses = getSession();
+        ses.beginTransaction();
+        Collection retval = new Collection();
+        try {
+            SQLQuery q = ses.createSQLQuery("select keyname, value "
+                    + "from collection "
+                    + "join trollingobject on(collection_id=collection.id) "
+                    + "join event on(trolling_id=trollingobject.id) "
+                    + "join eventproperty on(event_id=event.id) "
+                    + "join keyvalue on(keyvalue_id=keyvalue.id) "
+                    + "where keyname in('fish_species', 'fish_method', 'fish_getter') and "
+                    + "user_id=1 "
+                    + "group by value "
+                    + "order by keyname, value");
+            //q.setInteger("user", getUser().getId());
+            System.out.println("now ready to list");
+            //q.
+            System.out.println("list done");
+            ses.getTransaction().commit();                   
+        } 
+        catch(Exception e)
+        {
+            ses.getTransaction().rollback();
+            throw new RestfulException(e.toString());
+        } 
+        
+        return retval;
     }
     
 }

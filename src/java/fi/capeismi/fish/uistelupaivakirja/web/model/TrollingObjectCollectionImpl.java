@@ -84,26 +84,6 @@ class TrollingObjectCollectionImpl implements TrollingObjectCollection, DAOWrapp
     @Override
     public EType getType() {
         Type type = this.m_collectionDAO.getType();
-        if(type == null)
-        {
-            return EType.unknown;
-        }
-        
-        if(type.getName().equalsIgnoreCase("trip"))
-        {
-            return EType.trip;
-        }
-        else if(type.getName().equalsIgnoreCase("place"))
-        {
-            return EType.place;
-        }
-        else if(type.getName().equalsIgnoreCase("lure"))
-        {
-            return EType.lure;
-        }
-        
-        return EType.unknown;
-    }
-   
-            
+        return RestfulModel.parseType(type.getName());
+    }               
 }

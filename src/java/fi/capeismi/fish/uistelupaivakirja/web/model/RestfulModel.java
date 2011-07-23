@@ -27,7 +27,7 @@ public class RestfulModel {
     private String m_user = null;
     private DAOStore _daoStore = null;
     
-    public enum EType {unknown, trip, place, lure};    
+    public enum EType {unknown, trip, place, lure, spinneritem};    
     
     public RestfulModel(String user)
     {
@@ -61,6 +61,14 @@ public class RestfulModel {
         DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
         this._daoStore.setCollection(dao.getDAO());
         return new Integer(dao.getDAO().getRevision());
+    }
+    
+    public static EType parseType(String type) {
+        try {
+            return RestfulModel.EType.valueOf(type);
+        } catch (Exception e) {
+            return RestfulModel.EType.unknown;
+        }
     }
         
 }
