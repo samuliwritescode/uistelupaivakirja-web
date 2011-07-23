@@ -18,6 +18,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import java.util.List;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -209,6 +210,9 @@ public class DAOStore {
         Session ses = getSession();
         ses.beginTransaction();
         Collection retval = new Collection();
+        Type type = new Type();
+        type.setName("spinneritems");
+        retval.setType(type);
         try {
             SQLQuery q = ses.createSQLQuery("select keyname, value "
                     + "from collection "
@@ -220,9 +224,23 @@ public class DAOStore {
                     + "user_id=1 "
                     + "group by value "
                     + "order by keyname, value");
+            q.addScalar("keyname", Hibernate.STRING);
+            q.addScalar("value", Hibernate.STRING);
             //q.setInteger("user", getUser().getId());
             System.out.println("now ready to list");
-            //q.
+            for(Object o: q.list()) {
+                Object[] res = (Object[])o;
+                System.out.println(res[0]+"="+res[1]);
+                Keyvalue kv = new Keyvalue();
+                Trollingobject ob = new Trollingobject();
+                Property property = new Property();
+                kv.setKeyname((String)res[0]);
+                kv.setValue((String)res[1]);
+                property.setKeyvalue(kv);
+                retval.getTrollingobjects().add(ob);
+                ob.getProperties().add(property);
+            }
+            
             System.out.println("list done");
             ses.getTransaction().commit();                   
         } 
