@@ -16,19 +16,26 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public interface TrollingObject {
-    Map<String, String> getKeyvalues();
-    int getId();
-    List<TrollingEvent> getEvents();
+public final class Factory {
+    public static TrollingObjectCollection createEmptyCollection() {
+        return new TrollingObjectCollectionImpl();
+    }
     
-    void setKeyValue(String key, String value);
-    void setId(int id);
-    void addEvent(TrollingEvent event);
+    public static TrollingObject createEmptyTrollingObject() {
+        return new TrollingObjectImpl();
+    }
+    
+    public static TrollingEvent createEmptyTrollingEvent() {
+        return new TrollingEventImpl();
+    }
+    
+    private Factory() {
+        
+    }
 }

@@ -50,7 +50,6 @@ public class LoginService {
             userquery.setString("usr", username);
             
             List users = userquery.list();
-            System.out.println("size: "+users.size());
             
             if(users.size() == 0)
             {
@@ -62,8 +61,8 @@ public class LoginService {
                 MessageDigest messageDigest = MessageDigest.getInstance("MD5");
                 messageDigest.update(password.getBytes(),0, password.length());  
                 String hashedPass = new BigInteger(1,messageDigest.digest()).toString(16);  
-                System.out.println("User from db is "+var.getPassword());
-                System.out.println("User from input is "+hashedPass);
+                //System.out.println("User from db is "+var.getPassword());
+                //System.out.println("User from input is "+hashedPass);
 
                 if(!var.getPassword().equalsIgnoreCase(hashedPass))
                 {

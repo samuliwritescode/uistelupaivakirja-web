@@ -16,16 +16,13 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Revision;
-import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
+import fi.capeismi.fish.uistelupaivakirja.web.model.Factory;
+import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingEvent;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObject;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObjectCollection;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
@@ -39,99 +36,88 @@ import org.xml.sax.SAXException;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public class XMLReader {
+    TrollingObjectCollection _collection = null;
     
-    private TrollingObjectCollection objects = new TrollingObjectCollection();
-    private RestfulModel model = null;
-    
-    public XMLReader(RestfulModel model, InputStream in) throws ParserConfigurationException, SAXException, IOException
+    public XMLReader(InputStream in) throws ParserConfigurationException, SAXException, IOException
     {
-        this.model = model;
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+        _collection = Factory.createEmptyCollection();
+        parseDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in));
+    }
+    
+    private void parseDocument(Document doc) {
         Element root = doc.getDocumentElement();
         if(root.getNodeName().equalsIgnoreCase("TrollingObjects"))
         {
-            String revision = root.getAttribute("revision");
-            if(revision.isEmpty())
-            {
-                revision = "0";
-            }
-            
-            Revision revob = new Revision();
-            revob.setId(new Integer(revision).intValue());            
-            this.objects.setRevision(revob);
-            
-            NodeList children = root.getChildNodes();
-            for(int loop=0; loop < children.getLength(); loop++)                
-            {
-                Node node = children.item(loop);
-                if(node.getNodeName().equalsIgnoreCase("TrollingObject"))
-                {
-                    readTrollingObject((Element)node);
-                }
-            }
-            
-        }        
+            readTrollingObjectCollection(root);
+        }  
     }
     
-    private void readTrollingObject(Element element)
+    
+    private void readTrollingObjectCollection(Element collection) {
+        String revision = collection.getAttribute("revision");
+        //String type = collection.getAttribute("type");
+        if(revision.isEmpty())
+        {
+            revision = "0";
+        }
+        
+        _collection.setRevision(new Integer(revision).intValue());
+        
+
+        NodeList children = collection.getChildNodes();
+        for(int loop=0; loop < children.getLength(); loop++)                
+        {
+            Node node = children.item(loop);
+            if(node.getNodeName().equalsIgnoreCase("TrollingObject"))
+            {
+                readTrollingObject((Element)node);
+            }
+        }
+    }
+    
+    private void readTrollingObject(Element trollingObjectElement)
     {
-        String typestring = element.getAttribute("type");
-        String id = element.getAttribute("id");
+        String id = trollingObjectElement.getAttribute("id");
+        TrollingObject object = Factory.createEmptyTrollingObject();
+        _collection.addTrollingObject(object);
+        object.setId(new Integer(id).intValue());
         
-        RestfulModel.EType type = RestfulModel.EType.unknown;
-        
-        if(typestring.equals("trip"))
-            type = RestfulModel.EType.trip;
-        else if(typestring.equals("lure"))
-            type = RestfulModel.EType.lure;
-        else if(typestring.equals("place"))
-            type = RestfulModel.EType.place;
-        
-        TrollingObject object = this.model.newTrollingObject(type, 
-                new Integer(id).intValue());
-        this.objects.addTrollingObject(object);
-        
-        NodeList children = element.getChildNodes();
+        NodeList children = trollingObjectElement.getChildNodes();
         for(int loop=0; loop < children.getLength(); loop++)
         {
             Node node = children.item(loop);
             if(node.getNodeName().equalsIgnoreCase("PropertyList"))
             {
-                object.addPropertyKeyValue(readPropertyList(node));
+                readPropertyList(object, node);
             }else if(node.getNodeType() == Node.ELEMENT_NODE)
             {                               
                 String value = node.getChildNodes().item(0).getNodeValue();
-                //System.out.println("name="+node.getNodeName()+", value="+value);
+
                 if(value == null)
                     value = "";
                 object.setKeyValue(node.getNodeName(), value);
             }
-            else
-            {
-               // System.out.println("unknown node: "+node.getNodeValue());
-            }
         }                
     }
     
-    private List<Map<String, String>> readPropertyList(Node propertylist) 
-    {
-        List<Map<String, String>> retval = new ArrayList<Map<String, String>>();
+    private void readPropertyList(TrollingObject object, Node propertylist) 
+    {        
         NodeList children = propertylist.getChildNodes();
         for(int loop=0; loop < children.getLength(); loop++) 
         {
             Node node = children.item(loop);
             if(node.getNodeName().equalsIgnoreCase("PropertyListItem"))
             {
-                retval.add(readPropertyListItem(node));
+                TrollingEvent event = Factory.createEmptyTrollingEvent();
+                object.addEvent(event);
+                readPropertyListItem(event, node);
             }
         }
-        return retval;
     }
     
-    private Map<String, String> readPropertyListItem(Node item)
+    private void readPropertyListItem(TrollingEvent event, Node listitem)
     {
-        Map<String, String> retval = new HashMap<String, String>();
-        NodeList children = item.getChildNodes();
+        NodeList children = listitem.getChildNodes();
         for(int loop=0; loop < children.getLength(); loop++)
         {
             Node node = children.item(loop);
@@ -142,15 +128,14 @@ public class XMLReader {
                     value = "";
                 String key = node.getNodeName();
                 
-                retval.put(key, value);
+                event.setKeyValue(key, value);
             }
         }
-        return retval;
     }
     
     public TrollingObjectCollection getTrollingObjects()
     {
-        return this.objects;
+        return this._collection;
     }
     
 }

@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingEvent;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObject;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObjectCollection;
 import java.util.List;
@@ -34,7 +35,7 @@ import org.w3c.dom.Text;
  */
 public class XMLCreator {
 
-    private TrollingObjectCollection objects;
+    private TrollingObjectCollection _collection;
     
     public XMLCreator()
     {
@@ -43,7 +44,7 @@ public class XMLCreator {
     
     public XMLCreator(TrollingObjectCollection objects)
     {
-        this.objects = objects;
+        this._collection = objects;
     }
     
     public DOMSource getSource()
@@ -52,13 +53,13 @@ public class XMLCreator {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
             Element root = doc.createElement("TrollingObjects");            
             doc.appendChild(root);
-            int revision = this.objects.getRevision().getId().intValue();
+            int revision = this._collection.getRevision();
             int maxId = 0;
             
-            for(TrollingObject trollingobject: this.objects.getObjects())
+            for(TrollingObject trollingobject: this._collection.getObjects())
             {
                 Element object = doc.createElement("TrollingObject");
-                object.setAttribute("type", trollingobject.getType().name());
+                object.setAttribute("type", this._collection.getType().name());
                 object.setAttribute("id", new Integer(trollingobject.getId()).toString());
                 createTrollingObject(doc, object, trollingobject);
                 root.appendChild(object);
@@ -89,17 +90,12 @@ public class XMLCreator {
             element.appendChild(keyvalue);
         }
         
-        List<Map<String, String>> props = object.getPropertylist();
+        List<TrollingEvent> events = object.getEvents();
         Element proplist = doc.createElement("PropertyList");
-        for(Map<String, String> prop: props)
+        for(TrollingEvent event: events)
         {
             Element item = doc.createElement("PropertyListItem");
-            for(Map.Entry<String, String> kv: prop.entrySet())
-            {
-                Element kvpair = doc.createElement(kv.getKey());
-                kvpair.appendChild(doc.createTextNode(kv.getValue()));
-                item.appendChild(kvpair);
-            }
+            createPropertyItem(doc, item, event);
             proplist.appendChild(item);
         }
         
@@ -108,6 +104,15 @@ public class XMLCreator {
             element.appendChild(proplist);
         }
         
+    }
+    
+    private void createPropertyItem(Document doc, Element item, TrollingEvent event) {
+        for(Map.Entry<String, String> kv: event.getKeyvalues().entrySet())
+        {
+            Element kvpair = doc.createElement(kv.getKey());
+            kvpair.appendChild(doc.createTextNode(kv.getValue()));
+            item.appendChild(kvpair);
+        }
     }
     
 }

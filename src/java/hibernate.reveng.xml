@@ -4,8 +4,10 @@
   <schema-selection match-catalog="trolling"/>
   <table-filter match-name="keyvalue"/>
   <table-filter match-name="user"/>
-  <table-filter match-name="propertylist"/>
-  <table-filter match-name="propertylistitem"/>
-  <table-filter match-name="revision"/>
+  <table-filter match-name="property"/>
+  <table-filter match-name="eventproperty"/>
+  <table-filter match-name="event"/>
+  <table-filter match-name="type"/>
+  <table-filter match-name="collection"/>
   <table-filter match-name="trollingobject"/>
 </hibernate-reverse-engineering>

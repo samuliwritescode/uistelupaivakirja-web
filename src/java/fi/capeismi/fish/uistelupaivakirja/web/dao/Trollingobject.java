@@ -1,8 +1,8 @@
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
-// Generated Jun 19, 2011 4:55:37 PM by Hibernate Tools 3.2.1.GA
+// Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA
 
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -12,27 +12,24 @@ public class Trollingobject  implements java.io.Serializable {
 
 
      private Integer id;
-     private Revision revision;
+     private Collection collection;
      private int objectIdentifier;
-     private String type;
-     private Set keyvalues = new HashSet(0);
-     private Set propertylists = new HashSet(0);
+     private Set<Property> properties = new LinkedHashSet<Property>(0);
+     private Set<Event> events = new LinkedHashSet<Event>(0);
 
     public Trollingobject() {
     }
 
 	
-    public Trollingobject(Revision revision, int objectIdentifier, String type) {
-        this.revision = revision;
+    public Trollingobject(Collection collection, int objectIdentifier) {
+        this.collection = collection;
         this.objectIdentifier = objectIdentifier;
-        this.type = type;
     }
-    public Trollingobject(Revision revision, int objectIdentifier, String type, Set keyvalues, Set propertylists) {
-       this.revision = revision;
+    public Trollingobject(Collection collection, int objectIdentifier, Set<Property> properties, Set<Event> events) {
+       this.collection = collection;
        this.objectIdentifier = objectIdentifier;
-       this.type = type;
-       this.keyvalues = keyvalues;
-       this.propertylists = propertylists;
+       this.properties = properties;
+       this.events = events;
     }
    
     public Integer getId() {
@@ -42,12 +39,12 @@ public class Trollingobject  implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-    public Revision getRevision() {
-        return this.revision;
+    public Collection getCollection() {
+        return this.collection;
     }
     
-    public void setRevision(Revision revision) {
-        this.revision = revision;
+    public void setCollection(Collection collection) {
+        this.collection = collection;
     }
     public int getObjectIdentifier() {
         return this.objectIdentifier;
@@ -56,26 +53,19 @@ public class Trollingobject  implements java.io.Serializable {
     public void setObjectIdentifier(int objectIdentifier) {
         this.objectIdentifier = objectIdentifier;
     }
-    public String getType() {
-        return this.type;
+    public Set<Property> getProperties() {
+        return this.properties;
     }
     
-    public void setType(String type) {
-        this.type = type;
+    public void setProperties(Set<Property> properties) {
+        this.properties = properties;
     }
-    public Set getKeyvalues() {
-        return this.keyvalues;
-    }
-    
-    public void setKeyvalues(Set keyvalues) {
-        this.keyvalues = keyvalues;
-    }
-    public Set getPropertylists() {
-        return this.propertylists;
+    public Set<Event> getEvents() {
+        return this.events;
     }
     
-    public void setPropertylists(Set propertylists) {
-        this.propertylists = propertylists;
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 
 

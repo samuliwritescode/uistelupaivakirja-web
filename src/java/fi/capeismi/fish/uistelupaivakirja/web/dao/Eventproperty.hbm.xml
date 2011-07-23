@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class catalog="trolling" name="fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty" table="eventproperty">
+    <id name="id" type="java.lang.Integer">
+      <column name="ID"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="fi.capeismi.fish.uistelupaivakirja.web.dao.Event" fetch="select" name="event">
+      <column name="EVENT_ID" not-null="true"/>
+    </many-to-one>
+    <many-to-one cascade="all" class="fi.capeismi.fish.uistelupaivakirja.web.dao.Keyvalue" fetch="select" name="keyvalue">
+      <column name="KEYVALUE_ID" not-null="true"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>

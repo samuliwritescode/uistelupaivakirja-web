@@ -16,35 +16,18 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Revision;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel.EType;
 import java.util.List;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public class TrollingObjectCollection {
-    private List<TrollingObject> m_collection = new ArrayList<TrollingObject>();
-    private Revision revision = new Revision();
-
-    public Revision getRevision() {
-        return this.revision;
-    }
-
-    public void setRevision(Revision revision) {
-        this.revision = revision;
-    }
-   
-    
-    public void addTrollingObject(TrollingObject o) {
-        o.getDAO().setRevision(this.revision);
-        this.m_collection.add(o);
-    }
-            
-    public Collection<TrollingObject> getObjects() {
-        return Collections.unmodifiableList(m_collection);        
-    }
+public interface TrollingObjectCollection {
+    int getRevision();
+    EType getType();
+    List<TrollingObject> getObjects();
+    void setRevision(int revision);
+    void setType(EType eType);    
+    void addTrollingObject(TrollingObject object);
 }

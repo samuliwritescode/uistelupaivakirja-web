@@ -8,10 +8,12 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/trolling</property>
     <property name="hibernate.connection.username">root</property>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Trollingobject.hbm.xml"/>
-    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Revision.hbm.xml"/>
-    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Propertylistitem.hbm.xml"/>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/User.hbm.xml"/>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Keyvalue.hbm.xml"/>
-    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Propertylist.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Property.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Collection.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Eventproperty.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Type.hbm.xml"/>
+    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Event.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

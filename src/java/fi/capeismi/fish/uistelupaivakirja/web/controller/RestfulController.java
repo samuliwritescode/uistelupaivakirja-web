@@ -91,17 +91,18 @@ public class RestfulController
         RestfulModel model = m_loginService.getModel();
         RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
         try {            
-            InputStream in = new ByteArrayInputStream(content.getBytes("ISO-8859-1"));            
-            XMLReader reader = new XMLReader(model, in);
+            InputStream in = new ByteArrayInputStream(content.getBytes("ISO-8859-1"));
+            XMLReader reader = new XMLReader(in);
             TrollingObjectCollection objects = reader.getTrollingObjects();
+            objects.setType(type);
                         
             Integer commitId = null;
             if(append)
             {
-                commitId = model.appendTrollingObjects(type, objects);
+                commitId = model.appendTrollingObjects(objects);
             }else
             {
-               commitId = model.setTrollingObjects(type, objects); 
+               commitId = model.setTrollingObjects(objects); 
             }
             
             response.setContent(commitId.toString());

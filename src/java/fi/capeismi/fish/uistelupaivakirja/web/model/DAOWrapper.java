@@ -16,19 +16,11 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public interface TrollingObject {
-    Map<String, String> getKeyvalues();
-    int getId();
-    List<TrollingEvent> getEvents();
-    
-    void setKeyValue(String key, String value);
-    void setId(int id);
-    void addEvent(TrollingEvent event);
+interface DAOWrapper<T extends java.io.Serializable> {
+    void setDAO(T dao);
+    T getDAO();
 }
