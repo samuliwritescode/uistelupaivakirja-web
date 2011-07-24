@@ -211,7 +211,7 @@ public class DAOStore {
         ses.beginTransaction();
         Collection retval = new Collection();
         Type type = new Type();
-        type.setName("spinneritems");
+        type.setName("spinneritem");
         retval.setType(type);
         try {
             SQLQuery q = ses.createSQLQuery("select keyname, value "
@@ -226,22 +226,30 @@ public class DAOStore {
                     + "order by keyname, value");
             q.addScalar("keyname", Hibernate.STRING);
             q.addScalar("value", Hibernate.STRING);
-            //q.setInteger("user", getUser().getId());
-            System.out.println("now ready to list");
+
+            int index = 1;
             for(Object o: q.list()) {
-                Object[] res = (Object[])o;
-                System.out.println(res[0]+"="+res[1]);
-                Keyvalue kv = new Keyvalue();
+                Object[] res = (Object[])o;                
                 Trollingobject ob = new Trollingobject();
-                Property property = new Property();
-                kv.setKeyname((String)res[0]);
-                kv.setValue((String)res[1]);
-                property.setKeyvalue(kv);
+                
+                Property propertyType = new Property();
+                Keyvalue kvType = new Keyvalue();
+                Property propertyValue = new Property();
+                Keyvalue kvValue = new Keyvalue();
+                
+                kvType.setKeyname("type");
+                kvType.setValue((String)res[0]);
+                kvValue.setKeyname("value");
+                kvValue.setValue((String)res[1]);
+                
+                propertyType.setKeyvalue(kvType);
+                propertyValue.setKeyvalue(kvValue);
+                ob.setObjectIdentifier(index++);
                 retval.getTrollingobjects().add(ob);
-                ob.getProperties().add(property);
+                ob.getProperties().add(propertyType);
+                ob.getProperties().add(propertyValue);
             }
             
-            System.out.println("list done");
             ses.getTransaction().commit();                   
         } 
         catch(Exception e)

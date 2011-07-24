@@ -2,7 +2,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 // Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA
 
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -15,7 +15,7 @@ public class Collection  implements java.io.Serializable {
      private User user;
      private Type type;
      private int revision;
-     private Set<Trollingobject> trollingobjects = new HashSet<Trollingobject>(0);
+     private Set<Trollingobject> trollingobjects = new LinkedHashSet<Trollingobject>(0);
 
     public Collection() {
     }
