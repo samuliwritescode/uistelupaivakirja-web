@@ -214,39 +214,43 @@ public class DAOStore {
         User user = getUser();
         Session ses = getSession();
         ses.beginTransaction();        
-        Object retval = null;
 
         try {
-            SQLQuery q = ses.createSQLQuery("select * from "+view+" where user_id=:user");
-            //q.addScalar("keyname", Hibernate.STRING);
-            //q.addScalar("value", Hibernate.STRING);
+            View orm = getORM(view);
+            
+            SQLQuery q = ses.createSQLQuery(orm.getQuery() + " where user_id=:user_id");
+            for(String scalar: orm.getColumns()) {
+                q.addScalar(scalar, Hibernate.STRING);
+            }           
 
             q.setParameter("user_id", user.getId());
-            //retval = new View();
-            
+           
             for(Object o: q.list()) {
-                Object[] array = (Object[])o;
-                for(Object item: array) {
-                    System.out.println("Found item");
-                }
-            }
-
-           /* for(Object o: q.list()) {
                 Object[] res = (Object[])o;                
-                String type = (String)res[0];
-                String value = (String)res[1];
-                retval.add(type, value);
-            }*/
+                orm.add(res);
+            }
             
             ses.getTransaction().commit();                   
+            return orm;
         } 
         catch(Exception e)
         {
             ses.getTransaction().rollback();
             throw new RestfulException(e.toString());
         } 
+    }
+    
+    View getORM(String view) {
+        if(view.equalsIgnoreCase(SpinnerItems.viewname)) {
+            return new SpinnerItems();
+        }
         
-        return retval;
+        if(view.equalsIgnoreCase(WayPoints.viewname)) {
+            return new WayPoints();
+        }
+        
+        
+        throw new RestfulException("no such view: "+view);
     }
     
 }

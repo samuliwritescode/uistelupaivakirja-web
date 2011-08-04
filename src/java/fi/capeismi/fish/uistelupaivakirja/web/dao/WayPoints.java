@@ -16,9 +16,12 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,40 +31,80 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="gpx")
-public class WayPoints {
+public class WayPoints extends View {
+    private List<WayPoint> _waypoints = new ArrayList<WayPoint>();
+    public static final String viewname = "fishmapview";
+    
+    public WayPoints() {
+        super();
+        addColumn("fish_coord_lat");
+        addColumn("fish_coord_lon");
+        addColumn("fish_species");
+        addColumn("fish_time");
+        addColumn("date"); 
+    }
     
     @XmlElement
     public List<WayPoint> getWpt() {
-        List<WayPoint> retval = new ArrayList<WayPoint>();
-        
-        retval.add(new WayPoint());
-        retval.add(new WayPoint());
-        retval.add(new WayPoint());
-        retval.add(new WayPoint());
-        return retval;
+        return Collections.unmodifiableList(this._waypoints);
+    }
+
+    @Override
+    void add(Map<String, String> row) {
+        this._waypoints.add(new WayPoint(
+                row.get("fish_coord_lat"),
+                row.get("fish_coord_lon"),
+                row.get("date"),
+                row.get("fish_time"),                
+                row.get("fish_species")
+                ));
+    }
+
+    @Override
+    String getQuery() {
+        return "select fish_coord_lat, fish_coord_lon, fish_species, fish_time, date from fishmapview";
     }
 
     @XmlRootElement
     public static class WayPoint {
         
+        private String _lat, _lon, _date, _time, _name;
+        
+        public WayPoint() {
+            
+        }
+        
+        public WayPoint(String lat, String lon, String date, String time, String name) {
+            this._lat = lat;
+            this._lon = lon;
+            this._date = date;
+            this._time = time;
+            this._name = name;
+        }
+        
         @XmlAttribute
         public String getLat() {
-            return "65.323";
+            return this._lat;
         }
         
         @XmlAttribute
         public String getLon() {
-            return "25.233";
+            return this._lon;
         }
         
         @XmlElement
         public Date getTime() {
-            return new Date();
+            try {
+                String parse = this._date+" "+this._time;
+                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parse);
+            }catch(Exception e){
+                return null;
+            }
         }
         
         @XmlElement
         public String getName() {
-            return "hauki";
+            return this._name+" "+this._time;
         }
     }
 }

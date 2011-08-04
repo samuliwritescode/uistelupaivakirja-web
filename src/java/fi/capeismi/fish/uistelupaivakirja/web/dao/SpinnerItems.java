@@ -19,6 +19,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,19 +29,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="TrollingObjects")
-public class SpinnerItems {
-        
-    List<SpinnerItem> _items;
+public class SpinnerItems extends View {        
+    List<SpinnerItem> _items;    
+    public static final String viewname = "spinneritem";
+    
+    @Override
+    public String getQuery() {
+        return "select user_id, keyname, value from spinneritem";
+    }
     
     public SpinnerItems() {
+        super();
         this._items = new ArrayList<SpinnerItem>();
-    }
+        addColumn("user_id");
+        addColumn("keyname");
+        addColumn("value");
+    }    
        
-    public void add(SpinnerItem item) {
-        
-        this._items.add(item);
-    }
-    
     @XmlAttribute(name="MaxId")
     public Integer getMaxId() {
         return new Integer(this._items.size());
@@ -49,6 +54,11 @@ public class SpinnerItems {
     @XmlElement(name="TrollingObject")
     public List<SpinnerItem> getItems() {
         return this._items;
+    }
+
+    @Override
+    void add(Map<String, String> row) {
+        this._items.add(new SpinnerItem(row.get("keyname"), row.get("value"), this._items.size()+1));
     }
      
     public static class SpinnerItem {
@@ -64,18 +74,6 @@ public class SpinnerItems {
             this._key = key;
             this._value = value;
             this._id = id;
-        }
-        
-        public void setId(int id) {
-            this._id = id;
-        }
-        
-        public void setKeyname(String key) {
-            this._key = key;         
-        }
-    
-        public void setValue(String value) {
-            this._value = value;            
         }
         
         @XmlAttribute
