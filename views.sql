@@ -37,3 +37,39 @@ where
 having
     species is not null and
     weight is not null;
+
+drop view if exists fishmapview;
+create view fishmapview as 
+select    
+    event.id,
+    trolling_id,
+    user_id,
+    (select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='type' and event_id=event.id) as 'type',
+    (select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='fish_species' and event_id=event.id) as 'fish_species',
+    cast((select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='fish_weight' and event_id=event.id) as SIGNED) as 'fish_weight',
+    cast((select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='fish_length' and event_id=event.id) as SIGNED) as 'fish_length',
+    (select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='fish_coord_lat' and event_id=event.id) as 'fish_coord_lat',
+    (select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='fish_coord_lon' and event_id=event.id) as 'fish_coord_lon',    
+    cast((select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='fish_group_amount' and event_id=event.id) as SIGNED) as 'fish_group_amount',
+    cast((select value from keyvalue join eventproperty on(keyvalue.id=keyvalue_id) where keyname='fish_time' and event_id=event.id) as TIME) as 'fish_time',
+    cast((select value from keyvalue join property on(keyvalue.id=keyvalue_id) where keyname='date' and trolling_id=trollingobject.id) as DATE) as 'date'
+from event
+    join trollingobject on(trolling_id=trollingobject.id)
+    join collection on(collection_id=collection.id)
+having fish_coord_lat is not null and
+    fish_coord_lon is not null and
+    (type=1 OR type=3)
+;
+
+drop view if exists spinneritem;
+create view spinneritem as
+select user_id, keyname, value 
+from collection 
+join trollingobject on(collection_id=collection.id) 
+join event on(trolling_id=trollingobject.id) 
+join eventproperty on(event_id=event.id) 
+join keyvalue on(keyvalue_id=keyvalue.id) 
+where keyname in('fish_species', 'fish_method', 'fish_getter') 
+group by user_id, value, keyname
+order by keyname, value
+;

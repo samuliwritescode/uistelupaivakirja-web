@@ -17,6 +17,7 @@
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
+
 import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -65,16 +66,19 @@ public class DAOStore {
             ses.getTransaction().rollback();
             throw new RestfulException(e.toString());
         }
-        throw new RestfulException("No such type in DB: "+type);        
+         
+        return null;  
     }
     
-    public Collection getCollection(String typename) {
-        if(typename.equalsIgnoreCase("spinneritem")) {
-            return getSpinnerItems();
-        }
+    public Object getCollection(String typename) {
         
         Type type = getType(typename);
-        return getCollection(type);
+        if(type == null) {
+            return getView(typename);
+        }
+        else {
+            return getCollection(type);
+        }
     }    
             
     private Collection getCollection(Type typeDAO) {
@@ -206,49 +210,33 @@ public class DAOStore {
         return fac.getCurrentSession();
     }
 
-    public Collection getSpinnerItems() {
+    public Object getView(String view) {
+        User user = getUser();
         Session ses = getSession();
-        ses.beginTransaction();
-        Collection retval = new Collection();
-        Type type = new Type();
-        type.setName("spinneritem");
-        retval.setType(type);
-        try {
-            SQLQuery q = ses.createSQLQuery("select keyname, value "
-                    + "from collection "
-                    + "join trollingobject on(collection_id=collection.id) "
-                    + "join event on(trolling_id=trollingobject.id) "
-                    + "join eventproperty on(event_id=event.id) "
-                    + "join keyvalue on(keyvalue_id=keyvalue.id) "
-                    + "where keyname in('fish_species', 'fish_method', 'fish_getter') and "
-                    + "user_id=1 "
-                    + "group by value "
-                    + "order by keyname, value");
-            q.addScalar("keyname", Hibernate.STRING);
-            q.addScalar("value", Hibernate.STRING);
+        ses.beginTransaction();        
+        Object retval = null;
 
-            int index = 1;
+        try {
+            SQLQuery q = ses.createSQLQuery("select * from "+view+" where user_id=:user");
+            //q.addScalar("keyname", Hibernate.STRING);
+            //q.addScalar("value", Hibernate.STRING);
+
+            q.setParameter("user_id", user.getId());
+            //retval = new View();
+            
             for(Object o: q.list()) {
-                Object[] res = (Object[])o;                
-                Trollingobject ob = new Trollingobject();
-                
-                Property propertyType = new Property();
-                Keyvalue kvType = new Keyvalue();
-                Property propertyValue = new Property();
-                Keyvalue kvValue = new Keyvalue();
-                
-                kvType.setKeyname("type");
-                kvType.setValue((String)res[0]);
-                kvValue.setKeyname("value");
-                kvValue.setValue((String)res[1]);
-                
-                propertyType.setKeyvalue(kvType);
-                propertyValue.setKeyvalue(kvValue);
-                ob.setObjectIdentifier(index++);
-                retval.getTrollingobjects().add(ob);
-                ob.getProperties().add(propertyType);
-                ob.getProperties().add(propertyValue);
+                Object[] array = (Object[])o;
+                for(Object item: array) {
+                    System.out.println("Found item");
+                }
             }
+
+           /* for(Object o: q.list()) {
+                Object[] res = (Object[])o;                
+                String type = (String)res[0];
+                String value = (String)res[1];
+                retval.add(type, value);
+            }*/
             
             ses.getTransaction().commit();                   
         } 

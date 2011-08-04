@@ -20,7 +20,6 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Type;
-import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel.EType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,14 +75,14 @@ class TrollingObjectCollectionImpl implements TrollingObjectCollection, DAOWrapp
     }
 
     @Override
-    public void setType(EType eType) {
-        Type type = DAOStore.getType(eType.name());
-        this.m_collectionDAO.setType(type);
+    public void setType(String type) {
+        Type typeobj = DAOStore.getType(type);
+        this.m_collectionDAO.setType(typeobj);
     }
     
     @Override
-    public EType getType() {
+    public String getType() {
         Type type = this.m_collectionDAO.getType();
-        return RestfulModel.parseType(type.getName());
+        return type.getName();
     }               
 }

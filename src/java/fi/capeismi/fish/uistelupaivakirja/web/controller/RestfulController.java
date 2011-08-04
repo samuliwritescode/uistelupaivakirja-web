@@ -16,7 +16,6 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,21 +53,18 @@ public class RestfulController
     private static final String RESPONSE_TRANSACTIONTICKET = "TransactionTicket";
     private static final String RESPONSE_RESPONSE = "TrollingResponse";
       
-    @RequestMapping(value="/{doctype}", method=RequestMethod.GET)
+    @RequestMapping(value="/{collection}", method=RequestMethod.GET)
     @ResponseBody
-    public DOMSource getPlaces(@PathVariable String doctype) 
-    {                
-        RestfulModel.EType type = parseTypes(doctype);
+    public DOMSource getItems(@PathVariable String collection) 
+    {                        
         RestfulModel model = m_loginService.getModel();
-        TrollingObjectCollection list = model.getTrollingObjects(type);
-        XMLCreator creator = new XMLCreator(list);
-
-        return creator.getSource();   
+        Object items = model.getTrollingObjects(collection);
+        return XMLCreator.marshal(items);        
     }
-
+    
     @RequestMapping(value="/{doctype}", method=RequestMethod.POST)
     @ResponseBody
-    public DOMSource postTrips(
+    public DOMSource postItems(
         @RequestBody String content, 
         @PathVariable String doctype)
     {
@@ -77,7 +73,7 @@ public class RestfulController
     
     @RequestMapping(value="/{doctype}", method=RequestMethod.PUT)
     @ResponseBody
-    public DOMSource putTrips(
+    public DOMSource putItems(
         @RequestBody String content, 
         @PathVariable String doctype)
     {
@@ -86,15 +82,14 @@ public class RestfulController
     
     private DOMSource putOrPostTrips(String content, String doctype, boolean append)
     {
-        RestfulModel.EType type = parseTypes(doctype);
-        
+       
         RestfulModel model = m_loginService.getModel();
         RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
         try {            
             InputStream in = new ByteArrayInputStream(content.getBytes("ISO-8859-1"));
             XMLReader reader = new XMLReader(in);
             TrollingObjectCollection objects = reader.getTrollingObjects();
-            objects.setType(type);
+            objects.setType(doctype);
                         
             Integer commitId = null;
             if(append)
@@ -148,9 +143,5 @@ public class RestfulController
         m_loginService = service;
     }
     
-    private static RestfulModel.EType parseTypes(String type)
-    {     
-        return RestfulModel.parseType(type.substring(0, type.length()-1));
-    }
 
 }

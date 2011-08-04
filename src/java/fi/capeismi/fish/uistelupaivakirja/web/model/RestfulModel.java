@@ -25,9 +25,7 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
  */
 public class RestfulModel {
     private String m_user = null;
-    private DAOStore _daoStore = null;
-    
-    public enum EType {unknown, trip, place, lure, spinneritem};    
+    private DAOStore _daoStore = null;      
     
     public RestfulModel(String user)
     {
@@ -36,15 +34,20 @@ public class RestfulModel {
     }
 
     
-    public TrollingObjectCollection getTrollingObjects(EType type)
+    public Object getTrollingObjects(String type)
     {        
-        Collection dao = this._daoStore.getCollection(type.name());
-        TrollingObjectCollectionImpl retval = new TrollingObjectCollectionImpl();
-        if(dao != null) {
-            retval.setDAO(dao);
+        Object dao = this._daoStore.getCollection(type);
+        if(dao instanceof Collection) {
+            
+            TrollingObjectCollectionImpl retval = new TrollingObjectCollectionImpl();
+            if(dao != null) {
+                retval.setDAO((Collection)dao);
+            }
+            return retval;
+        }else {
+            return dao;
         }
-        
-        return retval;
+
     }
 
 
@@ -61,14 +64,5 @@ public class RestfulModel {
         DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
         this._daoStore.setCollection(dao.getDAO());
         return new Integer(dao.getDAO().getRevision());
-    }
-    
-    public static EType parseType(String type) {
-        try {
-            return RestfulModel.EType.valueOf(type);
-        } catch (Exception e) {
-            return RestfulModel.EType.unknown;
-        }
-    }
-        
+    }           
 }

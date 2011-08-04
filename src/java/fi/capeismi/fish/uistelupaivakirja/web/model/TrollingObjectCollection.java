@@ -16,7 +16,6 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel.EType;
 import java.util.List;
 
 /**
@@ -25,9 +24,9 @@ import java.util.List;
  */
 public interface TrollingObjectCollection {
     int getRevision();
-    EType getType();
+    String getType();
     List<TrollingObject> getObjects();
     void setRevision(int revision);
-    void setType(EType eType);    
+    void setType(String type);    
     void addTrollingObject(TrollingObject object);
 }
