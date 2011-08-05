@@ -228,7 +228,7 @@ public class DAOStore {
             
             ResultSet res = st.executeQuery("select * from " +viewname+ " where user_id="+user.getId().toString());           
             List<String> columns = new ArrayList<String>();
-            for(int loop=1; loop < res.getMetaData().getColumnCount(); loop++) {
+            for(int loop=1; loop <= res.getMetaData().getColumnCount(); loop++) {                
                 String colname = res.getMetaData().getColumnName(loop);
                 columns.add(colname);
                 orm.addColumn(colname);

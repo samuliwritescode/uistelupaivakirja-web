@@ -16,11 +16,111 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <!DOCTYPE html>
 <html>
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0 }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false">
+</script>
+<script type="text/javascript">
+  function initialize() {
+    var latlng = new google.maps.LatLng(62, 25);
+    var myOptions = {
+      zoom: 8,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+  }
+  
+  function createRequest() {
+    var result = null;
+    try {
+        if (window.XMLHttpRequest) {
+            // FireFox, Safari, etc.
+            result = new XMLHttpRequest();
+            if (typeof result.overrideMimeType != 'undefined') {
+              result.overrideMimeType('text/xml'); // Or anything else
+            }
+        }
+        else if (window.ActiveXObject) {
+            // MSIE
+            result = new ActiveXObject("Microsoft.XMLHTTP");
+        } 
+        else {
+            // No known mechanism -- consider aborting the application
+        }
+        return result;
+    }catch(e) {
+        document.write(e);
+    }
+  }
+
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+     
+  <script type="text/javascript">
+
+    var req = createRequest();
+    // Create the callback:
+    req.onreadystatechange = function() {
+      if (req.readyState != 4) return; // Not there yet
+      if (req.status != 200) {
+        // Handle request failure here...
+        document.write("errorerror");
+        return;
+      }
+      // Request successful, read the response
+      
+      var myLatlng = new google.maps.LatLng(62, 25);
+      var myOptions = {
+        zoom: 8,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+        
+      var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        
+      var resp = req.responseXML;
+      for(var loop=0; loop < resp.getElementsByTagName("wpt").length; loop++) {
+        var node = resp.getElementsByTagName("wpt")[loop];
+        
+        var lat = node.attributes["lat"].nodeValue;
+        var lon = node.attributes["lon"].nodeValue;
+        var title = node.getElementsByTagName("name")[0].childNodes[0].nodeValue;
+        title += "/";
+        title += node.getElementsByTagName("time")[0].childNodes[0].nodeValue;
+        //document.getElementById("area").innerHTML+=lat+", ";
+        //document.getElementById("area").innerHTML+=lon+", ";   
+        //document.getElementById("area").innerHTML+=node.getElementsByTagName("name")[0].childNodes[0].nodeValue;
+        //document.getElementById("area").innerHTML+=node.getElementsByTagName("time")[0].childNodes[0].nodeValue;
+        //document.getElementById("area").innerHTML+="<br>";
+        var pos = new google.maps.LatLng(lat, lon);
+        var marker = new google.maps.Marker({
+            position: pos, 
+            map: map,
+            title: title
+        }); 
+      }              
+
+
+  
+    }
+    req.open("GET", "../fishmapview",  true); 
+    req.send(null); 
+  </script>
+  
+  
+  boz:
+  <div id="area"></div>
+  .
+  
+</body>
 </html>
