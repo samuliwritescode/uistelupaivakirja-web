@@ -53,6 +53,12 @@ public class RestfulController
     private static final String RESPONSE_TRANSACTIONTICKET = "TransactionTicket";
     private static final String RESPONSE_RESPONSE = "TrollingResponse";
       
+    @RequestMapping(value="/", method=RequestMethod.GET)
+    public String getRedirect()
+    {
+        return "redirect";
+    }
+    
     @RequestMapping(value="/{collection}", method=RequestMethod.GET)
     @ResponseBody
     public DOMSource getItems(@PathVariable String collection) 
