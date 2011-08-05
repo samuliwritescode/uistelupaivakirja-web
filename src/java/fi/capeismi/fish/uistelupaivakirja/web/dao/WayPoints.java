@@ -31,17 +31,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="gpx")
+@ViewRepresenter("fishmapview")
 public class WayPoints extends View {
     private List<WayPoint> _waypoints = new ArrayList<WayPoint>();
-    public static final String viewname = "fishmapview";
     
     public WayPoints() {
         super();
-        addColumn("fish_coord_lat");
-        addColumn("fish_coord_lon");
-        addColumn("fish_species");
-        addColumn("fish_time");
-        addColumn("date"); 
     }
     
     @XmlElement
@@ -58,11 +53,6 @@ public class WayPoints extends View {
                 row.get("fish_time"),                
                 row.get("fish_species")
                 ));
-    }
-
-    @Override
-    String getQuery() {
-        return "select fish_coord_lat, fish_coord_lon, fish_species, fish_time, date from fishmapview";
     }
 
     @XmlRootElement

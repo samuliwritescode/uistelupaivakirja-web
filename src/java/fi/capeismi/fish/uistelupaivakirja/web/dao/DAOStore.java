@@ -17,11 +17,15 @@
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import java.util.List;
-import org.hibernate.Hibernate;
+import java.util.Map;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -216,18 +220,27 @@ public class DAOStore {
         ses.beginTransaction();        
 
         try {
-            View orm = getORM(view);
+            View orm = View.ViewFactory.getInstance(view);
             
-            SQLQuery q = ses.createSQLQuery(orm.getQuery() + " where user_id=:user_id");
-            for(String scalar: orm.getColumns()) {
-                q.addScalar(scalar, Hibernate.STRING);
-            }           
-
-            q.setParameter("user_id", user.getId());
-           
-            for(Object o: q.list()) {
-                Object[] res = (Object[])o;                
-                orm.add(res);
+            Connection conn = ses.connection();
+            Statement st = conn.createStatement();
+            String viewname = orm.getClass().getAnnotation(ViewRepresenter.class).value();
+            
+            ResultSet res = st.executeQuery("select * from " +viewname+ " where user_id="+user.getId().toString());           
+            List<String> columns = new ArrayList<String>();
+            for(int loop=1; loop < res.getMetaData().getColumnCount(); loop++) {
+                String colname = res.getMetaData().getColumnName(loop);
+                columns.add(colname);
+                orm.addColumn(colname);
+            }
+            
+            
+            while(res.next()) {
+                Map<String, String> row = new HashMap<String, String>();
+                for(String colname: columns) {
+                    row.put(colname, res.getString(colname));
+                }
+                orm.add(row);
             }
             
             ses.getTransaction().commit();                   
@@ -238,19 +251,6 @@ public class DAOStore {
             ses.getTransaction().rollback();
             throw new RestfulException(e.toString());
         } 
-    }
-    
-    View getORM(String view) {
-        if(view.equalsIgnoreCase(SpinnerItems.viewname)) {
-            return new SpinnerItems();
-        }
-        
-        if(view.equalsIgnoreCase(WayPoints.viewname)) {
-            return new WayPoints();
-        }
-        
-        
-        throw new RestfulException("no such view: "+view);
     }
     
 }

@@ -29,21 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="TrollingObjects")
+@ViewRepresenter("spinneritem")
 public class SpinnerItems extends View {        
     List<SpinnerItem> _items;    
-    public static final String viewname = "spinneritem";
-    
-    @Override
-    public String getQuery() {
-        return "select user_id, keyname, value from spinneritem";
-    }
     
     public SpinnerItems() {
         super();
         this._items = new ArrayList<SpinnerItem>();
-        addColumn("user_id");
-        addColumn("keyname");
-        addColumn("value");
     }    
        
     @XmlAttribute(name="MaxId")

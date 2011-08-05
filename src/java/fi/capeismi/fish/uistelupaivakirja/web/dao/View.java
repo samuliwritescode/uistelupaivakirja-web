@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,8 +28,6 @@ import java.util.Map;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 abstract class View {
-    
-    public static final String viewname = "*OVERRIDETHIS*";
     private List<String> _columns = new ArrayList<String>();
     
     public final void addColumn(String colname) {
@@ -39,14 +38,29 @@ abstract class View {
         return Collections.unmodifiableList(this._columns);
     }
     
-    public final void add(Object[] row) {
-        Map<String, String> rowmap = new HashMap<String, String>();
-        for(int loop=0; loop < this._columns.size(); loop++) {
-            rowmap.put(this._columns.get(loop), (String)row[loop]);
-        }
-        add(rowmap);
-    }
-    
     abstract void add(Map<String, String> row);
-    abstract String getQuery();   
+       
+    public static class ViewFactory {
+        public static View getInstance(String view) {
+            
+            try {        
+                List<Class> classes = new ArrayList<Class>();
+                classes.add(SpinnerItems.class);
+                classes.add(WayPoints.class);
+
+                for(Class clazz: classes) {
+                    ViewRepresenter annotation = (ViewRepresenter)clazz.getAnnotation(ViewRepresenter.class);
+
+                    if(annotation.value().equalsIgnoreCase(view)) {
+                        return (View)clazz.newInstance();
+                    }
+                }
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            throw new RestfulException("no such view: "+view);
+        }
+    }
+
 }
