@@ -16,14 +16,18 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -74,6 +78,27 @@ public class FishStat extends View {
         @XmlElement
         public String getLength() {
             return this._values.get("fish_length");
+        }
+        
+        @XmlElement
+        public String getLuremaker() {
+            return this._values.get("lure_maker");
+        }
+        
+        @XmlElement
+        public String getProperty() {
+            Properties props = new Properties();
+            try {
+                ApplicationContext ctx = new ClassPathXmlApplicationContext();
+                
+                props.load(new FileInputStream(ctx.getResource("classpath:fi/capeismi/fish/uistelupaivakirja/web/dao/views.properties").getFile()));
+                return props.getProperty("testi");
+                    
+            } catch (Exception e) {
+                return "exception: "+e.toString();    
+                
+            }
+           
         }
         
         @XmlElement
