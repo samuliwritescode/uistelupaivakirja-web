@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,71 +29,62 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-@XmlRootElement(name="gpx")
-@ViewRepresenter("fishmap")
-public class WayPoints extends View {
-    private List<WayPoint> _waypoints = new ArrayList<WayPoint>();
+@XmlRootElement(name="fishlist")
+@ViewRepresenter("fishstat")
+public class FishStat extends View {
+    private List<Fish> _items = new ArrayList<Fish>();
     
-    public WayPoints() {
+    public FishStat() {
         super();
-    }
-    
-    @XmlElement
-    public List<WayPoint> getWpt() {
-        return Collections.unmodifiableList(this._waypoints);
     }
 
     @Override
-    void add(Map<String, String> row) {
-        this._waypoints.add(new WayPoint(
-                row.get("fish_coord_lat"),
-                row.get("fish_coord_lon"),
-                row.get("date"),
-                row.get("fish_time"),                
-                row.get("fish_species")
-                ));
+    void add(Map<String, String> row) {                
+        _items.add(new Fish(row));
+    }
+    
+    @XmlElement
+    public List<Fish> getFish() {
+        return Collections.unmodifiableList(this._items);
     }
 
     @XmlRootElement
-    public static class WayPoint {
+    public static class Fish {
         
-        private String _lat, _lon, _date, _time, _name;
+        private Map<String, String> _values;
         
-        public WayPoint() {
+        public Fish() {
             
         }
         
-        public WayPoint(String lat, String lon, String date, String time, String name) {
-            this._lat = lat;
-            this._lon = lon;
-            this._date = date;
-            this._time = time;
-            this._name = name;
+        public Fish(Map<String, String> values) {
+            this._values = values;
         }
         
-        @XmlAttribute
-        public String getLat() {
-            return this._lat;
+        @XmlElement
+        public String getPlace() {
+            return this._values.get("place_name");
         }
         
-        @XmlAttribute
-        public String getLon() {
-            return this._lon;
+        @XmlElement
+        public String getWeight() {
+            return this._values.get("fish_weight");
+        }
+        
+        @XmlElement
+        public String getLength() {
+            return this._values.get("fish_length");
         }
         
         @XmlElement
         public Date getTime() {
             try {
-                String parse = this._date+" "+this._time;
+                String parse = this._values.get("date") +" "+this._values.get("fish_time");
                 return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parse);
             }catch(Exception e){
                 return null;
             }
         }
-        
-        @XmlElement
-        public String getName() {
-            return this._name+" "+this._time;
-        }
     }
+    
 }

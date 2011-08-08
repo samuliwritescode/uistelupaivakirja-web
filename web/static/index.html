@@ -74,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       if (req.readyState != 4) return; // Not there yet
       if (req.status != 200) {
         // Handle request failure here...
-        document.write("errorerror");
+        document.write("error: "+req.responseText);
         return;
       }
       // Request successful, read the response
@@ -113,7 +113,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   
     }
-    req.open("GET", "../fishmapview",  true); 
+    req.open("GET", "../fishmap",  true); 
     req.send(null); 
   </script>
   

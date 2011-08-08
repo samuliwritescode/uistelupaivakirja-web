@@ -47,6 +47,7 @@ abstract class View {
                 List<Class> classes = new ArrayList<Class>();
                 classes.add(SpinnerItems.class);
                 classes.add(WayPoints.class);
+                classes.add(FishStat.class);
 
                 for(Class clazz: classes) {
                     ViewRepresenter annotation = (ViewRepresenter)clazz.getAnnotation(ViewRepresenter.class);

@@ -65,3 +65,5 @@ MD5('kek')
 INSERT INTO type (NAME) VALUES('trip');
 INSERT INTO type (NAME) VALUES('place');
 INSERT INTO type (NAME) VALUES('lure');
+
+create index trollingobject_idx on trollingobject(object_identifier);
