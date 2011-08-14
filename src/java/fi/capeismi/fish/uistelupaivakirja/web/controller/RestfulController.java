@@ -44,20 +44,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/api")
 public class RestfulController 
 {
     private LoginService m_loginService = null;
     
     private static final String RESPONSE_EXCEPTION = "TrollingException";
     private static final String RESPONSE_TRANSACTIONTICKET = "TransactionTicket";
-    private static final String RESPONSE_RESPONSE = "TrollingResponse";
-      
-    @RequestMapping(value="/", method=RequestMethod.GET)
-    public String getRedirect()
-    {
-        return "redirect";
-    }
+    private static final String RESPONSE_RESPONSE = "TrollingResponse";     
     
     @RequestMapping(value="/{collection}", method=RequestMethod.GET)
     @ResponseBody

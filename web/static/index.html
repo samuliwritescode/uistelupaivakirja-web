@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2011 Samuli Penttil√§ <samuli.penttila@gmail.com>
+Copyright (C) 2011 Samuli Penttil‰ <samuli.penttila@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,109 +17,316 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<style type="text/css">
-  html { height: 100% }
-  body { height: 100%; margin: 0; padding: 0 }
-  #map_canvas { height: 100% }
-</style>
-<script type="text/javascript"
-    src="http://maps.googleapis.com/maps/api/js?sensor=false">
-</script>
-<script type="text/javascript">
-  function initialize() {
-    var latlng = new google.maps.LatLng(62, 25);
-    var myOptions = {
-      zoom: 8,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map = new google.maps.Map(document.getElementById("map_canvas"),
-        myOptions);
-  }
-  
-  function createRequest() {
-    var result = null;
-    try {
-        if (window.XMLHttpRequest) {
-            // FireFox, Safari, etc.
-            result = new XMLHttpRequest();
-            if (typeof result.overrideMimeType != 'undefined') {
-              result.overrideMimeType('text/xml'); // Or anything else
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
+    <link type="text/css" href="jquery-ui/css/smoothness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />	
+    <script type="text/javascript" src="jquery-ui/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.15.custom.min.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // Accordion
+            $("#accordion").accordion({ header: "h3" });
+
+            // Tabs
+            $('#tabs').tabs();
+
+
+            // Dialog			
+            $('#dialog').dialog({
+                    autoOpen: false,
+                    width: 600,
+                    buttons: {
+                            "Ok": function() { 
+                                    $(this).dialog("close"); 
+                            }, 
+                            "Cancel": function() { 
+                                    $(this).dialog("close"); 
+                            } 
+                    }
+            });
+
+            // Dialog Link
+            $('#dialog_link').click(function(){
+                    $('#dialog').dialog('open');
+                    return false;
+            });
+
+            // Datepicker
+            $('#datepicker').datepicker({
+                    inline: true
+            });
+
+            // Slider
+            $('#slider').slider({
+                    range: true,
+                    values: [17, 67]
+            });
+
+            // Progressbar
+            $("#progressbar").progressbar({
+                    value: 20 
+            });
+
+            //hover states on the static widgets
+            $('#dialog_link, ul#icons li').hover(
+                    function() { $(this).addClass('ui-state-hover'); }, 
+                    function() { $(this).removeClass('ui-state-hover'); }
+            );
+
+        });
+    </script>
+    <style type="text/css">
+            /*demo page css*/
+            .titletext {font-family: "arial"; font-size: 400%;}
+            .stretch {background-repeat: no-repeat; background-size: 100% 100%;}
+            .mainwidget { width:100%; height:500px;}
+            body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 0px;}
+            .demoHeaders { margin-top: 2em; }
+            #dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
+            #dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
+            ul#icons {margin: 0; padding: 0;}
+            ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+            ul#icons span.ui-icon {float: left; margin: 0 4px;}
+    </style>
+                
+    <script type="text/javascript">
+      function initialize() {
+        var latlng = new google.maps.LatLng(62, 25);
+        var myOptions = {
+          zoom: 8,
+          center: latlng,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            myOptions);
+      }
+
+      function createRequest() {
+        var result = null;
+        try {
+            if (window.XMLHttpRequest) {
+                // FireFox, Safari, etc.
+                result = new XMLHttpRequest();
+                if (typeof result.overrideMimeType != 'undefined') {
+                  result.overrideMimeType('text/xml'); // Or anything else
+                }
             }
+            else if (window.ActiveXObject) {
+                // MSIE
+                result = new ActiveXObject("Microsoft.XMLHTTP");
+            } 
+            else {
+                // No known mechanism -- consider aborting the application
+            }
+            return result;
+        }catch(e) {
+            document.write(e);
         }
-        else if (window.ActiveXObject) {
-            // MSIE
-            result = new ActiveXObject("Microsoft.XMLHTTP");
-        } 
-        else {
-            // No known mechanism -- consider aborting the application
+      }
+
+    </script>
+    <script type="text/javascript">
+
+        var req = createRequest();
+        // Create the callback:
+        req.onreadystatechange = function() {
+          if (req.readyState != 4) return; // Not there yet
+          if (req.status != 200) {
+            // Handle request failure here...
+         
+            var loginBox = document.getElementById("loginbox");
+            var form = document.createElement("form");
+            var username = document.createElement("input");
+            var password = document.createElement("input");
+            var submit = document.createElement("input");
+            username.setAttribute("name", "j_username");
+            password.setAttribute("name", "j_password");
+            submit.setAttribute("type", "submit");
+            submit.setAttribute("value", "kirjaudu");
+            form.setAttribute("method", "get");
+            form.setAttribute("action", "../login");
+            form.appendChild(username);
+            form.appendChild(password);
+            form.appendChild(submit);
+            loginBox.appendChild(form);
+
+            return;
+          }
+          // Request successful, read the response
+
+          var myLatlng = new google.maps.LatLng(62, 25);
+          var myOptions = {
+            zoom: 8,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          }
+
+          var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+          var resp = req.responseXML;
+          for(var loop=0; loop < resp.getElementsByTagName("wpt").length; loop++) {
+            var node = resp.getElementsByTagName("wpt")[loop];
+
+            var lat = node.attributes["lat"].nodeValue;
+            var lon = node.attributes["lon"].nodeValue;
+            var title = node.getElementsByTagName("name")[0].childNodes[0].nodeValue;
+            title += "/";
+            title += node.getElementsByTagName("time")[0].childNodes[0].nodeValue;
+            var pos = new google.maps.LatLng(lat, lon);
+            var marker = new google.maps.Marker({
+                position: pos, 
+                map: map,
+                title: title
+            }); 
+          }
+          var loginBox = document.getElementById("loginbox");
+          var link = document.createElement("A");
+          link.setAttribute("href", "../logout");
+          link.appendChild(document.createTextNode("logout"));
+          loginBox.appendChild(link);
         }
-        return result;
-    }catch(e) {
-        document.write(e);
-    }
-  }
-
-</script>
-</head>
-<body onload="initialize()">
-  <div id="map_canvas" style="width:100%; height:100%"></div>
-     
-  <script type="text/javascript">
-
-    var req = createRequest();
-    // Create the callback:
-    req.onreadystatechange = function() {
-      if (req.readyState != 4) return; // Not there yet
-      if (req.status != 200) {
-        // Handle request failure here...
-        document.write("error: "+req.responseText);
-        return;
-      }
-      // Request successful, read the response
-      
-      var myLatlng = new google.maps.LatLng(62, 25);
-      var myOptions = {
-        zoom: 8,
-        center: myLatlng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-        
-      var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-        
-      var resp = req.responseXML;
-      for(var loop=0; loop < resp.getElementsByTagName("wpt").length; loop++) {
-        var node = resp.getElementsByTagName("wpt")[loop];
-        
-        var lat = node.attributes["lat"].nodeValue;
-        var lon = node.attributes["lon"].nodeValue;
-        var title = node.getElementsByTagName("name")[0].childNodes[0].nodeValue;
-        title += "/";
-        title += node.getElementsByTagName("time")[0].childNodes[0].nodeValue;
-        //document.getElementById("area").innerHTML+=lat+", ";
-        //document.getElementById("area").innerHTML+=lon+", ";   
-        //document.getElementById("area").innerHTML+=node.getElementsByTagName("name")[0].childNodes[0].nodeValue;
-        //document.getElementById("area").innerHTML+=node.getElementsByTagName("time")[0].childNodes[0].nodeValue;
-        //document.getElementById("area").innerHTML+="<br>";
-        var pos = new google.maps.LatLng(lat, lon);
-        var marker = new google.maps.Marker({
-            position: pos, 
-            map: map,
-            title: title
-        }); 
-      }              
-
-
-  
-    }
-    req.open("GET", "../fishmap",  true); 
-    req.send(null); 
+        req.open("GET", "../fishmap",  true); 
+        req.send(null); 
   </script>
-  
- 
-  <span id="area"></span>
+</head>
+<body onload="initialize()" width="100%">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td width="28" height="158" class="stretch" background="back-top-left.png" >
+            
+        </td>
+        <td background="back-top.png" class="stretch" height="157">
+            <table border="0" width="100%">
+                <tr>
+                    <td width="150">
+                        <img src="logo.png"></img>
+                    </td>
+                    <td>
+                        <table cellpadding="15" cellspacing="0">
+                            <tr>
+                                <td width="24" height="56" background="menu-left.png" class="stretch">
+                                    
+                                </td>
+                                <td height="56" background="menu.png" class="stretch">
+                                    P‰‰sivu
+                                </td>
+                                <td height="56" background="menu-selected.png" class="stretch">
+                                    Omat kalat
+                                </td>
+                                <td width="24" height="56" background="menu-right.png" class="stretch">
+                                    
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="titletext"><H1>Uistelup‰iv‰kirja</h1></div>
+                    </td>
+                    <td align="right">
+                        <div id="loginbox"></div>
+                    </td>                        
+                </tr>
+            </table>
+            
+        </td>
+        <td width="28" height="158" class="stretch" background="back-top-right.png">
+            
+        </td>
+    </tr>
+    <tr>
+        <td class="stretch" background="back-mid-left.png">
+            
+        </td>
+        <td>
+            <table border="1" cellpadding="0" cellspacing="5" width="100%">
+                <tr>
+                    <td>
+                        
+                        <div id="map_canvas" class="mainwidget"></div>
+                        <div id="tabs">
+                            <ul>
+                                <li><a href="#tabs-1">P‰‰sivu</a></li>
+                                <li><a href="#tabs-2">Kalapaikat</a></li>
+                                <li><a href="#tabs-3">Kalat</a></li>                
+                            </ul>
+                            <div id="tabs-1" >
+                                <table width="100%">
+                                    <tr><td width="75%">
+                                        
+                                    </td>
+                                    <td valign="top">
+                                        <div class="ui-widget-header">
+                                            Suurimmat kalat
+                                        </div>
+                                        <div class="ui-widget-content">
+                                            Hauki 1 kg<br/>
+                                            Hauki 2 kg<br/>
+                                            Hauki 3 kg<br/>
+                                            Hauki 4 kg<br/>
+                                            Hauki 5 kg<br/>
+                                            Hauki 6 kg<br/>
+                                            Hauki 7 kg<br/>
+                                            Hauki 8 kg<br/>
+                                            Hauki 9 kg<br/>
+                                            Hauki 10 kg<br/>
+                                            Hauki 11 kg<br/>
+                                            Hauki 12 kg<br/>
+                                            Hauki 13 kg<br/>
+                                            Hauki 14 kg<br/>
+                                            Hauki 15 kg<br/>
+                                        </div>
+                                        <br>
+                                        <div class="ui-widget-header">
+                                            Uusimmat kalat
+                                        </div>
+                                        <div class="ui-widget-content">
+                                            1.9.2011 14:11 cape Hauki 1 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 2 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 3 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 4 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 5 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 6 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 7 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 8 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 9 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 10 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 11 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 12 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 13 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 14 kg<br/>
+                                            1.9.2011 14:11 cape Hauki 15 kg<br/>
 
-  
+                                        </div>
+                                    </td></tr>
+                                </table>
+
+                            </div>
+                            <div id="tabs-2" class="mainwidget">
+
+                            </div>
+                            <div id="tabs-3" class="mainwidget">
+                                Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.
+                            </div>
+                        </div>
+                           
+                    </td>
+                </tr>
+            </table>
+            
+    </td>
+    <td class="stretch" background="back-mid-right.png">
+    </td>
+    </tr>
+    <tr>
+        <td width="28" class="stretch">
+            <img src="back-bottom-left.png" width="100%" height="100%"></img>
+        </td>
+        <td background="back-bottom.png" height="180" class="stretch">
+           
+        </td>
+        <td class="stretch"><img src="back-bottom-right.png" width="100%" height="100%"></img></td>
+    </tr>
+</table>
+    
 </body>
 </html>
