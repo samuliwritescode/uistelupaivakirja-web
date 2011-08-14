@@ -1,0 +1,22 @@
+/* 
+    Document   : style
+    Created on : Aug 14, 2011, 2:30:36 PM
+    Author     : Samuli Penttilä <samuli.penttila@gmail.com>
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.menulink { font-size: small; color: #000000; text-decoration: none;}
+.titletext {font-family: "Futura"; font-size: xx-large;}
+.stretch {background-repeat: no-repeat; background-size: 100% 100%;}
+.mainwidget { width:100%; height:100%;}
+.header { font-size: small; font-weight: bold; background-color: #EEEEEE;}
+.tabledataOdd { font-size: small; font-weight: normal; }
+.tabledataEven { font-size: small; font-weight: normal; background-color: #EEEFFF;}
+body{ margin: 0px;}
+

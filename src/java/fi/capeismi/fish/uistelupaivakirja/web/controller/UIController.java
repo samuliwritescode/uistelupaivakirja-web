@@ -16,9 +16,11 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -28,9 +30,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 public class UIController {
     
+    private LoginService loginservice;
+    
     @RequestMapping(value="/", method=RequestMethod.GET)
-    public String getMainPage()
+    public ModelAndView getMainPage()
     {
-        return "index";
+        ModelAndView view = new ModelAndView();
+        view.setViewName("index");
+        return view;
+    }
+    
+    @RequestMapping(value="/myfish", method=RequestMethod.GET)
+    public ModelAndView getMyFish()
+    {
+        ModelAndView view = new ModelAndView();
+        view.setViewName("myfish");
+        return view;
+    }
+    
+    @RequestMapping(value="/profile", method=RequestMethod.GET)
+    public ModelAndView getProfile()
+    {
+        ModelAndView view = new ModelAndView();
+        view.setViewName("profile");
+        return view;
+    }
+    
+    @Autowired
+    public void setLoginService(LoginService service) 
+    {
+        this.loginservice = service;
     }
 }

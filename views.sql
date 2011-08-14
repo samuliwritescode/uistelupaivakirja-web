@@ -84,5 +84,5 @@ from event
     join user on(user_id=user.id)
 having 
     (type=1 OR type=3)
-order by date desc, fish_time desc limit 50
+order by date desc, fish_time desc limit 10
 ;
