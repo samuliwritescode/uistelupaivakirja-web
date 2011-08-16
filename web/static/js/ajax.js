@@ -15,6 +15,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+function createTable(url, renderTo, columns) {
+    $.ajax( {
+        type: "GET",
+        url: url,
+        dataType: "xml",
+        success: function(resp) {
+            var newlist = document.getElementById(renderTo);
+
+            var loop=0;
+            $(resp).find("fish").each(function(){
+                loop++;
+
+                var tr = document.createElement("tr");
+                if(loop%2 == 0) {
+                    tr.setAttribute("class", "tabledataEven");
+                }
+                else {
+                    tr.setAttribute("class", "tabledataOdd");
+                }
+
+                for(var hdr in columns) {
+                    var td = document.createElement("td");                          
+                      var data = $(this).find(columns[hdr]).text();
+                      if(columns[hdr] == "time") {
+                          data = new Date(data).toLocaleDateString();
+                      }
+                      td.appendChild(document.createTextNode(data));
+                      tr.appendChild(td);
+                  }
+
+                newlist.appendChild(tr);                   
+            });
+
+        }
+    });
+}
 
 function loginbox() {
     var loginBox = document.getElementById("loginbox");
