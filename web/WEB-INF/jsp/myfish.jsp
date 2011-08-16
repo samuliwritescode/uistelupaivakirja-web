@@ -55,6 +55,7 @@ $.ajax({
 
 createTable("/uistelu/api/fishstat", 
     "mynewest", 
+    "fish",
     ["time", "luremaker", "place", "weight", "length"]
 );
     

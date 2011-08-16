@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function createTable(url, renderTo, columns) {
+function createTable(url, renderTo, root, columns) {
     $.ajax( {
         type: "GET",
         url: url,
@@ -24,7 +24,7 @@ function createTable(url, renderTo, columns) {
             var newlist = document.getElementById(renderTo);
 
             var loop=0;
-            $(resp).find("fish").each(function(){
+            $(resp).find(root).each(function(){
                 loop++;
 
                 var tr = document.createElement("tr");
