@@ -16,30 +16,6 @@
  */
 
 
-function createRequest() {
-    var result = null;
-    try {
-        if (window.XMLHttpRequest) {
-            // FireFox, Safari, etc.
-            result = new XMLHttpRequest();
-            if (typeof result.overrideMimeType != 'undefined') {
-              result.overrideMimeType('text/xml'); // Or anything else
-            }
-        }
-        else if (window.ActiveXObject) {
-            // MSIE
-            result = new ActiveXObject("Microsoft.XMLHTTP");
-        } 
-        else {
-            // No known mechanism -- consider aborting the application
-        }
-        return result;
-    }catch(e) {
-        document.write(e);
-    }
-    
-}
-
 function loginbox() {
     var loginBox = document.getElementById("loginbox");
     var form = document.createElement("form");
