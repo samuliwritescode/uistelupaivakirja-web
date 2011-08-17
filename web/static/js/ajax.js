@@ -59,11 +59,14 @@ function loginbox() {
     var password = document.createElement("input");
     var submit = document.createElement("input");
     username.setAttribute("name", "j_username");
+    username.setAttribute("id", "j_username");
     password.setAttribute("name", "j_password");
-    submit.setAttribute("type", "submit");
+    password.setAttribute("type", "password");
+    password.setAttribute("id", "j_password");
+    submit.setAttribute("type", "button");
+    submit.setAttribute("onClick", "login()");
     submit.setAttribute("value", "kirjaudu");
     form.setAttribute("method", "get");
-    form.setAttribute("action", "/uistelu/api/login");
     form.appendChild(username);
     form.appendChild(password);
     form.appendChild(submit);
@@ -73,7 +76,39 @@ function loginbox() {
 function logoutbox() {
   var loginBox = document.getElementById("loginbox");
   var link = document.createElement("A");
-  link.setAttribute("href", "/uistelu/api/logout");
+  link.setAttribute("href", "javascript: logout()");
   link.appendChild(document.createTextNode("logout"));
   loginBox.appendChild(link);
+}
+
+function logout() {
+    $.ajax( {
+        type: "GET",
+        url: "/uistelu/api/logout",
+        dataType: "xml",
+        success: function(resp) {
+            history.go(0);
+        },
+
+        error: function() {
+            alert("cannot log out. WTF?");
+        }
+    });
+}
+
+function login() {
+    var username = document.getElementById("j_username").value;
+    var password= document.getElementById("j_password").value;
+    $.ajax( {
+    type: "GET",
+    url: "/uistelu/api/login?j_username="+username+"&j_password="+password,
+    dataType: "xml",
+    success: function(resp) {
+        history.go(0);
+    },
+    
+    error: function() {
+        alert("invalid username or password");
+    }
+});
 }

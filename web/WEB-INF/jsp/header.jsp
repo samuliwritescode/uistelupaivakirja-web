@@ -55,3 +55,18 @@
                     <table border="1" cellpadding="0" cellspacing="5" width="100%">
                         <tr>
                             <td>
+                                <script type="text/javascript">
+$.ajax( {
+    type: "GET",
+    url: "/uistelu/api/userinfo",
+    dataType: "xml",
+    success: function(resp) {
+        //alert($(resp).find("username").text());
+        logoutbox();
+    },
+    
+    error: function() {
+        loginbox();
+    }
+});
+                                </script>
