@@ -82,23 +82,7 @@ public class FishStat extends View {
         @XmlElement
         public String getLuremaker() {
             return this._values.get("lure_maker");
-        }
-        
-        @XmlElement
-        public String getProperty() {
-            Properties props = new Properties();
-            try {
-                ApplicationContext ctx = new ClassPathXmlApplicationContext();
-                
-                props.load(new FileInputStream(ctx.getResource("classpath:fi/capeismi/fish/uistelupaivakirja/web/dao/views.properties").getFile()));
-                return props.getProperty("testi");
-                    
-            } catch (Exception e) {
-                return "exception: "+e.toString();    
-                
-            }
-           
-        }
+        }        
         
         @XmlElement
         public Date getTime() {

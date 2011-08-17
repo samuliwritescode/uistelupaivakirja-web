@@ -23,7 +23,7 @@ function initialize() {
 
 $.ajax({
   type: "GET",
-  url: "/uistelu/api/view/fishmap",
+  url: "/uistelu/api/views/fishmap",
   dataType: "xml",
   success: function(resp) {
     var myLatlng = new google.maps.LatLng(62, 25);
@@ -53,7 +53,7 @@ $.ajax({
 });
 
 
-createTable("/uistelu/api/view/fishstat", 
+createTable("/uistelu/api/views/fishstat", 
     "mynewest", 
     "fish",
     ["time", "luremaker", "place", "weight", "length"]
