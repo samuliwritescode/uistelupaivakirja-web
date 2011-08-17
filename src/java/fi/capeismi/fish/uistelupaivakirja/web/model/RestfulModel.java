@@ -18,6 +18,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.model;
 
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.View;
 
 /**
  *
@@ -34,20 +35,20 @@ public class RestfulModel {
     }
 
     
-    public Object getTrollingObjects(String type)
+    public TrollingObjectCollection getTrollingObjects(String type)
     {        
-        Object dao = this._daoStore.getCollection(type);
-        if(dao instanceof Collection) {
-            
-            TrollingObjectCollectionImpl retval = new TrollingObjectCollectionImpl();
-            if(dao != null) {
-                retval.setDAO((Collection)dao);
-            }
-            return retval;
-        }else {
-            return dao;
-        }
+        Collection dao = this._daoStore.getCollection(type);            
+        if(dao == null) return null;
 
+        TrollingObjectCollectionImpl retval = new TrollingObjectCollectionImpl();
+        retval.setDAO(dao);
+        return retval;
+
+    }
+    
+    public View getView(String viewname) {
+        View dao = this._daoStore.getView(viewname);
+        return dao;
     }
 
 

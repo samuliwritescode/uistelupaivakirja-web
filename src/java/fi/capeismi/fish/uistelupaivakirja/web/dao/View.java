@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-abstract class View {
+public abstract class View {
     private List<String> _columns = new ArrayList<String>();
     
     public final void addColumn(String colname) {

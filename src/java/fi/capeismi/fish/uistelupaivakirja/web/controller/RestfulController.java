@@ -58,8 +58,17 @@ public class RestfulController
     public DOMSource getItems(@PathVariable String collection) 
     {                        
         RestfulModel model = m_loginService.getModel();
-        Object items = model.getTrollingObjects(collection);
-        return XMLCreator.marshal(items);        
+
+        return XMLCreator.marshal(model.getTrollingObjects(collection));        
+    }
+    
+    @RequestMapping(value="/views/{view}", method=RequestMethod.GET)
+    @ResponseBody
+    public DOMSource getView(@PathVariable String view) 
+    {                        
+        RestfulModel model = m_loginService.getModel();
+
+        return XMLCreator.marshal(model.getView(view));
     }
     
     @RequestMapping(value="/{doctype}", method=RequestMethod.POST)

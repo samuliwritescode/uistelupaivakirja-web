@@ -73,16 +73,14 @@ public class DAOStore {
          
         return null;  
     }
-    
-    public Object getCollection(String typename) {
-        
+
+    public Collection getCollection(String typename) {
         Type type = getType(typename);
         if(type == null) {
-            return getView(typename);
+            return null;
         }
-        else {
-            return getCollection(type);
-        }
+
+        return getCollection(type);
     }    
             
     private Collection getCollection(Type typeDAO) {
@@ -214,7 +212,7 @@ public class DAOStore {
         return fac.getCurrentSession();
     }
 
-    public Object getView(String view) {
+    public View getView(String view) {
         User user = getUser();
         Session ses = getSession();
         ses.beginTransaction();        

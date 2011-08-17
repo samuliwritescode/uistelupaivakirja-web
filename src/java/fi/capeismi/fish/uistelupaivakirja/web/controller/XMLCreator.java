@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
+import fi.capeismi.fish.uistelupaivakirja.web.dao.View;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingEvent;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObject;
@@ -40,27 +41,38 @@ import org.w3c.dom.Text;
 public class XMLCreator {
     
     
-        public static DOMSource marshal(Object object) {        
-            if(object instanceof TrollingObjectCollection) {
-                TrollingObjectCollection collection = (TrollingObjectCollection)object;
-                TrollingCollectionMarshaller marshaller = new TrollingCollectionMarshaller(collection);
-                return marshaller.getSource();
-            }else
-            {
-                try {
-                    JAXBContext ctx = JAXBContext.newInstance(object.getClass());
-                    Marshaller m = ctx.createMarshaller();
-                    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-                    Node node = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-                    m.marshal(object, node);
-                    return new DOMSource(node);
-                } catch (Exception ex) {
-                    throw new RestfulException(ex.toString());
-                }
-            }
+    public static DOMSource marshal(View object) {        
+        ViewMarshaller marshaller = new ViewMarshaller(object);
+        return marshaller.getSource();
     }
-    
+
+    public static DOMSource marshal(TrollingObjectCollection collection) {
+        TrollingCollectionMarshaller marshaller = new TrollingCollectionMarshaller(collection);
+        return marshaller.getSource();
+    }
+  
+    private static class ViewMarshaller{
+        private DOMSource _domsource = null;
+        
+        public ViewMarshaller(View object) {
+            try {
+                JAXBContext ctx = JAXBContext.newInstance(object.getClass());
+                Marshaller m = ctx.createMarshaller();
+                m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+                Node node = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                m.marshal(object, node);
+                this._domsource = new DOMSource(node);
+            } catch (Exception ex) {
+                throw new RestfulException(ex.toString());
+            } 
+        }
+        
+        public DOMSource getSource()
+        {
+            return this._domsource;
+        }
+    }
 
     private static class TrollingCollectionMarshaller {
         private DOMSource _domsource = null;
@@ -131,10 +143,10 @@ public class XMLCreator {
             }
         }
         
-       public DOMSource getSource()
-       {
+        public DOMSource getSource()
+        {
            return this._domsource;
-       }
+        }
     }
     
 }
