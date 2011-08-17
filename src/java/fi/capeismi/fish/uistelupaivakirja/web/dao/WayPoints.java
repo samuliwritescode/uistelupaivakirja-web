@@ -31,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="gpx")
-@ViewRepresenter("fishmap")
 public class WayPoints extends View {
     private List<WayPoint> _waypoints = new ArrayList<WayPoint>();
     

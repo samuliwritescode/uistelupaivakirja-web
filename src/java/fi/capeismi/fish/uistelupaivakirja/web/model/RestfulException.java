@@ -25,6 +25,11 @@ public class RestfulException extends RuntimeException {
 
     private String _content;
     
+    public RestfulException(Exception e) {
+        e.printStackTrace();
+        this._content = e.getMessage();
+    }
+    
     public RestfulException(String string) {
         this._content = string;
     }

@@ -17,11 +17,15 @@
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -43,24 +47,17 @@ public abstract class View {
     public static class ViewFactory {
         public static View getInstance(String view) {
             
-            try {        
-                List<Class> classes = new ArrayList<Class>();
-                classes.add(SpinnerItems.class);
-                classes.add(WayPoints.class);
-                classes.add(FishStat.class);
-
-                for(Class clazz: classes) {
-                    ViewRepresenter annotation = (ViewRepresenter)clazz.getAnnotation(ViewRepresenter.class);
-
-                    if(annotation.value().equalsIgnoreCase(view)) {
-                        return (View)clazz.newInstance();
-                    }
-                }
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            throw new RestfulException("no such view: "+view);
+            Properties props = new Properties();
+            try {
+                ApplicationContext ctx = new ClassPathXmlApplicationContext();
+                
+                props.load(new FileInputStream(ctx.getResource("classpath:fi/capeismi/fish/uistelupaivakirja/web/dao/views.properties").getFile()));
+                String classname = props.getProperty(view);
+                return (View)Class.forName(classname).newInstance();
+                    
+            } catch (Exception e) {
+                throw new RestfulException(e);
+            }            
         }
     }
 

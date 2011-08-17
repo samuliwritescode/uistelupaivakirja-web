@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="TrollingObjects")
-@ViewRepresenter("spinneritem")
 public class SpinnerItems extends View {        
     List<SpinnerItem> _items;    
     

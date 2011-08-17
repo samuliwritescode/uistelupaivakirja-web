@@ -222,9 +222,8 @@ public class DAOStore {
             
             Connection conn = ses.connection();
             Statement st = conn.createStatement();
-            String viewname = orm.getClass().getAnnotation(ViewRepresenter.class).value();
-            
-            ResultSet res = st.executeQuery("select * from " +viewname+ "_view where user_id="+user.getId().toString());           
+           
+            ResultSet res = st.executeQuery("select * from " +view+ "_view where user_id="+user.getId().toString());           
             List<String> columns = new ArrayList<String>();
             for(int loop=1; loop <= res.getMetaData().getColumnCount(); loop++) {                
                 String colname = res.getMetaData().getColumnName(loop);

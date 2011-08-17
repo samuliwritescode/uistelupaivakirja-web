@@ -34,7 +34,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="fishlist")
-@ViewRepresenter("fishstat")
 public class FishStat extends View {
     private List<Fish> _items = new ArrayList<Fish>();
     
