@@ -127,6 +127,13 @@ public class RestfulController
         return RestfulResponse.getResponse(RESPONSE_EXCEPTION, ex.toString());             
     }
     
+    @RequestMapping(value="/userinfo", method=RequestMethod.GET)
+    @ResponseBody
+    public DOMSource userinfo() {
+        RestfulModel model = m_loginService.getModel();        
+        return XMLCreator.marshal(model.getUser());
+    }
+    
     @RequestMapping(value="/logout", method= RequestMethod.GET)
     @ResponseBody
     public DOMSource logout()

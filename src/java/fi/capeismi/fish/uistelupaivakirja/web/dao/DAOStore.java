@@ -106,7 +106,7 @@ public class DAOStore {
         return null;
     }
     
-    private User getUser() {
+    public User getUser() {
         Session ses = getSession();
         ses.beginTransaction();
          try {
@@ -124,7 +124,7 @@ public class DAOStore {
         catch(Exception e)
         {
             ses.getTransaction().rollback();
-            throw new RestfulException(e.toString());
+            throw new RestfulException(e);
         }
          
         throw new RestfulException("no user");

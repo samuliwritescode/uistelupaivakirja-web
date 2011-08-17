@@ -31,7 +31,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public abstract class View {
+public abstract class View implements AnnotatedView {
     private List<String> _columns = new ArrayList<String>();
     
     public final void addColumn(String colname) {

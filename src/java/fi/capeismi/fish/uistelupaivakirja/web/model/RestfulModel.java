@@ -16,8 +16,10 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import fi.capeismi.fish.uistelupaivakirja.web.dao.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.View;
 
 /**
@@ -32,6 +34,11 @@ public class RestfulModel {
     {
         this.m_user = user;
         this._daoStore = DAOStore.instance(user);
+    }
+    
+    public User getUser() {
+        User user = this._daoStore.getUser();
+        return user;
     }
 
     

@@ -16,7 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.dao.View;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingEvent;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObject;
@@ -31,7 +31,6 @@ import javax.xml.transform.dom.DOMSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.Text;
 
 
 /**
@@ -41,7 +40,7 @@ import org.w3c.dom.Text;
 public class XMLCreator {
     
     
-    public static DOMSource marshal(View object) {        
+    public static DOMSource marshal(AnnotatedView object) {        
         ViewMarshaller marshaller = new ViewMarshaller(object);
         return marshaller.getSource();
     }
@@ -54,7 +53,7 @@ public class XMLCreator {
     private static class ViewMarshaller{
         private DOMSource _domsource = null;
         
-        public ViewMarshaller(View object) {
+        public ViewMarshaller(AnnotatedView object) {
             try {
                 JAXBContext ctx = JAXBContext.newInstance(object.getClass());
                 Marshaller m = ctx.createMarshaller();
