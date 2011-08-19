@@ -16,10 +16,12 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.Factory;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingEvent;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObject;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObjectCollection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Keyvalue;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Property;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -36,11 +38,11 @@ import org.xml.sax.SAXException;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public class XMLReader {
-    TrollingObjectCollection _collection = null;
+    Collection _collection = null;
     
     public XMLReader(InputStream in) throws ParserConfigurationException, SAXException, IOException
     {
-        _collection = Factory.createEmptyCollection();
+        _collection = new Collection();
         parseDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in));
     }
     
@@ -78,9 +80,10 @@ public class XMLReader {
     private void readTrollingObject(Element trollingObjectElement)
     {
         String id = trollingObjectElement.getAttribute("id");
-        TrollingObject object = Factory.createEmptyTrollingObject();
-        _collection.addTrollingObject(object);
-        object.setId(new Integer(id).intValue());
+        Trollingobject object = new Trollingobject();
+        object.setCollection(_collection);
+        _collection.getTrollingobjects().add(object);
+        object.setObjectIdentifier(new Integer(id).intValue());
         
         NodeList children = trollingObjectElement.getChildNodes();
         for(int loop=0; loop < children.getLength(); loop++)
@@ -95,12 +98,20 @@ public class XMLReader {
 
                 if(value == null)
                     value = "";
-                object.setKeyValue(node.getNodeName(), value);
+                Property property = new Property();
+                Keyvalue kv = new Keyvalue();
+                kv.setKeyname(node.getNodeName());
+                kv.setValue(value);                
+                property.setKeyvalue(kv);
+                property.setTrollingobject(object);                        
+                property.setKeyvalue(kv);
+                
+                object.getProperties().add(property);
             }
         }                
     }
     
-    private void readPropertyList(TrollingObject object, Node propertylist) 
+    private void readPropertyList(Trollingobject object, Node propertylist) 
     {        
         NodeList children = propertylist.getChildNodes();
         for(int loop=0; loop < children.getLength(); loop++) 
@@ -108,14 +119,15 @@ public class XMLReader {
             Node node = children.item(loop);
             if(node.getNodeName().equalsIgnoreCase("PropertyListItem"))
             {
-                TrollingEvent event = Factory.createEmptyTrollingEvent();
-                object.addEvent(event);
+                Event event = new Event();
+                event.setTrollingobject(object);
+                object.getEvents().add(event);                
                 readPropertyListItem(event, node);
             }
         }
     }
     
-    private void readPropertyListItem(TrollingEvent event, Node listitem)
+    private void readPropertyListItem(Event event, Node listitem)
     {
         NodeList children = listitem.getChildNodes();
         for(int loop=0; loop < children.getLength(); loop++)
@@ -128,12 +140,20 @@ public class XMLReader {
                     value = "";
                 String key = node.getNodeName();
                 
-                event.setKeyValue(key, value);
+                Eventproperty eventproperty = new Eventproperty();
+                Keyvalue keyvalue = new Keyvalue();
+                eventproperty.setKeyvalue(keyvalue);
+                eventproperty.setEvent(event);
+                
+                keyvalue.setKeyname(key);
+                keyvalue.setValue(value);
+                
+                event.getEventproperties().add(eventproperty);                
             }
         }
     }
     
-    public TrollingObjectCollection getTrollingObjects()
+    public Collection getTrollingObjects()
     {
         return this._collection;
     }

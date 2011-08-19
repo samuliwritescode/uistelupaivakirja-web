@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObjectCollection;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -97,8 +97,8 @@ public class RestfulController
         try {            
             InputStream in = new ByteArrayInputStream(content.getBytes("ISO-8859-1"));
             XMLReader reader = new XMLReader(in);
-            TrollingObjectCollection objects = reader.getTrollingObjects();
-            objects.setType(doctype);
+            Collection objects = reader.getTrollingObjects();
+            objects.setType(model.getType(doctype));
                         
             Integer commitId = null;
             if(append)

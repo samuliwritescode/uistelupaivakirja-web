@@ -16,9 +16,9 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import fi.capeismi.fish.uistelupaivakirja.web.dao.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Type;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.View;
 
@@ -42,35 +42,34 @@ public class RestfulModel {
     }
 
     
-    public TrollingObjectCollection getTrollingObjects(String type)
+    public Collection getTrollingObjects(String type)
     {        
         Collection dao = this._daoStore.getCollection(type);            
-        if(dao == null) return null;
-
-        TrollingObjectCollectionImpl retval = new TrollingObjectCollectionImpl();
-        retval.setDAO(dao);
-        return retval;
-
+        return dao;
     }
     
     public View getView(String viewname) {
         View dao = this._daoStore.getView(viewname);
         return dao;
     }
+    
+    public Type getType(String typename) {
+        return this._daoStore.getType(typename);
+    }
 
 
-    public Integer appendTrollingObjects(TrollingObjectCollection objects)
+    public Integer appendTrollingObjects(Collection objects)
     {              
-        DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
-        this._daoStore.appendCollection(dao.getDAO());
-        return new Integer(dao.getDAO().getRevision());
+        //DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
+        this._daoStore.appendCollection(objects);
+        return new Integer(objects.getRevision());
     }
     
-    public Integer setTrollingObjects(TrollingObjectCollection objects)
+    public Integer setTrollingObjects(Collection objects)
     {                
         
-        DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
-        this._daoStore.setCollection(dao.getDAO());
-        return new Integer(dao.getDAO().getRevision());
+        //DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
+        this._daoStore.setCollection(objects);
+        return new Integer(objects.getRevision());
     }           
 }
