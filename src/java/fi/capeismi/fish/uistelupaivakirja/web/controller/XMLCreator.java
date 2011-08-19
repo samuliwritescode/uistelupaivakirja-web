@@ -23,11 +23,7 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Property;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingEvent;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObject;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TrollingObjectCollection;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;

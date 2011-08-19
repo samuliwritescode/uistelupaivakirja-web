@@ -23,18 +23,6 @@ import java.io.Serializable;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public final class Factory {
-    public static TrollingObjectCollection createEmptyCollection() {
-        return new TrollingObjectCollectionImpl();
-    }
-    
-    public static TrollingObject createEmptyTrollingObject() {
-        return new TrollingObjectImpl();
-    }
-    
-    public static TrollingEvent createEmptyTrollingEvent() {
-        return new TrollingEventImpl();
-    }
-    
     private Factory() {
         
     }
