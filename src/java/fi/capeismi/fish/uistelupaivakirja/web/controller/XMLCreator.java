@@ -20,8 +20,8 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Property;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingproperty;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 
 import java.util.Set;
@@ -107,11 +107,11 @@ public class XMLCreator {
         
         private void createTrollingObject(Document doc, Element element, Trollingobject object)
         {            
-            Set<Property> kvs = object.getProperties();
-            for(Property prop: kvs)
+            Set<Trollingproperty> kvs = object.getTrollingproperties();
+            for(Trollingproperty prop: kvs)
             {
-                Element keyvalue = doc.createElement(prop.getKeyvalue().getKeyname());
-                String value = prop.getKeyvalue().getValue();
+                Element keyvalue = doc.createElement(prop.getKeyname());
+                String value = prop.getValue();
                 if(value == null)
                     continue;
 
@@ -137,8 +137,8 @@ public class XMLCreator {
         private void createPropertyItem(Document doc, Element item, Event event) {
             for(Eventproperty prop: event.getEventproperties())
             {
-                Element kvpair = doc.createElement(prop.getKeyvalue().getKeyname());
-                kvpair.appendChild(doc.createTextNode(prop.getKeyvalue().getValue()));
+                Element kvpair = doc.createElement(prop.getKeyname());
+                kvpair.appendChild(doc.createTextNode(prop.getValue()));
                 item.appendChild(kvpair);
             }
         }

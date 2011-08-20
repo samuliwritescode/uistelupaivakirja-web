@@ -19,9 +19,8 @@ package fi.capeismi.fish.uistelupaivakirja.web.controller;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Keyvalue;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Property;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingproperty;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -98,15 +97,13 @@ public class XMLReader {
 
                 if(value == null)
                     value = "";
-                Property property = new Property();
-                Keyvalue kv = new Keyvalue();
-                kv.setKeyname(node.getNodeName());
-                kv.setValue(value);                
-                property.setKeyvalue(kv);
-                property.setTrollingobject(object);                        
-                property.setKeyvalue(kv);
                 
-                object.getProperties().add(property);
+                Trollingproperty property = new Trollingproperty();                
+                property.setTrollingobject(object);
+                property.setKeyname(node.getNodeName());
+                property.setValue(value);
+                                
+                object.getTrollingproperties().add(property);
             }
         }                
     }
@@ -141,14 +138,10 @@ public class XMLReader {
                 String key = node.getNodeName();
                 
                 Eventproperty eventproperty = new Eventproperty();
-                Keyvalue keyvalue = new Keyvalue();
-                eventproperty.setKeyvalue(keyvalue);
                 eventproperty.setEvent(event);
-                
-                keyvalue.setKeyname(key);
-                keyvalue.setValue(value);
-                
-                event.getEventproperties().add(eventproperty);                
+                eventproperty.setKeyname(key);
+                eventproperty.setValue(value);
+                event.getEventproperties().add(eventproperty);                                
             }
         }
     }

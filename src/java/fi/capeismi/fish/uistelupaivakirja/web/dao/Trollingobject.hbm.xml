@@ -1,29 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 19, 2011 9:44:24 PM by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-  <class catalog="trolling" name="fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject" table="trollingobject">
-    <id name="id" type="java.lang.Integer">
-      <column name="ID"/>
-      <generator class="identity"/>
-    </id>
-    <many-to-one class="fi.capeismi.fish.uistelupaivakirja.web.dao.Collection" fetch="select" name="collection">
-      <column name="COLLECTION_ID" not-null="true"/>
-    </many-to-one>
-    <property name="objectIdentifier" type="int">
-      <column name="OBJECT_IDENTIFIER" not-null="true"/>
-    </property>
-    <set cascade="all" inverse="true" name="properties" lazy="false">
-      <key>
-        <column name="TROLLING_ID" not-null="true"/>
-      </key>
-      <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Property"/>
-    </set>
-    <set cascade="all" inverse="true" name="events" lazy="false" order-by="id">
-      <key>
-        <column name="TROLLING_ID" not-null="true"/>
-      </key>
-      <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Event"/>
-    </set>
-  </class>
+    <class name="fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject" table="trollingobject" catalog="trolling">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="collection" class="fi.capeismi.fish.uistelupaivakirja.web.dao.Collection" fetch="select">
+            <column name="COLLECTION_ID" not-null="true" />
+        </many-to-one>
+        <property name="objectIdentifier" type="int">
+            <column name="OBJECT_IDENTIFIER" not-null="true" />
+        </property>
+        <set cascade="all" name="trollingproperties" inverse="true" lazy="false">
+            <key>
+                <column name="TROLLING_ID" not-null="true" />
+            </key>
+            <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingproperty" />
+        </set>
+        <set cascade="all" name="events" inverse="true" lazy="false" order-by="id">
+            <key>
+                <column name="TROLLING_ID" not-null="true" />
+            </key>
+            <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Event" />
+        </set>
+    </class>
 </hibernate-mapping>

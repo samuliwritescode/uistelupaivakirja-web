@@ -95,15 +95,15 @@ public class DAOStore {
             for(Object o: types) {
                 return (Collection)o;
             }
-            
-            ses.getTransaction().commit();        
+                        
+            ses.getTransaction().commit();      
+            return new Collection();
         } 
         catch(Exception e)
         {
             ses.getTransaction().rollback();
             throw new RestfulException(e.toString());
         }
-        return null;
     }
     
     public User getUser() {
@@ -147,6 +147,7 @@ public class DAOStore {
             }
             
             if(collectionDAO.getRevision() != oldRevision) {
+                System.out.println(collectionDAO.getRevision()+" != " +oldRevision);
                 throw new RestfulException("Cannot commit. Conflict with revision");
             }
                 
