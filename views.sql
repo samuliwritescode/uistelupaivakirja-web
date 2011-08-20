@@ -7,8 +7,7 @@ select trolling_id,
     value 
     from trollingobject 
     join collection on(collection_id=collection.id)
-    join property on(trolling_id=trollingobject.id) 
-    join keyvalue on(keyvalue_id=keyvalue.id)
+    join trollingproperty on(trolling_id=trollingobject.id) 
 ;
 
 drop view if exists eventproperty_view;
@@ -23,7 +22,6 @@ select trolling_id,
     join collection on(collection_id=collection.id)
     join event on(trolling_id=trollingobject.id)
     join eventproperty on(event_id=event.id) 
-    join keyvalue on(keyvalue_id=keyvalue.id)
 ;
 
 drop view if exists spinneritem_view;
