@@ -1,5 +1,5 @@
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
-// Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA
+// Generated Aug 19, 2011 9:44:24 PM by Hibernate Tools 3.2.1.GA
 
 
 import java.util.LinkedHashSet;
@@ -14,7 +14,7 @@ public class Trollingobject  implements java.io.Serializable {
      private Integer id;
      private Collection collection;
      private int objectIdentifier;
-     private Set<Property> properties = new LinkedHashSet<Property>(0);
+     private Set<Trollingproperty> trollingproperties = new LinkedHashSet<Trollingproperty>(0);
      private Set<Event> events = new LinkedHashSet<Event>(0);
 
     public Trollingobject() {
@@ -25,10 +25,10 @@ public class Trollingobject  implements java.io.Serializable {
         this.collection = collection;
         this.objectIdentifier = objectIdentifier;
     }
-    public Trollingobject(Collection collection, int objectIdentifier, Set<Property> properties, Set<Event> events) {
+    public Trollingobject(Collection collection, int objectIdentifier, Set<Trollingproperty> trollingproperties, Set<Event> events) {
        this.collection = collection;
        this.objectIdentifier = objectIdentifier;
-       this.properties = properties;
+       this.trollingproperties = trollingproperties;
        this.events = events;
     }
    
@@ -53,12 +53,12 @@ public class Trollingobject  implements java.io.Serializable {
     public void setObjectIdentifier(int objectIdentifier) {
         this.objectIdentifier = objectIdentifier;
     }
-    public Set<Property> getProperties() {
-        return this.properties;
+    public Set<Trollingproperty> getTrollingproperties() {
+        return this.trollingproperties;
     }
     
-    public void setProperties(Set<Property> properties) {
-        this.properties = properties;
+    public void setTrollingproperties(Set<Trollingproperty> trollingproperties) {
+        this.trollingproperties = trollingproperties;
     }
     public Set<Event> getEvents() {
         return this.events;
