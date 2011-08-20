@@ -45,10 +45,6 @@ public class RestfulModel {
     public Collection getTrollingObjects(String type)
     {        
         Collection dao = this._daoStore.getCollection(type);
-        if(dao == null)
-        {
-            throw new RestfulException("Collection "+type+" is empty");
-        }
         return dao;
     }
     

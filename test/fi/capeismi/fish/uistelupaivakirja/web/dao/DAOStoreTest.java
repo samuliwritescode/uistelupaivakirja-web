@@ -16,6 +16,8 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import org.hibernate.SessionException;
+import org.hibernate.Transaction;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
@@ -31,12 +33,13 @@ import static org.junit.Assert.*;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public class DAOStoreTest {
+    private Session sessionBefore;
     
     public DAOStoreTest() {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {        
+    public static void setUpClass() throws Exception {
         getSession().beginTransaction();
         for(Object item: getSession().createQuery("from User").list()) {
             getSession().delete(item);
@@ -57,6 +60,7 @@ public class DAOStoreTest {
         return fac.getCurrentSession();
     }
     
+    
     private static int getNumberOfRowsInTable(String table) {
         getSession().beginTransaction();
         int retval = getSession().createQuery("from "+table).list().size();
@@ -70,21 +74,50 @@ public class DAOStoreTest {
     
     @Before
     public void setUp() {
+        this.sessionBefore = getSession();
     }
     
     @After
     public void tearDown() {
+        try {
+            assertFalse(this.sessionBefore.getTransaction().isActive());            
+        } catch(SessionException e) {
+            
+        }
     }
 
     @Test
-    public void testCreateUser() {
+    public void testCreateUser() {        
+        createUser("cape");
+        createUser("testuser");
+        createUser("keijjo");
+    }
+    
+    @Test
+    public void testOpenTransactions() {
+        DAOStore store = new DAOStore("cape");
+
+        store.getUser();
+       
+        getNumberOfRowsInTable("User");
+
+        
+        
+    }
+    
+    private void checkTx(Session before) {
+
+    }
+    
+    private void createUser(String username) {
+        int usersBefore = getNumberOfRowsInTable("User");
         DAOStore store = new DAOStore(null);
         User user = new User();
-        user.setUsername("cape");
-        user.setPassword(LoginService.getMD5Hash("kek"));
-        store.setUser(user);
+        user.setUsername(username);
+        user.setPassword(LoginService.getMD5Hash("pw"+username));
+        store.addUser(user);
         
-        assertEquals(getNumberOfRowsInTable("User"), 1);
-        
+        assertEquals(usersBefore+1, getNumberOfRowsInTable("User"));
+        assertEquals(new DAOStore(username).getUser().getUsername(), username);
     }
 }

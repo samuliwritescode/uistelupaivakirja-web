@@ -68,20 +68,21 @@ public class DAOStore {
     public Collection getCollection(String typename) {
         Type type = getType(typename);
         if(type == null) {
-            return null;
+            throw new RestfulException("no such collection");
         }
 
         return getCollection(type);
     }    
             
     private Collection getCollection(Type typeDAO) {
+        User user = getUser();
         Session ses = getSession();
         ses.beginTransaction();
          try {
         
             Query q = ses.createQuery("from Collection where user_id=:user and type_id=:type");
             q.setParameter("type", typeDAO);
-            q.setParameter("user", getUser());
+            q.setParameter("user", user);
             List types = q.list();
             for(Object o: types) {
                 return (Collection)o;
@@ -97,7 +98,7 @@ public class DAOStore {
         }
     }
     
-    public void setUser(User user) {
+    public void addUser(User user) {
         Session ses = getSession();
         ses.beginTransaction();
          try {
@@ -122,15 +123,15 @@ public class DAOStore {
             List types = q.list();
             for(Object o: types) {
                 return (User)o;
-            }
-            
-            ses.getTransaction().commit();        
+            }    
         } 
         catch(Exception e)
         {
-            ses.getTransaction().rollback();
             throw new RestfulException(e);
         }
+        finally {
+             //ses.close();
+         }
          
         throw new RestfulException("no user");
     }
