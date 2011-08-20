@@ -22,9 +22,12 @@ import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -38,6 +41,19 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public class LoginService {
     private Map<String, RestfulModel> m_models = new HashMap<String, RestfulModel>();
+    
+    public static String getMD5Hash(String from) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(from.getBytes(),0, from.length());  
+            String hashedPass = new BigInteger(1,messageDigest.digest()).toString(16);
+            return hashedPass;
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(LoginService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return "";
+    }
     
     public void login(String username, String password)
     {
@@ -58,12 +74,7 @@ public class LoginService {
             
             for(User var: (List<User>)users)
             {
-                MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-                messageDigest.update(password.getBytes(),0, password.length());  
-                String hashedPass = new BigInteger(1,messageDigest.digest()).toString(16);  
-                //System.out.println("User from db is "+var.getPassword());
-                //System.out.println("User from input is "+hashedPass);
-
+                String hashedPass = getMD5Hash(password);
                 if(!var.getPassword().equalsIgnoreCase(hashedPass))
                 {
                     throw new RestfulException("incorrect password");

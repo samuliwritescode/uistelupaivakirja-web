@@ -33,7 +33,7 @@ public class RestfulModel {
     public RestfulModel(String user)
     {
         this.m_user = user;
-        this._daoStore = DAOStore.instance(user);
+        this._daoStore = new DAOStore(user);
     }
     
     public User getUser() {

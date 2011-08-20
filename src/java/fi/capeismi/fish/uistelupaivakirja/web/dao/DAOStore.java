@@ -38,18 +38,9 @@ public class DAOStore {
     private static DAOStore _instance = null;
     private String _user = null;
     
-    private DAOStore(String user) {
+    public DAOStore(String user) {
         this._user = user;
-    }
-        
-    public static DAOStore instance(String user) {
-        if(_instance == null)
-        {
-            _instance = new DAOStore(user);
-        }
-        
-        return _instance;
-    }
+    }        
 
     public static Type getType(String type) {
         Session ses = getSession();
@@ -103,6 +94,20 @@ public class DAOStore {
         {
             ses.getTransaction().rollback();
             throw new RestfulException(e.toString());
+        }
+    }
+    
+    public void setUser(User user) {
+        Session ses = getSession();
+        ses.beginTransaction();
+         try {
+            ses.persist(user);            
+            ses.getTransaction().commit();        
+        } 
+        catch(Exception e)
+        {
+            ses.getTransaction().rollback();
+            throw new RestfulException(e);
         }
     }
     
