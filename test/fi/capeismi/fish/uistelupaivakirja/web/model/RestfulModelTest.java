@@ -93,7 +93,6 @@ public class RestfulModelTest {
             Collection collection = new Collection();
             collection.setType(model.getType("trip"));
             collection.setRevision(0);
-            collection.setUser(model.getUser());
             model.setTrollingObjects(collection);
         }
     }
@@ -106,7 +105,6 @@ public class RestfulModelTest {
             Collection collection = new Collection();
             collection.setType(model.getType("trip"));
             collection.setRevision(1);
-            collection.setUser(model.getUser());
             setTrollingObject(collection, 1, generateTestProps(user+1), generateTestEvents(user+1));
             setTrollingObject(collection, 2, generateTestProps(user+2), generateTestEvents(user+2));
             setTrollingObject(collection, 3, generateTestProps(user+3), generateTestEvents(user+3));
@@ -146,7 +144,6 @@ public class RestfulModelTest {
             Collection collection = new Collection();
             collection.setType(model.getType("trip"));
             collection.setRevision(2);
-            collection.setUser(model.getUser());
             setTrollingObject(collection, 2, generateTestProps(user+2), generateTestEvents(user+2));
             model.setTrollingObjects(collection);
             
