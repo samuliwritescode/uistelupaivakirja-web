@@ -60,7 +60,6 @@ public class RestfulModel {
 
     public Integer appendTrollingObjects(Collection objects)
     {              
-        //DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
         this._daoStore.appendCollection(objects);
         return new Integer(objects.getRevision());
     }
@@ -68,7 +67,6 @@ public class RestfulModel {
     public Integer setTrollingObjects(Collection objects)
     {                
         
-        //DAOWrapper<Collection> dao = (DAOWrapper<Collection>)objects;
         this._daoStore.setCollection(objects);
         return new Integer(objects.getRevision());
     }           

@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import junit.framework.TestSuite;
 import org.hibernate.SessionException;
 import org.hibernate.Transaction;
 import org.hibernate.Session;
@@ -32,9 +33,7 @@ import static org.junit.Assert.*;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public class DAOStoreTest {
-    private Session sessionBefore;
-    
+public class DAOStoreTest {   
     public DAOStoreTest() {
     }
 
@@ -74,16 +73,10 @@ public class DAOStoreTest {
     
     @Before
     public void setUp() {
-        this.sessionBefore = getSession();
     }
     
     @After
     public void tearDown() {
-        try {
-            assertFalse(this.sessionBefore.getTransaction().isActive());            
-        } catch(SessionException e) {
-            
-        }
     }
 
     @Test
@@ -95,18 +88,31 @@ public class DAOStoreTest {
     
     @Test
     public void testOpenTransactions() {
-        DAOStore store = new DAOStore("cape");
-
-        store.getUser();
-       
-        getNumberOfRowsInTable("User");
-
+        final DAOStore store = new DAOStore("cape");
+        new Runner() {
+            public void runInTx() {
+                store.getUser();       
+            }            
+        };
         
+        new Runner() {
+            public void runInTx() {
+                store.getType("trip");       
+            }            
+        };
         
-    }
-    
-    private void checkTx(Session before) {
-
+        new Runner() {
+            public void runInTx() {
+                store.getCollection("trip");       
+            }            
+        };
+        
+        new Runner() {
+            public void runInTx() {
+                store.getView("spinneritem");       
+            }            
+        };        
+                
     }
     
     private void createUser(String username) {
@@ -119,5 +125,28 @@ public class DAOStoreTest {
         
         assertEquals(usersBefore+1, getNumberOfRowsInTable("User"));
         assertEquals(new DAOStore(username).getUser().getUsername(), username);
+    }
+    
+    private abstract class Runner {
+        private Session session;
+        public Runner() {
+            before();
+            runInTx();
+            after();
+        }
+        
+        public abstract void runInTx();
+        
+        private void before() {
+            this.session = getSession();
+        }
+        
+        private void after() {
+            try {
+                assertFalse(this.session.getTransaction().isActive());            
+            } catch(SessionException e) {
+                
+            }
+        }
     }
 }

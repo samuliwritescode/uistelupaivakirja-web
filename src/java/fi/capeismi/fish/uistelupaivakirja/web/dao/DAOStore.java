@@ -28,6 +28,7 @@ import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 /**
  *
@@ -42,106 +43,94 @@ public class DAOStore {
         this._user = user;
     }        
 
-    public static Type getType(String type) {
-        Session ses = getSession();
-        ses.beginTransaction();
-         try {
-        
-            Query q = ses.createQuery("from Type where name=:name");
+    public static Type getType(final String type) {
+        return (Type) new TransactionDecorator() { public Object doQuery() {
+            Query q = this.session.createQuery("from Type where name=:name");
             q.setParameter("name", type);
             List types = q.list();
             for(Object o: types) {
-                return (Type)o;
+                return o;
             }
-            
-            ses.getTransaction().commit();
-        } 
-        catch(Exception e)
-        {
-            ses.getTransaction().rollback();
-            throw new RestfulException(e.toString());
-        }
-         
-        return null;  
+
+            throw new RestfulException("no such collection");
+        }}.getResult();       
     }
 
     public Collection getCollection(String typename) {
         Type type = getType(typename);
-        if(type == null) {
-            throw new RestfulException("no such collection");
-        }
-
         return getCollection(type);
     }    
             
-    private Collection getCollection(Type typeDAO) {
-        User user = getUser();
-        Session ses = getSession();
-        ses.beginTransaction();
-         try {
-        
-            Query q = ses.createQuery("from Collection where user_id=:user and type_id=:type");
+    private Collection getCollection(final Type typeDAO) {
+        final User user = getUser();
+        return (Collection) new TransactionDecorator() { public Object doQuery() {
+            Query q = this.session.createQuery("from Collection where user_id=:user and type_id=:type");
             q.setParameter("type", typeDAO);
             q.setParameter("user", user);
             List types = q.list();
             for(Object o: types) {
-                return (Collection)o;
+                return o;
             }
-                        
-            ses.getTransaction().commit();      
+
             return new Collection();
-        } 
-        catch(Exception e)
-        {
-            ses.getTransaction().rollback();
-            throw new RestfulException(e.toString());
-        }
+        }}.getResult();
     }
     
-    public void addUser(User user) {
-        Session ses = getSession();
-        ses.beginTransaction();
-         try {
-            ses.persist(user);            
-            ses.getTransaction().commit();        
-        } 
-        catch(Exception e)
-        {
-            ses.getTransaction().rollback();
-            throw new RestfulException(e);
-        }
+    public void addUser(final User user) {
+        new TransactionDecorator() { public Object doQuery() {
+            this.session.persist(user);
+            return null;
+        }};
     }
     
-    public User getUser() {
-        Session ses = getSession();
-        ses.beginTransaction();
-         try {
+    public User getUser() {        
+        return (User) new TransactionDecorator() {
+            public Object doQuery() {
+                Query q = this.session.createQuery("from User where username=:user");
+                q.setParameter("user", _user);
+
+                List types = q.list();
+                for(Object o: types) {
+                    return o;
+                }
+                
+                throw new RestfulException("no user");
+            }
+        }.getResult();                        
+    }
+    
+
+    
+    private static abstract class TransactionDecorator {
+        Object result;
+        Session session;
+        public TransactionDecorator() {
+            doTransaction();
+        }
         
-            Query q = ses.createQuery("from User where username=:user");
-            q.setParameter("user", this._user);
-            
-            List types = q.list();
-            for(Object o: types) {
-                return (User)o;
-            }    
-        } 
-        catch(Exception e)
-        {
-            throw new RestfulException(e);
+        private void doTransaction() {
+            this.session = getSession();
+            Transaction tx = this.session.beginTransaction();
+            try {
+                this.result = doQuery();
+                tx.commit();
+            } catch (Exception e) {
+                tx.rollback();
+                throw new RestfulException(e);
+            }
         }
-        finally {
-             //ses.close();
-         }
-         
-        throw new RestfulException("no user");
+        
+        public abstract Object doQuery();
+        
+        public Object getResult() {
+            return this.result;
+        }
     }
     
-    public void setCollection(Collection collectionDAO) {
-        User user = getUser();
-        Session ses = getSession();
-        ses.beginTransaction();
-        try {
-            Query q = ses.createQuery("from Collection where user_id=:user and type_id=:type");
+    public void setCollection(final Collection collectionDAO) {
+        final User user = getUser();
+        new TransactionDecorator() { public Object doQuery() {
+            Query q = this.session.createQuery("from Collection where user_id=:user and type_id=:type");
             q.setParameter("user", user);
             q.setParameter("type", collectionDAO.getType());
             
@@ -149,7 +138,7 @@ public class DAOStore {
             for(Object o: q.list()) {
                 Collection oldCollection = (Collection)o;
                 oldRevision = oldCollection.getRevision();
-                ses.delete(o);
+                this.session.delete(o);
             }
             
             if(collectionDAO.getRevision() != oldRevision) {
@@ -157,24 +146,17 @@ public class DAOStore {
                 throw new RestfulException("Cannot commit. Conflict with revision");
             }
                 
-            collectionDAO.setUser(getUser());
+            collectionDAO.setUser(user);
             collectionDAO.setRevision(oldRevision+1);
-            ses.persist(collectionDAO);
-            ses.getTransaction().commit();        
-        } 
-        catch(Exception e)
-        {
-            ses.getTransaction().rollback();
-            throw new RestfulException(e.toString());
-        } 
+            this.session.persist(collectionDAO);
+            return null;
+        }};
     }
     
-    public void appendCollection(Collection collectionDAO) {
-        User user = getUser();
-        Session ses = getSession();
-        ses.beginTransaction();
-        try {
-            Query q = ses.createQuery("from Collection where user_id=:user and type_id=:type");
+    public void appendCollection(final Collection collectionDAO) {
+        final User user = getUser();
+        new TransactionDecorator() { public Object doQuery() {
+            Query q = this.session.createQuery("from Collection where user_id=:user and type_id=:type");
             q.setParameter("user", user);
             q.setParameter("type", collectionDAO.getType());
                         
@@ -193,15 +175,11 @@ public class DAOStore {
             }
             
             oldCollection.setRevision(oldCollection.getRevision()+1);
-            ses.persist(oldCollection);
-            ses.getTransaction().commit();        
+            this.session.persist(oldCollection);
+            this.session.getTransaction().commit();        
             collectionDAO.setRevision(oldCollection.getRevision());
-        } 
-        catch(Exception e)
-        {
-            ses.getTransaction().rollback();
-            throw new RestfulException(e.toString());
-        } 
+            return null;
+        }};
     }
     
     private int getMaxId(Collection collection) {

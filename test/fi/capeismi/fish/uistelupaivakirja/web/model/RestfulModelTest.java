@@ -78,7 +78,7 @@ public class RestfulModelTest {
             model.getTrollingObjects("idontexist").getTrollingobjects();
             fail("exception was expected");
         } catch(RestfulException e) {
-            assertEquals(e.toString(), "no such collection");
+            assertEquals("no such collection", e.toString());
         }
     }
     
@@ -101,9 +101,14 @@ public class RestfulModelTest {
         String[] users = {"cape", "testuser", "keijjo"};
         for(String user: users) {
             RestfulModel model = new RestfulModel(user);
-            setTrollingObject(model.getTrollingObjects("trip"), 1, generateTestProps(user+1), generateTestEvents(user+1));
-            setTrollingObject(model.getTrollingObjects("trip"), 2, generateTestProps(user+2), generateTestEvents(user+2));
-            setTrollingObject(model.getTrollingObjects("trip"), 3, generateTestProps(user+3), generateTestEvents(user+3));
+            Collection collection = new Collection();
+            collection.setType(model.getType("trip"));
+            collection.setRevision(1);
+            collection.setUser(model.getUser());
+            setTrollingObject(collection, 1, generateTestProps(user+1), generateTestEvents(user+1));
+            setTrollingObject(collection, 2, generateTestProps(user+2), generateTestEvents(user+2));
+            setTrollingObject(collection, 3, generateTestProps(user+3), generateTestEvents(user+3));
+            model.setTrollingObjects(collection);
         }
     }
     

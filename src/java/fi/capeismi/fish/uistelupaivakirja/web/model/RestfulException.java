@@ -39,4 +39,9 @@ public class RestfulException extends RuntimeException {
         return this._content;
     }
     
+    @Override
+    public String getMessage() {
+        return toString();
+    }
+    
 }
