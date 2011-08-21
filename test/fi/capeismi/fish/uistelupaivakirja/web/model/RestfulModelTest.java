@@ -16,6 +16,8 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import fi.capeismi.fish.uistelupaivakirja.web.controller.RestfulController;
+import fi.capeismi.fish.uistelupaivakirja.web.controller.XMLReader;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Map;
@@ -151,6 +153,27 @@ public class RestfulModelTest {
             assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());            
             compareUserObjects(model, user, 2, generateTestProps(user+2), generateTestEvents(user+2));
         } 
+    }
+    
+    @Test
+    public void testFromXML() throws Exception {
+        String[] users = {"cape", "testuser", "keijjo"};
+        for(String user: users) { 
+            RestfulModel model = new RestfulModel(user);
+            String content = String.format(
+                    "<TrollingObjects revision=\"%d\">"
+                        + "<TrollingObject type=\"%s\" id=\"1\">"
+                            + "<date>1.1.2009</date>"
+                            + "<description>testidataahaa</description>"
+                        + "</TrollingObject>"
+                    + "</TrollingObjects>", 3, "trip");
+            
+            XMLReader reader = new XMLReader(RestfulController.stringToInputStream(content));
+            Collection collection = reader.getTrollingObjects();
+            collection.setType(model.getType("trip"));
+            model.setTrollingObjects(collection);
+            assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());
+        }
     }
     
     private void compareUserObjects(RestfulModel model, 

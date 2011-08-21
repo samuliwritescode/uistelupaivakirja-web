@@ -17,6 +17,7 @@
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import java.io.UnsupportedEncodingException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -95,7 +96,7 @@ public class RestfulController
         RestfulModel model = m_loginService.getModel();
         RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
         try {            
-            InputStream in = new ByteArrayInputStream(content.getBytes("ISO-8859-1"));
+            InputStream in = stringToInputStream(content);
             XMLReader reader = new XMLReader(in);
             Collection objects = reader.getTrollingObjects();
             objects.setType(model.getType(doctype));
@@ -116,6 +117,10 @@ public class RestfulController
         }
         
         return response.getBody();
+    }
+    
+    public static InputStream stringToInputStream(String content) throws UnsupportedEncodingException {
+        return new ByteArrayInputStream(content.getBytes("ISO-8859-1"));
     }
     
     
