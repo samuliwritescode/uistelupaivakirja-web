@@ -141,10 +141,15 @@ public class RestfulModelTest {
         String[] users = {"cape", "testuser", "keijjo"};
         for(String user: users) {
             RestfulModel model = new RestfulModel(user);
-            assertEquals(3, model.getTrollingObjects("trip").getTrollingobjects().size());            
-            compareUserObjects(model, user, 1, generateTestProps(user+1), generateTestEvents(user+1));
+            Collection collection = new Collection();
+            collection.setType(model.getType("trip"));
+            collection.setRevision(2);
+            collection.setUser(model.getUser());
+            setTrollingObject(collection, 2, generateTestProps(user+2), generateTestEvents(user+2));
+            model.setTrollingObjects(collection);
+            
+            assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());            
             compareUserObjects(model, user, 2, generateTestProps(user+2), generateTestEvents(user+2));
-            compareUserObjects(model, user, 3, generateTestProps(user+3), generateTestEvents(user+3));
         } 
     }
     
