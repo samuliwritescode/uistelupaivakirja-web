@@ -18,6 +18,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.model;
 
 import fi.capeismi.fish.uistelupaivakirja.web.controller.RestfulController;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.XMLReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Map;
@@ -98,157 +99,111 @@ public class RestfulModelTest {
     }
     
     @Test
-    public void testSetBasicData() {
+    public void testBasicData() throws Exception {
         String[] users = {"cape", "testuser", "keijjo"};
-        for(String user: users) {
+        for(String user: users) { 
             RestfulModel model = new RestfulModel(user);
-            Collection collection = new Collection();
-            collection.setType(model.getType("trip"));
-            collection.setRevision(1);
-            setTrollingObject(collection, 1, generateTestProps(user+1), generateTestEvents(user+1));
-            setTrollingObject(collection, 2, generateTestProps(user+2), generateTestEvents(user+2));
-            setTrollingObject(collection, 3, generateTestProps(user+3), generateTestEvents(user+3));
+            Collection collection = generateTestData("trip", 1, 5, "kekkuli"+user);   
             model.setTrollingObjects(collection);
-        }
+            assertEquals(5, model.getTrollingObjects("trip").getTrollingobjects().size());
+
+            Collection collectionLocal = generateTestData("trip", 1, 5, "kekkuli"+user);
+            assertTrue(compareCollections(model.getTrollingObjects("trip"), collectionLocal));
+        }  
     }
     
     @Test
     public void testSetDataForNoSuchUser() {
         try {
             RestfulModel model = new RestfulModel("nouser");
-            setTrollingObject(model.getTrollingObjects("trip"), 1, generateTestProps(""+1), generateTestEvents(""+1));
+            model.setTrollingObjects(new Collection());
+            
             fail("user should not be found");
         } catch(RestfulException e) {
             assertEquals("no user", e.toString());
         }
     }
     
-        
-    @Test
-    public void testGetBasicData() {
-        String[] users = {"cape", "testuser", "keijjo"};
-        for(String user: users) {
-            RestfulModel model = new RestfulModel(user);
-            assertEquals(3, model.getTrollingObjects("trip").getTrollingobjects().size());        
-            compareUserObjects(model, user, 1, generateTestProps(user+1), generateTestEvents(user+1));
-            compareUserObjects(model, user, 2, generateTestProps(user+2), generateTestEvents(user+2));
-            compareUserObjects(model, user, 3, generateTestProps(user+3), generateTestEvents(user+3));
-        }
-    }
     
     @Test
-    public void testRemoveObject() {
+    public void testRemoveObject() throws Exception {
         String[] users = {"cape", "testuser", "keijjo"};
         for(String user: users) {
-            RestfulModel model = new RestfulModel(user);
-            Collection collection = new Collection();
-            collection.setType(model.getType("trip"));
-            collection.setRevision(2);
-            setTrollingObject(collection, 2, generateTestProps(user+2), generateTestEvents(user+2));
-            model.setTrollingObjects(collection);
-            
-            assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());            
-            compareUserObjects(model, user, 2, generateTestProps(user+2), generateTestEvents(user+2));
-        } 
-    }
-    
-    @Test
-    public void testFromXML() throws Exception {
-        String[] users = {"cape", "testuser", "keijjo"};
-        for(String user: users) { 
-            RestfulModel model = new RestfulModel(user);
-            String content = String.format(
-                    "<TrollingObjects revision=\"%d\">"
-                        + "<TrollingObject type=\"%s\" id=\"1\">"
-                            + "<date>1.1.2009</date>"
-                            + "<description>testidataahaa</description>"
-                        + "</TrollingObject>"
-                    + "</TrollingObjects>", 3, "trip");
-            
-            XMLReader reader = new XMLReader(RestfulController.stringToInputStream(content));
-            Collection collection = reader.getTrollingObjects();
-            collection.setType(model.getType("trip"));
+            RestfulModel model = new RestfulModel(user);            
+            Collection collection = generateTestData("trip", 2, 1, user);
             model.setTrollingObjects(collection);
             assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());
-        }
-    }
-    
-    private void compareUserObjects(RestfulModel model, 
-            String user, 
-            int id, 
-            Map<String, String> compTo, 
-            List<Map<String, String>> eventsCompTo) {
-               
-        for(Trollingobject tobject: model.getTrollingObjects("trip").getTrollingobjects()) {
-            if(tobject.getObjectIdentifier() == id) {
-                compareTrollingObject(tobject, compTo, eventsCompTo);
-                return;
-            }
-        }
-        fail("no such object");
-    }
-    
-    private void compareTrollingObject(Trollingobject tobject, Map<String, String> compTo, List<Map<String, String>> eventsCompTo) {
-        Map<String, String> kvs = new HashMap<String, String>();
-        for(Trollingproperty prop: tobject.getTrollingproperties()) {
-            kvs.put(prop.getKeyname(), prop.getValue());
-        }
-        assertEquals(compTo, kvs);        
-        assertEquals(tobject.getEvents().size(), eventsCompTo.size());
-        
-        Iterator<Map<String, String>> iterEvents = eventsCompTo.iterator();
-        for(Event event: tobject.getEvents()) {
-            Map<String, String> eventprops = iterEvents.next();
-            compareEvent(event, eventprops);
-        }
-    }
-    
-    private void compareEvent(Event event, Map<String, String> compTo) {
-        Map<String, String> kvs = new HashMap<String, String>();
-        for(Eventproperty prop: event.getEventproperties()) {
-            kvs.put(prop.getKeyname(), prop.getValue());
-        }
-        System.out.print("Compare "+compTo.keySet().toString()+ " <=> "+kvs.keySet().toString());
-        System.out.println(" with "+compTo.values().toString()+ " <=> "+kvs.values().toString());
-        assertEquals(compTo, kvs);
-    }
-        
-    private Map<String, String> generateTestProps(String user) {
-        Map<String, String> props = new HashMap<String, String>();
-        for(int loop=0; loop < 5; loop++) {
-            props.put("property"+loop, user+"value"+loop);
-        }
-        
-        return props;
-    }
-    
-    private List<Map<String, String>> generateTestEvents(String user) {
-        List<Map<String, String>> events = new ArrayList<Map<String, String>>();
-        for(int i=0; i < 10; i++) {
-            Map<String, String> props = new HashMap<String, String>();
-            for(int j=0; j < 3; j++) {
-                props.put("property"+j, user+"value"+i+j);
-            }
-            events.add(props);
-        }
-        return events;
-    }
-    
-    private void setTrollingObject(Collection collection, int identifier, Map<String, String> properties, List<Map<String, String> > events) {
-        Trollingobject trollingobject = new Trollingobject(collection, identifier);
-        
-        for(Map.Entry<String, String> entry: properties.entrySet()) {
-            trollingobject.getTrollingproperties().add(new Trollingproperty(trollingobject, entry.getKey(), entry.getValue()));
-        }
-        
-        for(Map<String, String> eventproperties: events) {
-            Event event = new Event(trollingobject);
-            trollingobject.getEvents().add(event);
-            for(Map.Entry<String, String> property: eventproperties.entrySet()) {            
-                event.getEventproperties().add(new Eventproperty(event, property.getKey(), property.getValue()));                
-            }
-        }
-        
-        collection.getTrollingobjects().add(trollingobject);
+        } 
     }    
+    
+    
+    private Collection generateTestData(String type, int revision, int count, String contentseed) throws Exception {
+        String content = String.format("<TrollingObjects revision=\"%d\">", revision);
+        for(int loop=0; loop < count; loop++) {
+            content += String.format("<TrollingObject type=\"%s\" id=\"%d\">"
+                        + "<date>%s</date>"
+                        + "<description>%s%d</description>"
+                        + "<type>1</type>"
+                    + "</TrollingObject>", type, loop, contentseed, contentseed, loop+666);
+        }
+        
+        content += "</TrollingObjects>";
+        
+        XMLReader reader = new XMLReader(RestfulController.stringToInputStream(content));
+        Collection collection = reader.getTrollingObjects();
+        collection.setType(new RestfulModel("").getType(type));
+        return collection;
+    }
+    
+    private boolean compareCollections(Collection c1, Collection c2) {
+        assertEquals(c1.getTrollingobjects().size(), c2.getTrollingobjects().size());
+        
+        Iterator<Trollingobject> iter = c2.getTrollingobjects().iterator();
+        
+        for(Trollingobject t1: c1.getTrollingobjects()) {
+            Trollingobject t2 = iter.next();
+            assertTrue(compareTrollingObjects(t1, t2));            
+        }
+        
+        return true;
+    }
+    
+    private boolean compareTrollingObjects(Trollingobject t1, Trollingobject t2) {
+        Map<String, String> kvs1 = new HashMap<String, String>();
+        Map<String, String> kvs2 = new HashMap<String, String>();
+        for(Trollingproperty prop: t1.getTrollingproperties()) {
+            kvs1.put(prop.getKeyname(), prop.getValue());
+        }
+
+        for(Trollingproperty prop: t2.getTrollingproperties()) {
+            kvs2.put(prop.getKeyname(), prop.getValue());
+        }
+
+        assertEquals(kvs1, kvs2);        
+        assertEquals(t1.getEvents().size(), t2.getEvents().size());
+        
+        Iterator<Event> iter = t2.getEvents().iterator();
+        for(Event e1: t1.getEvents()) {
+            Event e2 = iter.next();
+            assertTrue(compareEvents(e1, e2));
+        }
+        
+        return true;
+    }
+    
+    private boolean compareEvents(Event e1, Event e2) {
+        Map<String, String> kvs1 = new HashMap<String, String>();
+        Map<String, String> kvs2 = new HashMap<String, String>();
+        
+        for(Eventproperty prop: e1.getEventproperties()) {
+            kvs1.put(prop.getKeyname(), prop.getValue());
+        }
+        
+        for(Eventproperty prop: e2.getEventproperties()) {
+            kvs2.put(prop.getKeyname(), prop.getValue());
+        }
+        
+        assertEquals(e1, e2);
+        return true;
+    }     
 }
