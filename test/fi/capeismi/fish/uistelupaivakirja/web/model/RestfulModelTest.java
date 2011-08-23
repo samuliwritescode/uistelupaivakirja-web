@@ -157,6 +157,7 @@ public class RestfulModelTest {
     
     private boolean compareCollections(Collection c1, Collection c2) {
         assertEquals(c1.getTrollingobjects().size(), c2.getTrollingobjects().size());
+        assertEquals(c1.getType().getName(), c2.getType().getName());
         
         Iterator<Trollingobject> iter = c2.getTrollingobjects().iterator();
         

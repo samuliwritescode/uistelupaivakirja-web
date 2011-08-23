@@ -7,10 +7,10 @@
       <column name="ID"/>
       <generator class="identity"/>
     </id>
-    <many-to-one class="fi.capeismi.fish.uistelupaivakirja.web.dao.User" fetch="select" name="user">
+    <many-to-one class="fi.capeismi.fish.uistelupaivakirja.web.dao.User" lazy="false" fetch="select" name="user">
       <column name="USER_ID" not-null="true"/>
     </many-to-one>
-    <many-to-one class="fi.capeismi.fish.uistelupaivakirja.web.dao.Type" fetch="select" name="type">
+    <many-to-one class="fi.capeismi.fish.uistelupaivakirja.web.dao.Type" lazy="false" fetch="select" name="type">
       <column name="TYPE_ID" not-null="true"/>
     </many-to-one>
     <property name="revision" type="int">
