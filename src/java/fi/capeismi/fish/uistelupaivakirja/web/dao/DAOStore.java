@@ -120,10 +120,15 @@ public class DAOStore {
             }
         }
         
-        public abstract Object doQuery();
+        public abstract Object doQuery() throws Exception;
         
         public Object getResult() {
             return this.result;
+        }
+        
+        private Session getSession() {
+            SessionFactory fac = TrollingHibernateUtil.getSessionFactory();
+            return fac.getCurrentSession();
         }
     }
     
@@ -190,22 +195,14 @@ public class DAOStore {
             }                
         }
         return retval;
-    }
-    
-    private static Session getSession() {
-        SessionFactory fac = TrollingHibernateUtil.getSessionFactory();
-        return fac.getCurrentSession();
-    }
+    }   
 
-    public View getView(String view) {
-        User user = getUser();
-        Session ses = getSession();
-        ses.beginTransaction();        
-
-        try {
+    public View getView(final String view) {
+        final User user = getUser();
+        return (View) new TransactionDecorator() { public Object doQuery() throws Exception{
             View orm = View.ViewFactory.getInstance(view);
             
-            Connection conn = ses.connection();
+            Connection conn = this.session.connection();
             Statement st = conn.createStatement();
            
             ResultSet res = st.executeQuery("select * from " +view+ "_view where user_id="+user.getId().toString());           
@@ -214,8 +211,7 @@ public class DAOStore {
                 String colname = res.getMetaData().getColumnName(loop);
                 columns.add(colname);
                 orm.addColumn(colname);
-            }
-            
+            }            
             
             while(res.next()) {
                 Map<String, String> row = new HashMap<String, String>();
@@ -224,15 +220,8 @@ public class DAOStore {
                 }
                 orm.add(row);
             }
-            
-            ses.getTransaction().commit();                   
             return orm;
-        } 
-        catch(Exception e)
-        {
-            ses.getTransaction().rollback();
-            throw new RestfulException(e.toString());
-        } 
+        }}.getResult();
     }
     
 }
