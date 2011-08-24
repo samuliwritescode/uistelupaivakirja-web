@@ -16,6 +16,8 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.ViewContainer;
+import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

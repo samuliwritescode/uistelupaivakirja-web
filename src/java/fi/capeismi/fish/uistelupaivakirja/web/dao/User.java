@@ -2,6 +2,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 // Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA
 
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.AnnotatedView;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;

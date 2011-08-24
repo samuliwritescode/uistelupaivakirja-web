@@ -14,12 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fi.capeismi.fish.uistelupaivakirja.web.dao;
+package fi.capeismi.fish.uistelupaivakirja.web.model;
+
+import java.util.Map;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public interface AnnotatedView {    
-    
+public interface TableView {
+    int rowCount();
+    Map<String, String> row(int index);
+    String getName();
 }

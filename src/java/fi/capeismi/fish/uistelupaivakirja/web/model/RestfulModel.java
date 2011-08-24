@@ -18,7 +18,6 @@ package fi.capeismi.fish.uistelupaivakirja.web.model;
 
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Type;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 

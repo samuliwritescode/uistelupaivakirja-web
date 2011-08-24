@@ -16,13 +16,13 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.dao.AnnotatedView;
+import fi.capeismi.fish.uistelupaivakirja.web.model.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingproperty;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.TableView;
+import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 
 import java.util.Map;

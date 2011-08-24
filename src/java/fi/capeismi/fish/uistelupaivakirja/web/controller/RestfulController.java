@@ -16,9 +16,9 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.dao.AnnotatedView;
+import fi.capeismi.fish.uistelupaivakirja.web.model.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.TableView;
+import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import java.io.UnsupportedEncodingException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

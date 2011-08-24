@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import java.sql.Connection;
 import java.sql.ResultSet;

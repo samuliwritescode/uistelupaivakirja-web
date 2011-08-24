@@ -14,16 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fi.capeismi.fish.uistelupaivakirja.web.dao;
+package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public interface TableView {
-    int rowCount();
-    Map<String, String> row(int index);
-    String getName();
+public abstract class ViewContainer {
+    private List<String> _columns = new ArrayList<String>();
+    
+    public final void addColumn(String colname) {
+        this._columns.add(colname);
+    }
+    
+    public final List<String> getColumns() {
+        return Collections.unmodifiableList(this._columns);
+    }
+    
+    public abstract void add(Map<String, String> row);
+
 }
+

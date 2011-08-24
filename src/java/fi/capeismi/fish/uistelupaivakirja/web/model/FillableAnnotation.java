@@ -14,34 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fi.capeismi.fish.uistelupaivakirja.web.dao;
+package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public abstract class ViewContainer {
-    private List<String> _columns = new ArrayList<String>();
+public interface FillableAnnotation extends AnnotatedView {
+    void add(Map<String, String> row);
     
-    public final void addColumn(String colname) {
-        this._columns.add(colname);
-    }
-    
-    public final List<String> getColumns() {
-        return Collections.unmodifiableList(this._columns);
-    }
-    
-    public abstract void add(Map<String, String> row);
-
 }
-

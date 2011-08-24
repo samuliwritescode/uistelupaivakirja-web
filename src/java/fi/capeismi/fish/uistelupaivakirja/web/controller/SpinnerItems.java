@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fi.capeismi.fish.uistelupaivakirja.web.dao;
+package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.FillableAnnotation;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
