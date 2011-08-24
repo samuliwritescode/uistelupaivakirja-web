@@ -34,7 +34,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="fishlist")
-public class FishStat extends View {
+public class FishStat implements FillableAnnotation {
     private List<Fish> _items = new ArrayList<Fish>();
     
     public FishStat() {
@@ -42,7 +42,7 @@ public class FishStat extends View {
     }
 
     @Override
-    void add(Map<String, String> row) {                
+    public void add(Map<String, String> row) {                
         _items.add(new Fish(row));
     }
     

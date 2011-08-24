@@ -197,10 +197,10 @@ public class DAOStore {
         return retval;
     }   
 
-    public View getView(final String view) {
+    public TableView getView(final String view) {
         final User user = getUser();
-        return (View) new TransactionDecorator() { public Object doQuery() throws Exception{
-            View orm = View.ViewFactory.getInstance(view);
+        return (TableView) new TransactionDecorator() { public Object doQuery() throws Exception{
+            GenericView orm = new GenericView(view);
             
             Connection conn = this.session.connection();
             Statement st = conn.createStatement();

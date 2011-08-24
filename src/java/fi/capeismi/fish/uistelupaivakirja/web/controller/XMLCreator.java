@@ -22,9 +22,12 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingproperty;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 
+import java.util.Map;
 import java.util.Set;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,7 +45,12 @@ import org.w3c.dom.Node;
 public class XMLCreator {
     
     
-    public static DOMSource marshal(AnnotatedView object) {        
+    public static DOMSource marshal(TableView object) {
+        GenericMarshaller marshaller = new GenericMarshaller(object);
+        return marshaller.getSource();
+    }
+    
+    public static DOMSource marshal(AnnotatedView object) {
         ViewMarshaller marshaller = new ViewMarshaller(object);
         return marshaller.getSource();
     }
@@ -52,6 +60,46 @@ public class XMLCreator {
         return marshaller.getSource();
     }
   
+    private static class GenericMarshaller {
+        private DOMSource _domsource = null;
+        
+        public GenericMarshaller(TableView view) {
+            try {
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                Element root = doc.createElement("root");
+                doc.appendChild(root);
+                
+                for(int loop=0; loop < view.rowCount(); loop++) {
+                    Map<String, String> row = view.row(loop);
+                    parseRow(row, doc, root, view.getName());
+                }
+                this._domsource = new DOMSource(doc);
+                
+            } catch (Exception e) {
+                throw new RestfulException(e);
+            }            
+        }
+        
+        private void parseRow(Map<String, String> row, Document doc, Element root, String name) {
+            Element object = doc.createElement(name);
+            for(Map.Entry<String, String> pair: row.entrySet()) {
+                Element tag = doc.createElement(pair.getKey());
+                String value = "";
+                if(pair.getValue() != null)
+                    value = pair.getValue();
+
+                tag.appendChild(doc.createTextNode(value));
+                object.appendChild(tag);
+            }
+            root.appendChild(object);   
+        }
+        
+        public DOMSource getSource()
+        {
+            return this._domsource;
+        }
+    }
+    
     private static class ViewMarshaller{
         private DOMSource _domsource = null;
         

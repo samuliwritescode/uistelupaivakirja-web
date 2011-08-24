@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="gpx")
-public class WayPoints extends View {
+public class WayPoints implements FillableAnnotation {
     private List<WayPoint> _waypoints = new ArrayList<WayPoint>();
     
     public WayPoints() {
@@ -44,7 +44,7 @@ public class WayPoints extends View {
     }
 
     @Override
-    void add(Map<String, String> row) {
+    public void add(Map<String, String> row) {
         this._waypoints.add(new WayPoint(
                 row.get("fish_coord_lat"),
                 row.get("fish_coord_lon"),

@@ -16,7 +16,9 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
+import fi.capeismi.fish.uistelupaivakirja.web.dao.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.TableView;
 import java.io.UnsupportedEncodingException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,8 +70,12 @@ public class RestfulController
     public DOMSource getView(@PathVariable String view) 
     {                        
         RestfulModel model = m_loginService.getModel();
-
-        return XMLCreator.marshal(model.getView(view));
+        TableView viewobject = model.getView(view);
+        AnnotatedView annotated = new Adapter().decorate(viewobject);
+        if(annotated == null)
+            return XMLCreator.marshal(viewobject);
+        else
+            return XMLCreator.marshal(annotated);
     }
     
     @RequestMapping(value="/{doctype}", method=RequestMethod.POST)

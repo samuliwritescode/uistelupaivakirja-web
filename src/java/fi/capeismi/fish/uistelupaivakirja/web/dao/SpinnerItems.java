@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="TrollingObjects")
-public class SpinnerItems extends View {        
+public class SpinnerItems implements FillableAnnotation {        
     List<SpinnerItem> _items;    
     
     public SpinnerItems() {
@@ -48,7 +48,7 @@ public class SpinnerItems extends View {
     }
 
     @Override
-    void add(Map<String, String> row) {
+    public void add(Map<String, String> row) {
         this._items.add(new SpinnerItem(row.get("keyname"), row.get("value"), this._items.size()+1));
     }
      

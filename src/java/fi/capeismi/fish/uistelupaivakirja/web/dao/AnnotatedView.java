@@ -20,6 +20,6 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public interface AnnotatedView {
+public interface AnnotatedView {    
     
 }

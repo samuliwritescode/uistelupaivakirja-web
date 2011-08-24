@@ -14,35 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fi.capeismi.fish.uistelupaivakirja.web.model;
+package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public class RestfulException extends RuntimeException {
+public class GenericView extends ViewContainer implements TableView{
 
-    private String _content;
+    private List<Map<String, String>> items;
+    private String name;
     
-    public RestfulException(Exception e) {
-        e.printStackTrace();
-        this._content = e.getMessage();
+    public GenericView(String name) {
+        super();
+        this.items = new ArrayList<Map<String, String>>();
+        this.name = name;
     }
-    
-    public RestfulException(String string) {
-        this.printStackTrace();
-        this._content = string;
-    }
-    
+
     @Override
-    public String toString() {
-        return this._content;
+    public void add(Map<String, String> row) {
+        this.items.add(row);
     }
-    
-    @Override
-    public String getMessage() {
-        return toString();
+
+    public int rowCount() {
+        return this.items.size();
     }
-    
+
+    public Map<String, String> row(int index) {
+        return this.items.get(index);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
 }

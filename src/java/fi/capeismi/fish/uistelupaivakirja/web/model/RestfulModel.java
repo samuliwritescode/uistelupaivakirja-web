@@ -18,9 +18,9 @@ package fi.capeismi.fish.uistelupaivakirja.web.model;
 
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Type;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.View;
 
 /**
  *
@@ -48,8 +48,8 @@ public class RestfulModel {
         return dao;
     }
     
-    public View getView(String viewname) {
-        View dao = this._daoStore.getView(viewname);
+    public TableView getView(String viewname) {
+        TableView dao = this._daoStore.getView(viewname);
         return dao;
     }
     

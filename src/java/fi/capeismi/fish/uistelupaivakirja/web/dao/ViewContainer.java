@@ -20,7 +20,6 @@ import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -31,7 +30,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public abstract class View implements AnnotatedView {
+public abstract class ViewContainer {
     private List<String> _columns = new ArrayList<String>();
     
     public final void addColumn(String colname) {
@@ -42,23 +41,7 @@ public abstract class View implements AnnotatedView {
         return Collections.unmodifiableList(this._columns);
     }
     
-    abstract void add(Map<String, String> row);
-       
-    public static class ViewFactory {
-        public static View getInstance(String view) {
-            
-            Properties props = new Properties();
-            try {
-                ApplicationContext ctx = new ClassPathXmlApplicationContext();
-                
-                props.load(new FileInputStream(ctx.getResource("classpath:fi/capeismi/fish/uistelupaivakirja/web/dao/views.properties").getFile()));
-                String classname = props.getProperty(view);
-                return (View)Class.forName(classname).newInstance();
-                    
-            } catch (Exception e) {
-                throw new RestfulException(e);
-            }            
-        }
-    }
+    public abstract void add(Map<String, String> row);
 
 }
+

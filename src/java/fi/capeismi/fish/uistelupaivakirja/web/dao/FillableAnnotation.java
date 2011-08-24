@@ -14,35 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fi.capeismi.fish.uistelupaivakirja.web.model;
+package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import java.util.Map;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public class RestfulException extends RuntimeException {
-
-    private String _content;
-    
-    public RestfulException(Exception e) {
-        e.printStackTrace();
-        this._content = e.getMessage();
-    }
-    
-    public RestfulException(String string) {
-        this.printStackTrace();
-        this._content = string;
-    }
-    
-    @Override
-    public String toString() {
-        return this._content;
-    }
-    
-    @Override
-    public String getMessage() {
-        return toString();
-    }
+public interface FillableAnnotation extends AnnotatedView {
+    void add(Map<String, String> row);
     
 }
