@@ -26,12 +26,10 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public class RestfulModel {
-    private String m_user = null;
     private DAOStore _daoStore = null;      
     
     public RestfulModel(String user)
     {
-        this.m_user = user;
         this._daoStore = new DAOStore(user);
     }
     
@@ -48,7 +46,9 @@ public class RestfulModel {
     }
     
     public TableView getView(String viewname) {
-        TableView dao = this._daoStore.getView(viewname);
+        SearchObject search = DAOStore.SearchObjectFactory.build();
+        search.setUser(this._daoStore.getUser());
+        TableView dao = this._daoStore.getView(viewname, search);
         return dao;
     }
     
@@ -68,5 +68,5 @@ public class RestfulModel {
         
         this._daoStore.setCollection(objects);
         return new Integer(objects.getRevision());
-    }           
+    }
 }

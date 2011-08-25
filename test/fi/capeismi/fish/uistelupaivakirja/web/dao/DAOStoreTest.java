@@ -109,7 +109,7 @@ public class DAOStoreTest {
         
         new Runner() {
             public void runInTx() {
-                store.getView("spinneritem");       
+                store.getView("spinneritem", DAOStore.SearchObjectFactory.build());       
             }            
         };        
                 

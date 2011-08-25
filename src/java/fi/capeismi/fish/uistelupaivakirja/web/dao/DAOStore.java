@@ -18,10 +18,12 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
+import fi.capeismi.fish.uistelupaivakirja.web.model.SearchObject;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import java.util.List;
@@ -198,15 +200,18 @@ public class DAOStore {
         return retval;
     }   
 
-    public TableView getView(final String view) {
-        final User user = getUser();
+    public TableView getView(final String view, final SearchObject search) {
         return (TableView) new TransactionDecorator() { public Object doQuery() throws Exception{
             ViewContainer orm = new ViewContainer(view);
             
             Connection conn = this.session.connection();
             Statement st = conn.createStatement();
+            ConcreteSearchObject concretesearch = (ConcreteSearchObject)search;
+            String searchSQL = "select * from " +view+ "_view "+concretesearch.getSQL();
+            
+
            
-            ResultSet res = st.executeQuery("select * from " +view+ "_view where user_id="+user.getId().toString());           
+            ResultSet res = st.executeQuery(searchSQL);           
             List<String> columns = new ArrayList<String>();
             for(int loop=1; loop <= res.getMetaData().getColumnCount(); loop++) {                
                 String colname = res.getMetaData().getColumnName(loop);
@@ -224,4 +229,39 @@ public class DAOStore {
         }}.getResult();
     }
     
+    public static class SearchObjectFactory {
+        private SearchObjectFactory() {
+            
+        }
+        
+        public static SearchObject build() {
+            return new ConcreteSearchObject();
+        }
+    }
+    
+    private static class ConcreteSearchObject implements SearchObject {
+        private Map<String, String> constraints;
+        
+        public ConcreteSearchObject() {
+            this.constraints = new HashMap<String, String>();
+        }
+        
+        public void setUser(User user) {
+            addFieldConstraint("user_id", user.getId().toString());
+        }
+
+        public void addFieldConstraint(String field, String constraint) {
+            this.constraints.put(field, constraint);
+        }
+        
+        public String getSQL() {
+            String searchSQL = "where ";
+            for(Map.Entry<String, String> kvpair: this.constraints.entrySet()) {
+                searchSQL += kvpair.getKey()+"='"+kvpair.getValue()+"' AND ";                
+            }
+            
+            searchSQL += " 1=1";
+            return searchSQL;
+        }
+    }
 }
