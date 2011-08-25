@@ -1,23 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 25, 2011 6:12:02 PM by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-  <class catalog="trolling" name="fi.capeismi.fish.uistelupaivakirja.web.dao.User" table="user">
-    <id name="id" type="java.lang.Integer">
-      <column name="ID"/>
-      <generator class="identity"/>
-    </id>
-    <property name="username" type="string">
-      <column name="USERNAME"/>
-    </property>
-    <property name="password" type="string">
-      <column name="PASSWORD"/>
-    </property>
-    <set cascade="all" inverse="true" name="collections">
-      <key>
-        <column name="USER_ID" not-null="true"/>
-      </key>
-      <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Collection"/>
-    </set>
-  </class>
+    <class name="fi.capeismi.fish.uistelupaivakirja.web.dao.User" table="user" catalog="trolling">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="username" type="string">
+            <column name="USERNAME" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" />
+        </property>
+        <property name="publishlocation" type="java.lang.Boolean">
+            <column name="PUBLISHLOCATION" />
+        </property>
+        <property name="publishplace" type="java.lang.Boolean">
+            <column name="PUBLISHPLACE" />
+        </property>
+        <property name="publishlure" type="java.lang.Boolean">
+            <column name="PUBLISHLURE" />
+        </property>
+        <property name="publishfish" type="java.lang.Boolean">
+            <column name="PUBLISHFISH" />
+        </property>
+        <property name="publishtrip" type="java.lang.Boolean">
+            <column name="PUBLISHTRIP" />
+        </property>
+        <set name="collections" inverse="true">
+            <key>
+                <column name="USER_ID" not-null="true" />
+            </key>
+            <one-to-many class="fi.capeismi.fish.uistelupaivakirja.web.dao.Collection" />
+        </set>
+    </class>
 </hibernate-mapping>

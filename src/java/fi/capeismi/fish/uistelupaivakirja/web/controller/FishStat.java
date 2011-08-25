@@ -62,6 +62,11 @@ public class FishStat implements FillableAnnotation {
         }
         
         @XmlElement
+        public String getSpecies() {
+            return this._values.get("fish_species");
+        }
+        
+        @XmlElement
         public String getPlace() {
             return this._values.get("place_name");
         }

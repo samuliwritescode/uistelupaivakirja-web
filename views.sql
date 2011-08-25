@@ -85,8 +85,8 @@ having
 order by date desc, fish_time desc limit 10
 ;
 
-drop view if exists generic_view;
-create view generic_view as 
+drop view if exists fishrecord_view;
+create view fishrecord_view as 
 select    
     trolling_id,
     object_identifier,
@@ -97,16 +97,20 @@ select
     (select value from eventproperty_view where event_id=event.id and keyname = 'lure') as 'lure_id',
     (select value from trollingproperty_view where trolling_id=trollingobject.id and keyname = 'place') as 'place_id',
     (select value from trollingproperty_view where object_identifier=lure_id and keyname='maker') as 'lure_maker',
-    (select value from trollingproperty_view where object_identifier=place_id and keyname='name') as 'place_name',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_weight' and event_id=event.id) as SIGNED) as 'fish_weight',
+    (select value from trollingproperty_view where object_identifier=place_id and keyname='name') as 'place_name',    
+    cast(
+        cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_weight' and event_id=event.id) as SIGNED) / 
+        coalesce(cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_group_amount' and event_id=event.id) as SIGNED), 1) as decimal
+    ) as 'fish_weight',
     cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_length' and event_id=event.id) as SIGNED) as 'fish_length',
-    coalesce(cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_group_amount' and event_id=event.id) as SIGNED), 1) as 'fish_group_amount',
     cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_time' and event_id=event.id) as TIME) as 'fish_time',
     cast((select value from trollingproperty_view where keyname='date' and trolling_id=trollingobject.id) as DATE) as 'date'
 from event
     join trollingobject on(trolling_id=trollingobject.id)
     join collection on(trollingobject.collection_id=collection.id)
     join user on(user_id=user.id)
+where
+    user.publishfish = true
 having 
     (type=1 OR type=3)
-order by date desc, fish_time desc limit 10;
+order by fish_weight desc, fish_length desc limit 10;

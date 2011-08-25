@@ -1,5 +1,5 @@
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
-// Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA
+// Generated Aug 25, 2011 6:12:00 PM by Hibernate Tools 3.2.1.GA
 
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.AnnotatedView;
@@ -19,14 +19,24 @@ public class User  implements java.io.Serializable, AnnotatedView {
      private Integer id;
      private String username;
      private String password;
+     private Boolean publishlocation;
+     private Boolean publishplace;
+     private Boolean publishlure;
+     private Boolean publishfish;
+     private Boolean publishtrip;
      private Set<Collection> collections = new HashSet<Collection>(0);
 
     public User() {
     }
 
-    public User(String username, String password, Set<Collection> collections) {
+    public User(String username, String password, Boolean publishlocation, Boolean publishplace, Boolean publishlure, Boolean publishfish, Boolean publishtrip, Set<Collection> collections) {
        this.username = username;
        this.password = password;
+       this.publishlocation = publishlocation;
+       this.publishplace = publishplace;
+       this.publishlure = publishlure;
+       this.publishfish = publishfish;
+       this.publishtrip = publishtrip;
        this.collections = collections;
     }
    
@@ -55,6 +65,41 @@ public class User  implements java.io.Serializable, AnnotatedView {
     
     public void setPassword(String password) {
         this.password = password;
+    }
+    public Boolean getPublishlocation() {
+        return this.publishlocation;
+    }
+    
+    public void setPublishlocation(Boolean publishlocation) {
+        this.publishlocation = publishlocation;
+    }
+    public Boolean getPublishplace() {
+        return this.publishplace;
+    }
+    
+    public void setPublishplace(Boolean publishplace) {
+        this.publishplace = publishplace;
+    }
+    public Boolean getPublishlure() {
+        return this.publishlure;
+    }
+    
+    public void setPublishlure(Boolean publishlure) {
+        this.publishlure = publishlure;
+    }
+    public Boolean getPublishfish() {
+        return this.publishfish;
+    }
+    
+    public void setPublishfish(Boolean publishfish) {
+        this.publishfish = publishfish;
+    }
+    public Boolean getPublishtrip() {
+        return this.publishtrip;
+    }
+    
+    public void setPublishtrip(Boolean publishtrip) {
+        this.publishtrip = publishtrip;
     }
     
     @XmlTransient

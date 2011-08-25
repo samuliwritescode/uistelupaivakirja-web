@@ -56,7 +56,13 @@ $.ajax({
 createTable("/uistelu/api/views/fishstat", 
     "mynewest", 
     "fish",
-    ["time", "luremaker", "place", "weight", "length"]
+    ["time", "species","luremaker", "place", "weight", "length"]
+);
+
+createTable("/uistelu/api/views/fishrecord", 
+    "myrecord", 
+    "fish",
+    ["time", "species", "weight", "length", "luremaker", "place" ]
 );
     
   </script>
@@ -74,10 +80,27 @@ createTable("/uistelu/api/views/fishstat",
                 <table id="mynewest" class="tabledata" cellspacing="0" width="100%">
                     <tr class="header">
                         <td>aika</td>
+                        <td>laji</td>
                         <td>viehe</td>
                         <td>paikka</td>
                         <td>paino</td>
                         <td>pituus</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <div class="ui-widget-header">
+                Kookkaimmat kalani
+            </div>
+            <div class="ui-widget-content">
+                <table id="myrecord" class="tabledata" cellspacing="0" width="100%">
+                    <tr class="header">
+                        <td>aika</td>
+                        <td>laji</td>
+                        <td>paino</td>
+                        <td>pituus</td>
+                        <td>viehe</td>
+                        <td>paikka</td>
                     </tr>
                 </table>
             </div>
