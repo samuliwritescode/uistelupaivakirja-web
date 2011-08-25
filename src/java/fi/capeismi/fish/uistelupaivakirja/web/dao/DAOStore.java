@@ -201,7 +201,7 @@ public class DAOStore {
     public TableView getView(final String view) {
         final User user = getUser();
         return (TableView) new TransactionDecorator() { public Object doQuery() throws Exception{
-            GenericView orm = new GenericView(view);
+            ViewContainer orm = new ViewContainer(view);
             
             Connection conn = this.session.connection();
             Statement st = conn.createStatement();
@@ -211,7 +211,6 @@ public class DAOStore {
             for(int loop=1; loop <= res.getMetaData().getColumnCount(); loop++) {                
                 String colname = res.getMetaData().getColumnName(loop);
                 columns.add(colname);
-                orm.addColumn(colname);
             }            
             
             while(res.next()) {
