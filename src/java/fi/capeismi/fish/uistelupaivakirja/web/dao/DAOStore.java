@@ -201,6 +201,7 @@ public class DAOStore {
 
     private TableView getView(final String view, final ConcreteSearchObject search) {
         return (TableView) new TransactionDecorator() { public Object doQuery() throws Exception{
+            //TODO: SQL injection hardening
             ViewContainer orm = new ViewContainer(view);
             
             Connection conn = this.session.connection();
