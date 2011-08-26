@@ -114,3 +114,27 @@ where
 having 
     (type=1 OR type=3)
 order by fish_weight desc, fish_length desc limit 10;
+
+drop view if exists tripstat_view;
+create view tripstat_view as
+select    
+    object_identifier,
+    user_id,
+    user.username,
+    (select value from trollingproperty_view where trolling_id=trollingobject.id and keyname = 'place') as 'place_id',
+    (select value from trollingproperty_view where object_identifier=place_id and keyname='city') as 'place_name',
+    coalesce((select 
+        sum(coalesce(
+                cast((select value from eventproperty_view ev1 where ev1.event_id=ev2.event_id and keyname='fish_group_amount') as signed), 1
+            )) as 'trip_fish_amount'
+        from eventproperty_view as ev2 where ev2.trolling_id = trollingobject.id and keyname='type' and value in('1', '3')
+    ),0) as 'fish_amount',
+
+    cast((select value from trollingproperty_view where keyname='date' and trolling_id=trollingobject.id) as DATE) as 'date'
+    
+from trollingobject
+    join collection on(trollingobject.collection_id=collection.id)
+    join user on(user_id=user.id)
+where
+    user.publishtrip = true
+order by date desc limit 10;

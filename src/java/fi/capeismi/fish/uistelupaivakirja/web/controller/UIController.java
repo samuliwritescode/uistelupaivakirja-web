@@ -38,7 +38,8 @@ public class UIController {
         UIModel model = new UIModel();
         
         view.addObject("fishstat",  model.getView("fishstat"));
-        view.addObject("fishrecord",  model.getView("fishrecord"));
+        view.addObject("fishrecord", model.getView("fishrecord"));
+        view.addObject("tripstat",  model.getView("tripstat"));
         return view;
     }
     

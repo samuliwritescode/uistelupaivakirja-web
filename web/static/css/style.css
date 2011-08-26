@@ -18,5 +18,6 @@
 .header { font-size: small; font-weight: bold; background-color: #EEEEEE;}
 .tabledataOdd { font-size: small; font-weight: normal; }
 .tabledataEven { font-size: small; font-weight: normal; background-color: #EEEFFF;}
+.ui-widget-header { font-size: small; }
 body{ margin: 0px;}
 

@@ -26,7 +26,7 @@ function initialize() {
     <tr>
     <td valign="top">
         <div class="ui-widget-header">
-            Uusimmat kalat
+            Uudet saaliit
         </div>
         <div class="ui-widget-content">
             <table id="mynewest" class="tabledata" cellspacing="0" width="100%">
@@ -73,7 +73,7 @@ function initialize() {
     <td>
 
         <div class="ui-widget-header">
-            Kookkaimmat kalat
+            Kalaennätykset
         </div>
         <div class="ui-widget-content">
             <table class="tabledata" cellspacing="0" width="100%">
@@ -117,6 +117,44 @@ function initialize() {
             </table>
         </div>
 
-    </td></tr>
+    </td>
+    
+        <td>
+
+        <div class="ui-widget-header">
+            Uudet reissut
+        </div>
+        <div class="ui-widget-content">
+            <table class="tabledata" cellspacing="0" width="100%">
+                <tr class="header">
+                    <td>päivä</td>
+                    <td>kalamies</td>
+                    <td>paikkakunta</td>
+                    <td>kaloja</td>
+                </tr>
+                <c:forEach var="loop" begin="0" step="1" end="${tripstat.rowCount()-1}">
+                    <c:if test="${loop % 2 == 0}"><tr class="tabledataEven"></c:if>
+                    <c:if test="${loop % 2 != 0}"><tr class="tabledataOdd"></c:if>
+                        
+                    <td>
+                        ${tripstat.row(loop).get('date')} 
+                    </td>
+                    <td>
+                        ${tripstat.row(loop).get('username')}
+                    </td>
+                    <td>
+                        ${tripstat.row(loop).get('place_name')}
+                    </td>
+                    <td>
+                        ${tripstat.row(loop).get('fish_amount')}
+                    </td>
+                </tr>
+                </c:forEach>
+            </table>
+        </div>
+
+    </td>
+    
+    </tr>
 </table>
 <jsp:include page="footer.jsp" />
