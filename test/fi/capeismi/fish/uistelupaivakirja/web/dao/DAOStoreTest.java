@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.SearchObject;
 import junit.framework.TestSuite;
 import org.hibernate.SessionException;
 import org.hibernate.Transaction;
@@ -109,7 +110,8 @@ public class DAOStoreTest {
         
         new Runner() {
             public void runInTx() {
-                store.getView("spinneritem", DAOStore.SearchObjectFactory.build());       
+                SearchObject search = store.searchObject("spinneritem");
+                search.doSearch();
             }            
         };        
                 

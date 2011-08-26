@@ -30,8 +30,7 @@ public class UIModel {
     }
     
     public TableView getView(String viewname) {
-        SearchObject search = DAOStore.SearchObjectFactory.build();
-        TableView dao = this._daoStore.getView(viewname, search);
-        return dao;
+        SearchObject search = this._daoStore.searchObject(viewname);
+        return search.doSearch();
     }
 }

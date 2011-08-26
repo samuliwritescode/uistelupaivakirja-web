@@ -25,4 +25,5 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 public interface SearchObject {
     void setUser(User user);
     void addFieldConstraint(String field, String constraint);
+    TableView doSearch();
 }

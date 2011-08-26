@@ -23,7 +23,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import java.util.List;
@@ -200,17 +199,14 @@ public class DAOStore {
         return retval;
     }   
 
-    public TableView getView(final String view, final SearchObject search) {
+    private TableView getView(final String view, final ConcreteSearchObject search) {
         return (TableView) new TransactionDecorator() { public Object doQuery() throws Exception{
             ViewContainer orm = new ViewContainer(view);
             
             Connection conn = this.session.connection();
             Statement st = conn.createStatement();
-            ConcreteSearchObject concretesearch = (ConcreteSearchObject)search;
-            String searchSQL = "select * from " +view+ "_view "+concretesearch.getSQL();
+            String searchSQL = "select * from " +view+ "_view "+search.getSQL();
             
-
-           
             ResultSet res = st.executeQuery(searchSQL);           
             List<String> columns = new ArrayList<String>();
             for(int loop=1; loop <= res.getMetaData().getColumnCount(); loop++) {                
@@ -229,21 +225,17 @@ public class DAOStore {
         }}.getResult();
     }
     
-    public static class SearchObjectFactory {
-        private SearchObjectFactory() {
-            
-        }
-        
-        public static SearchObject build() {
-            return new ConcreteSearchObject();
-        }
+    public SearchObject searchObject(String view) {
+        return new ConcreteSearchObject(view);
     }
     
-    private static class ConcreteSearchObject implements SearchObject {
+    private class ConcreteSearchObject implements SearchObject {
         private Map<String, String> constraints;
+        private String view;
         
-        public ConcreteSearchObject() {
+        public ConcreteSearchObject(String view) {
             this.constraints = new HashMap<String, String>();
+            this.view = view;
         }
         
         public void setUser(User user) {
@@ -262,6 +254,14 @@ public class DAOStore {
             
             searchSQL += " 1=1";
             return searchSQL;
+        }
+
+        public TableView doSearch() {
+            return getView(this.view, this);
+        }
+
+        public void setView(String view) {
+            this.view = view;
         }
     }
 }

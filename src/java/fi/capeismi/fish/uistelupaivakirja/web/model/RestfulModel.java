@@ -46,10 +46,9 @@ public class RestfulModel {
     }
     
     public TableView getView(String viewname) {
-        SearchObject search = DAOStore.SearchObjectFactory.build();
+        SearchObject search = this._daoStore.searchObject(viewname);
         search.setUser(this._daoStore.getUser());
-        TableView dao = this._daoStore.getView(viewname, search);
-        return dao;
+        return search.doSearch();
     }
     
     public Type getType(String typename) {
