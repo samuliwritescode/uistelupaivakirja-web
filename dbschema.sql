@@ -66,3 +66,5 @@ INSERT INTO type (NAME) VALUES('place');
 INSERT INTO type (NAME) VALUES('lure');
 
 create index trollingobject_idx on trollingobject(object_identifier);
+create index eventproperty_idx on eventproperty(keyname);
+create index trollingproperty_idx on trollingproperty(keyname);

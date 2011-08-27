@@ -69,8 +69,7 @@ public class XMLCreator {
                 Element root = doc.createElement("root");
                 doc.appendChild(root);
                 
-                for(int loop=0; loop < view.rowCount(); loop++) {
-                    Map<String, String> row = view.row(loop);
+                for(Map<String, String> row: view.getTable()) {
                     parseRow(row, doc, root, view.getName());
                 }
                 this._domsource = new DOMSource(doc);

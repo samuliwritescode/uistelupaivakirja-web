@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +24,6 @@ import java.util.Map;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public interface TableView {
-    int rowCount();
-    Map<String, String> row(int index);
+    List<Map<String, String>> getTable();
     String getName();
 }

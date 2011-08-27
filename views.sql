@@ -32,54 +32,112 @@ group by user_id, value, keyname
 order by keyname, value
 ;
 
-drop view if exists fishmap_view;
-create view fishmap_view as 
-select    
+drop view if exists event_view;
+create view event_view as
+select
+    event.id,
     trolling_id,
-    object_identifier,
-    user_id,
-    user.username,
-    (select value from eventproperty_view where event_id=event.id and keyname = 'type') as 'type',
-    (select value from eventproperty_view where event_id=event.id and keyname = 'fish_species' and event_id=event.id) as 'fish_species',
-    (select value from eventproperty_view where event_id=event.id and keyname = 'fish_coord_lon') as 'fish_coord_lon',
-    (select value from eventproperty_view where event_id=event.id and keyname = 'fish_coord_lat') as 'fish_coord_lat',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_weight' and event_id=event.id) as SIGNED) as 'fish_weight',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_length' and event_id=event.id) as SIGNED) as 'fish_length',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_time' and event_id=event.id) as TIME) as 'fish_time',
-    cast((select value from trollingproperty_view where keyname='date' and trolling_id=trollingobject.id) as DATE) as 'date'
-from event
-    join trollingobject on(trolling_id=trollingobject.id)
-    join collection on(trollingobject.collection_id=collection.id)
-    join user on(user_id=user.id)
-having 
-    (type=1 OR type=3) and
-    fish_coord_lon is not null and
-    fish_coord_lat is not null
-order by date desc, fish_time desc
+    group_concat(IF(keyname = 'fish_species', value, NULL)) as fish_species,
+    group_concat(IF(keyname = 'fish_coord_lon', value, NULL)) as fish_coord_lon,
+    group_concat(IF(keyname = 'fish_coord_lat', value, NULL)) as fish_coord_lat,
+    group_concat(IF(keyname = 'fish_length', value, NULL)) as fish_length,
+    group_concat(IF(keyname = 'fish_weight', value, NULL)) as fish_weight,
+    group_concat(IF(keyname = 'fish_time', value, NULL)) as fish_time,
+    group_concat(IF(keyname = 'fish_method', value, NULL)) as fish_method,
+    group_concat(IF(keyname = 'fish_getter', value, NULL)) as fish_getter,
+    group_concat(IF(keyname = 'fish_group_amount', value, NULL)) as fish_group_amount,
+    group_concat(IF(keyname = 'lure', value, NULL)) as lure_id,
+    group_concat(IF(keyname = 'type', value, NULL)) as type
+from
+    event
+    join eventproperty on(event.id=event_id)
+group by event.id
 ;
+
+drop view if exists trip_view;
+create view trip_view as
+select
+    trollingobject.id as id,
+    type_id,
+    user_id,
+    collection_id,
+    object_identifier,
+    group_concat(IF(keyname = 'date', value, NULL)) as date,
+    group_concat(IF(keyname = 'description', value, NULL)) as description,
+    group_concat(IF(keyname = 'place', value, NULL)) as place_id,    
+    group_concat(IF(keyname = 'time_start', value, NULL)) as time_start,
+    group_concat(IF(keyname = 'time_end', value, NULL)) as time_end
+from
+    trollingobject
+    join trollingproperty on(trolling_id=trollingobject.id)
+    join collection on(collection_id=collection.id)
+    join type on(type_id=type.id)   
+where type.name = 'trip'
+group by trollingobject.id
+;
+
+drop view if exists lure_view;
+create view lure_view as
+select
+    trollingobject.id as id,
+    type_id,
+    user_id,
+    collection_id,
+    object_identifier,
+    group_concat(IF(keyname = 'maker', value, NULL)) as lure_maker,
+    group_concat(IF(keyname = 'model', value, NULL)) as lure_model,
+    group_concat(IF(keyname = 'color', value, NULL)) as lure_color,
+    group_concat(IF(keyname = 'size', value, NULL)) as lure_size
+from
+    trollingobject
+    join trollingproperty on(trolling_id=trollingobject.id)
+    join collection on(collection_id=collection.id)
+    join type on(type_id=type.id)   
+where type.name = 'lure'
+group by trollingobject.id
+;
+
+drop view if exists place_view;
+create view place_view as
+select
+    trollingobject.id as id,
+    type_id,
+    user_id,
+    collection_id,
+    object_identifier,
+    group_concat(IF(keyname = 'city', value, NULL)) as place_city,
+    group_concat(IF(keyname = 'name', value, NULL)) as place_name
+from
+    trollingobject
+    join trollingproperty on(trolling_id=trollingobject.id)
+    join collection on(collection_id=collection.id)
+    join type on(type_id=type.id)   
+where type.name = 'place'
+group by trollingobject.id
+;
+
 
 drop view if exists fishstat_view;
 create view fishstat_view as 
 select    
     trolling_id,
-    object_identifier,
-    user_id,
+    trip_view.object_identifier,
+    trip_view.user_id,
     user.username,
-    (select value from eventproperty_view where event_id=event.id and keyname = 'type') as 'type',
-    (select value from eventproperty_view where event_id=event.id and keyname = 'fish_species' and event_id=event.id) as 'fish_species',
-    (select value from eventproperty_view where event_id=event.id and keyname = 'lure') as 'lure_id',
-    (select value from trollingproperty_view where trolling_id=trollingobject.id and keyname = 'place') as 'place_id',
-    (select value from trollingproperty_view where object_identifier=lure_id and keyname='maker') as 'lure_maker',
-    (select value from trollingproperty_view where object_identifier=place_id and keyname='name') as 'place_name',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_weight' and event_id=event.id) as SIGNED) as 'fish_weight',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_length' and event_id=event.id) as SIGNED) as 'fish_length',
-    coalesce(cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_group_amount' and event_id=event.id) as SIGNED), 1) as 'fish_group_amount',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_time' and event_id=event.id) as TIME) as 'fish_time',
-    cast((select value from trollingproperty_view where keyname='date' and trolling_id=trollingobject.id) as DATE) as 'date'
-from event
-    join trollingobject on(trolling_id=trollingobject.id)
-    join collection on(trollingobject.collection_id=collection.id)
+    type,
+    place_name,
+    fish_species,
+    lure_id,
+    fish_weight,
+    fish_length,
+    fish_time,
+    trip_view.date,
+    fish_group_amount,
+    trip_view.place_id
+from event_view
+    join trip_view on(trolling_id=trip_view.id)
     join user on(user_id=user.id)
+    join place_view on(place_id=place_view.object_identifier)
 having 
     (type=1 OR type=3)
 order by date desc, fish_time desc limit 10
@@ -92,49 +150,63 @@ select
     object_identifier,
     user_id,
     user.username,
-    (select value from eventproperty_view where event_id=event.id and keyname = 'type') as 'type',
-    (select value from eventproperty_view where event_id=event.id and keyname = 'fish_species' and event_id=event.id) as 'fish_species',
-    (select value from eventproperty_view where event_id=event.id and keyname = 'lure') as 'lure_id',
-    (select value from trollingproperty_view where trolling_id=trollingobject.id and keyname = 'place') as 'place_id',
-    (select value from trollingproperty_view where object_identifier=lure_id and keyname='maker') as 'lure_maker',
-    (select value from trollingproperty_view where object_identifier=place_id and keyname='name') as 'place_name',    
-    cast(
-        cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_weight' and event_id=event.id) as SIGNED) / 
-        coalesce(cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_group_amount' and event_id=event.id) as SIGNED), 1) as decimal
-    ) as 'fish_weight',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_length' and event_id=event.id) as SIGNED) as 'fish_length',
-    cast((select value from eventproperty_view where event_id=event.id and keyname ='fish_time' and event_id=event.id) as TIME) as 'fish_time',
-    cast((select value from trollingproperty_view where keyname='date' and trolling_id=trollingobject.id) as DATE) as 'date'
-from event
-    join trollingobject on(trolling_id=trollingobject.id)
-    join collection on(trollingobject.collection_id=collection.id)
+    type,
+    fish_species,
+    lure_id,
+    place_id,
+    fish_weight/coalesce(fish_group_amount,1) as fish_weight,
+    fish_length,
+    fish_time,
+    date
+from event_view
+    join trip_view on(trolling_id=trip_view.id)
     join user on(user_id=user.id)
 where
     user.publishfish = true
 having 
     (type=1 OR type=3)
-order by fish_weight desc, fish_length desc limit 10;
+order by fish_weight desc, fish_length desc limit 10
+;
 
-drop view if exists tripstat_view;
-create view tripstat_view as
+drop view if exists fishmap_view;
+create view fishmap_view as 
 select    
+    trolling_id,
     object_identifier,
     user_id,
     user.username,
-    (select value from trollingproperty_view where trolling_id=trollingobject.id and keyname = 'place') as 'place_id',
-    (select value from trollingproperty_view where object_identifier=place_id and keyname='city') as 'place_name',
-    coalesce((select 
-        sum(coalesce(
-                cast((select value from eventproperty_view ev1 where ev1.event_id=ev2.event_id and keyname='fish_group_amount') as signed), 1
-            )) as 'trip_fish_amount'
-        from eventproperty_view as ev2 where ev2.trolling_id = trollingobject.id and keyname='type' and value in('1', '3')
-    ),0) as 'fish_amount',
+    type,
+    fish_species,
+    fish_coord_lon,
+    fish_coord_lat,
+    fish_weight,
+    fish_time,
+    date
+from event_view
+    join trip_view on(trolling_id=trip_view.id)
+    join user on(user_id=user.id)
+having 
+    (type=1 OR type=3) and
+    fish_coord_lon is not null and
+    fish_coord_lat is not null
+order by date desc, fish_time desc
+;
 
-    cast((select value from trollingproperty_view where keyname='date' and trolling_id=trollingobject.id) as DATE) as 'date'
-    
-from trollingobject
-    join collection on(trollingobject.collection_id=collection.id)
+
+drop view if exists tripstat_view;
+create view tripstat_view as
+select
+    date,
+    time_start,
+    time_end,
+    description,
+    coalesce((select sum(fish_group_amount) from event_view where trolling_id=trip_view.id and type in('1', '3')),0) as fishes
+from trip_view
+    join type on(type_id=type.id)
     join user on(user_id=user.id)
 where
+    type.name = 'trip' and
     user.publishtrip = true
-order by date desc limit 10;
+order by date desc, time_end desc
+limit 10
+;

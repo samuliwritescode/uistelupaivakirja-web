@@ -18,6 +18,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -37,20 +38,15 @@ public class ViewContainer implements TableView {
     public void add(Map<String, String> row) {
         this.items.add(row);
     }
-
-    @Override
-    public int rowCount() {
-        return this.items.size();
-    }
-
-    @Override
-    public Map<String, String> row(int index) {
-        return this.items.get(index);
-    }
-
+    
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public List<Map<String, String>> getTable() {
+        return Collections.unmodifiableList(this.items);
     }
 }
 

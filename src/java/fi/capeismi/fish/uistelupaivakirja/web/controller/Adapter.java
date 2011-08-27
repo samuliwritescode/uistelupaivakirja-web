@@ -21,6 +21,7 @@ import fi.capeismi.fish.uistelupaivakirja.web.model.FillableAnnotation;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
 import java.io.FileInputStream;
+import java.util.Map;
 import java.util.Properties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -44,8 +45,8 @@ class Adapter {
             }            
             FillableAnnotation fillable = (FillableAnnotation)Class.forName(classname).newInstance();
 
-            for(int loop=0; loop < view.rowCount(); loop++) {
-                fillable.add(view.row(loop));
+            for(Map<String,String> row: view.getTable()) {
+                fillable.add(row);
             }
             
             return fillable;

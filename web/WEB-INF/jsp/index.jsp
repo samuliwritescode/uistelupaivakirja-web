@@ -39,31 +39,29 @@ function initialize() {
                     <td>paino</td>
                     <td>pituus</td>
                 </tr>
-                <c:forEach var="loop" begin="0" step="1" end="${fishstat.rowCount()-1}">
-                    <c:if test="${loop % 2 == 0}"><tr class="tabledataEven"></c:if>
-                    <c:if test="${loop % 2 != 0}"><tr class="tabledataOdd"></c:if>
-                        
+                <c:forEach var="row" items="${fishstat.table}" varStatus="loop">
+                    <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">                        
                     <td>
-                        ${fishstat.row(loop).get('date')} 
-                        ${fishstat.row(loop).get('fish_time')}
+                        ${row['date']}
+                        ${row['fish_time']}
                     </td>
                     <td>
-                        ${fishstat.row(loop).get('username')}
+                        ${row['username']}
                     </td>
                     <td>
-                        ${fishstat.row(loop).get('fish_species')}
+                        ${row['fish_species']}
                     </td>
                     <td>
-                        ${fishstat.row(loop).get('lure_maker')}
+                        ${row['lure_maker']}
                     </td>
                     <td>
-                        ${fishstat.row(loop).get('place_name')}
+                        ${row['place_name']}
                     </td>
                     <td>
-                        ${fishstat.row(loop).get('fish_weight')}
+                        ${row['fish_weight']}
                     </td>
                     <td>
-                        ${fishstat.row(loop).get('fish_length')}
+                        ${row['fish_length']}
                     </td>
                 </tr>
                 </c:forEach>                
@@ -86,34 +84,33 @@ function initialize() {
                     <td>viehe</td>
                     <td>paikka</td>
                 </tr>
-                <c:forEach var="loop" begin="0" step="1" end="${fishrecord.rowCount()-1}">
-                    <c:if test="${loop % 2 == 0}"><tr class="tabledataEven"></c:if>
-                    <c:if test="${loop % 2 != 0}"><tr class="tabledataOdd"></c:if>
+                <c:forEach var="row" items="${fishrecord.table}" varStatus="loop">
+                    <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">  
                         
                     <td>
-                        ${fishrecord.row(loop).get('date')} 
-                        ${fishrecord.row(loop).get('fish_time')}
+                        ${row['date']}
+                        ${row['fish_time']}
                     </td>
                     <td>
-                        ${fishrecord.row(loop).get('username')}
+                        ${row['username']}
                     </td>
                     <td>
-                        ${fishrecord.row(loop).get('fish_species')}
+                        ${row['fish_species']}
                     </td>
                     <td>
-                        ${fishrecord.row(loop).get('fish_weight')}
+                        ${row['fish_weight']}
                     </td>
                     <td>
-                        ${fishrecord.row(loop).get('fish_length')}
+                        ${row['fish_length']}
                     </td>
                     <td>
-                        ${fishrecord.row(loop).get('lure_maker')}
+                        ${row['lure_maker']}
                     </td>
                     <td>
-                        ${fishrecord.row(loop).get('place_name')}
+                        ${row['place_name']}
                     </td>
                 </tr>
-                </c:forEach>
+                </c:forEach>    
             </table>
         </div>
 
@@ -132,24 +129,24 @@ function initialize() {
                     <td>paikkakunta</td>
                     <td>kaloja</td>
                 </tr>
-                <c:forEach var="loop" begin="0" step="1" end="${tripstat.rowCount()-1}">
-                    <c:if test="${loop % 2 == 0}"><tr class="tabledataEven"></c:if>
-                    <c:if test="${loop % 2 != 0}"><tr class="tabledataOdd"></c:if>
+                <c:forEach var="row" items="${tripstat.table}" varStatus="loop">
+                    <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">  
                         
                     <td>
-                        ${tripstat.row(loop).get('date')} 
+                        ${row['date']}
                     </td>
                     <td>
-                        ${tripstat.row(loop).get('username')}
+                        ${row['username']}
                     </td>
                     <td>
-                        ${tripstat.row(loop).get('place_name')}
+                        ${row['place_name']}
                     </td>
                     <td>
-                        ${tripstat.row(loop).get('fish_amount')}
+                        ${row['fish_amount']}
                     </td>
                 </tr>
-                </c:forEach>
+                </c:forEach>    
+                
             </table>
         </div>
 
