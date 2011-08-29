@@ -143,31 +143,43 @@ having
 order by date desc, fish_time desc limit 10
 ;
 
+--- RECORDS ---
 drop view if exists fishrecord_view;
 create view fishrecord_view as 
-select    
-    trolling_id,
-    object_identifier,
-    user_id,
+select 
+    (select value from trollingproperty join event on(event.trolling_id = trollingproperty.trolling_id) where event.id = event_id and keyname='date') as date,
+    (
+        select value 
+        from trollingproperty
+            join trollingobject on(trolling_id=trollingobject.id)
+        where 
+            object_identifier in(select value from eventproperty e2 where e2.event_id = eventproperty.event_id and keyname='lure') and
+            keyname='maker'
+    ) as lure_maker,
+    (
+        select value 
+        from trollingproperty
+            join trollingobject on(trolling_id=trollingobject.id)
+        where 
+            object_identifier in(select value from trollingproperty join event on(event.trolling_id = trollingproperty.trolling_id) where event.id = event_id and keyname='place') and
+            keyname='name'
+    ) as place_name,
+    (select value from eventproperty e2 where e2.event_id = eventproperty.event_id and keyname='fish_species') as fish_species,
+    (select value from eventproperty e2 where e2.event_id = eventproperty.event_id and keyname='fish_getter') as fish_getter,
+    (select value from eventproperty e2 where e2.event_id = eventproperty.event_id and keyname='fish_length') as fish_length,
     user.username,
-    type,
-    fish_species,
-    lure_id,
-    place_id,
-    fish_weight/coalesce(fish_group_amount,1) as fish_weight,
-    fish_length,
-    fish_time,
-    date
-from event_view
-    join trip_view on(trolling_id=trip_view.id)
+    cast(value as unsigned) as fish_weight
+from eventproperty
+    join event on(event.ID = event_id)
+    join trollingobject on(trolling_id=trollingobject.id)
+    join collection on(collection_id=collection.id)
     join user on(user_id=user.id)
-where
-    user.publishfish = true
-having 
-    (type=1 OR type=3)
-order by fish_weight desc, fish_length desc limit 10
-;
+where 
+    keyname='fish_weight' and
+    user.id=1
+order by fish_weight desc limit 10;
 
+--- GPX ---
 drop view if exists fishmap_view;
 create view fishmap_view as 
 select    
