@@ -29,7 +29,7 @@
         <property name="publishtrip" type="java.lang.Boolean">
             <column name="PUBLISHTRIP" />
         </property>
-        <set name="collections" inverse="true">
+        <set name="collections" inverse="true" cascade="all">
             <key>
                 <column name="USER_ID" not-null="true" />
             </key>

@@ -25,9 +25,7 @@ import java.util.Map;
 import java.util.List;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingproperty;
 
 import java.util.HashMap;
 import org.junit.After;
@@ -170,17 +168,8 @@ public class RestfulModelTest {
     }
     
     private boolean compareTrollingObjects(Trollingobject t1, Trollingobject t2) {
-        Map<String, String> kvs1 = new HashMap<String, String>();
-        Map<String, String> kvs2 = new HashMap<String, String>();
-        for(Trollingproperty prop: t1.getTrollingproperties()) {
-            kvs1.put(prop.getKeyname(), prop.getValue());
-        }
 
-        for(Trollingproperty prop: t2.getTrollingproperties()) {
-            kvs2.put(prop.getKeyname(), prop.getValue());
-        }
-
-        assertEquals(kvs1, kvs2);        
+        assertEquals(t1.getProperties(), t2.getProperties());        
         assertEquals(t1.getEvents().size(), t2.getEvents().size());
         
         Iterator<Event> iter = t2.getEvents().iterator();
@@ -192,19 +181,8 @@ public class RestfulModelTest {
         return true;
     }
     
-    private boolean compareEvents(Event e1, Event e2) {
-        Map<String, String> kvs1 = new HashMap<String, String>();
-        Map<String, String> kvs2 = new HashMap<String, String>();
-        
-        for(Eventproperty prop: e1.getEventproperties()) {
-            kvs1.put(prop.getKeyname(), prop.getValue());
-        }
-        
-        for(Eventproperty prop: e2.getEventproperties()) {
-            kvs2.put(prop.getKeyname(), prop.getValue());
-        }
-        
-        assertEquals(e1, e2);
+    private boolean compareEvents(Event e1, Event e2) {        
+        assertEquals(e1.getProperties(), e2.getProperties());
         return true;
     }     
 }

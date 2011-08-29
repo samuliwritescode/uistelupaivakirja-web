@@ -3,8 +3,6 @@
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="trolling"/>
   <table-filter match-name="user"/>
-  <table-filter match-name="trollingproperty"/>
-  <table-filter match-name="eventproperty"/>
   <table-filter match-name="event"/>
   <table-filter match-name="type"/>
   <table-filter match-name="collection"/>

@@ -2,7 +2,11 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 // Generated Jul 22, 2011 3:04:04 PM by Hibernate Tools 3.2.1.GA
 
 
+import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -11,9 +15,37 @@ import java.util.Set;
 public class Event  implements java.io.Serializable {
 
 
-     private Integer id;
-     private Trollingobject trollingobject;
-     private Set<Eventproperty> eventproperties = new LinkedHashSet<Eventproperty>(0);
+    private Integer id;
+    private Trollingobject trollingobject;
+
+    private String fish_air_temp;
+    private String fish_coord_lat;
+    private String fish_coord_lon;
+    private String fish_cr;
+    private String fish_getter;
+    private String fish_group; 
+    private String fish_group_amount;
+    private String fish_length;
+    private String fish_line_weight;
+    private String fish_method;
+    private String fish_misc_text;
+    private String fish_pressure;
+    private String fish_pressure_change;
+    private String fish_rain;
+    private String fish_release_width;
+    private String fish_species;
+    private String fish_spot_depth;
+    private String fish_time;
+    private String fish_total_depth;
+    private String fish_trolling_speed;
+    private String fish_undersize;
+    private String fish_water_temp; 
+    private String fish_weather;
+    private String fish_weight;
+    private String fish_wind;
+    private String fish_wind_direction;
+    private String lure;
+    private String type;
 
     public Event() {
     }
@@ -22,11 +54,7 @@ public class Event  implements java.io.Serializable {
     public Event(Trollingobject trollingobject) {
         this.trollingobject = trollingobject;
     }
-    public Event(Trollingobject trollingobject, Set<Eventproperty> eventproperties) {
-       this.trollingobject = trollingobject;
-       this.eventproperties = eventproperties;
-    }
-   
+
     public Integer getId() {
         return this.id;
     }
@@ -41,16 +69,282 @@ public class Event  implements java.io.Serializable {
     public void setTrollingobject(Trollingobject trollingobject) {
         this.trollingobject = trollingobject;
     }
-    public Set<Eventproperty> getEventproperties() {
-        return this.eventproperties;
+    
+    public Map<String, String> getProperties() {
+        Map<String, String> retval = new HashMap<String, String>();
+        retval.put("fish_air_temp", fish_air_temp);
+        retval.put("fish_coord_lat", fish_coord_lat);
+        retval.put("fish_coord_lon", fish_coord_lon);
+        retval.put("fish_cr", fish_cr);
+        retval.put("fish_getter", fish_getter);
+        retval.put("fish_group", fish_group);
+        retval.put("fish_group_amount", fish_group_amount);
+        retval.put("fish_length", fish_length);
+        retval.put("fish_line_weight", fish_line_weight);
+        retval.put("fish_method", fish_method);
+        retval.put("fish_misc_text", fish_misc_text);
+        retval.put("fish_pressure", fish_pressure);
+        retval.put("fish_pressure_change", fish_pressure_change);
+        retval.put("fish_rain", fish_rain);
+        retval.put("fish_release_width", fish_release_width);
+        retval.put("fish_species", fish_species);
+        retval.put("fish_spot_depth", fish_spot_depth);
+        retval.put("fish_time", fish_time);
+        retval.put("fish_total_depth", fish_total_depth);
+        retval.put("fish_trolling_speed", fish_trolling_speed);
+        retval.put("fish_undersize", fish_undersize);
+        retval.put("fish_water_temp", fish_water_temp);
+        retval.put("fish_weather", fish_weather);
+        retval.put("fish_weight", fish_weight);
+        retval.put("fish_wind", fish_wind);
+        retval.put("fish_wind_direction", fish_wind_direction);
+        retval.put("lure", lure);
+        retval.put("type", type);
+        return retval;
     }
     
-    public void setEventproperties(Set<Eventproperty> eventproperties) {
-        this.eventproperties = eventproperties;
+    public void setProperty(String property, String value) {
+        for(Method method: this.getClass().getMethods())
+        {
+            if(method.getName().equalsIgnoreCase("set"+property)) {
+                try {
+                    Object[] args = new Object[1];
+                    args[0] = value;
+                    
+                    method.invoke(this, args);
+                    return;
+                } catch (Exception e) {
+                    throw new RestfulException(e);
+                }
+            }
+        }    
     }
 
+    //Getters
+    public String getFish_air_temp() {
+        return fish_air_temp;
+    }
 
+    public String getFish_coord_lat() {
+        return fish_coord_lat;
+    }
 
+    public String getFish_coord_lon() {
+        return fish_coord_lon;
+    }
+
+    public String getFish_cr() {
+        return fish_cr;
+    }
+
+    public String getFish_getter() {
+        return fish_getter;
+    }
+
+    public String getFish_group() {
+        return fish_group;
+    }
+
+    public String getFish_group_amount() {
+        return fish_group_amount;
+    }
+
+    public String getFish_length() {
+        return fish_length;
+    }
+
+    public String getFish_line_weight() {
+        return fish_line_weight;
+    }
+
+    public String getFish_method() {
+        return fish_method;
+    }
+
+    public String getFish_misc_text() {
+        return fish_misc_text;
+    }
+
+    public String getFish_pressure() {
+        return fish_pressure;
+    }
+
+    public String getFish_pressure_change() {
+        return fish_pressure_change;
+    }
+
+    public String getFish_rain() {
+        return fish_rain;
+    }
+
+    public String getFish_release_width() {
+        return fish_release_width;
+    }
+
+    public String getFish_species() {
+        return fish_species;
+    }
+
+    public String getFish_spot_depth() {
+        return fish_spot_depth;
+    }
+
+    public String getFish_time() {
+        return fish_time;
+    }
+
+    public String getFish_total_depth() {
+        return fish_total_depth;
+    }
+
+    public String getFish_trolling_speed() {
+        return fish_trolling_speed;
+    }
+
+    public String getFish_undersize() {
+        return fish_undersize;
+    }
+
+    public String getFish_water_temp() {
+        return fish_water_temp;
+    }
+
+    public String getFish_weather() {
+        return fish_weather;
+    }
+
+    public String getFish_weight() {
+        return fish_weight;
+    }
+
+    public String getFish_wind() {
+        return fish_wind;
+    }
+
+    public String getFish_wind_direction() {
+        return fish_wind_direction;
+    }
+
+    public String getLure() {
+        return lure;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    //Setters
+    public void setFish_air_temp(String fish_air_temp) {
+        this.fish_air_temp = fish_air_temp;
+    }
+
+    public void setFish_coord_lat(String fish_coord_lat) {
+        this.fish_coord_lat = fish_coord_lat;
+    }
+
+    public void setFish_coord_lon(String fish_coord_lon) {
+        this.fish_coord_lon = fish_coord_lon;
+    }
+
+    public void setFish_cr(String fish_cr) {
+        this.fish_cr = fish_cr;
+    }
+
+    public void setFish_getter(String fish_getter) {
+        this.fish_getter = fish_getter;
+    }
+
+    public void setFish_group(String fish_group) {
+        this.fish_group = fish_group;
+    }
+
+    public void setFish_group_amount(String fish_group_amount) {
+        this.fish_group_amount = fish_group_amount;
+    }
+
+    public void setFish_length(String fish_length) {
+        this.fish_length = fish_length;
+    }
+
+    public void setFish_line_weight(String fish_line_weight) {
+        this.fish_line_weight = fish_line_weight;
+    }
+
+    public void setFish_method(String fish_method) {
+        this.fish_method = fish_method;
+    }
+
+    public void setFish_misc_text(String fish_misc_text) {
+        this.fish_misc_text = fish_misc_text;
+    }
+
+    public void setFish_pressure(String fish_pressure) {
+        this.fish_pressure = fish_pressure;
+    }
+
+    public void setFish_pressure_change(String fish_pressure_change) {
+        this.fish_pressure_change = fish_pressure_change;
+    }
+
+    public void setFish_rain(String fish_rain) {
+        this.fish_rain = fish_rain;
+    }
+
+    public void setFish_release_width(String fish_release_width) {
+        this.fish_release_width = fish_release_width;
+    }
+
+    public void setFish_species(String fish_species) {
+        this.fish_species = fish_species;
+    }
+
+    public void setFish_spot_depth(String fish_spot_depth) {
+        this.fish_spot_depth = fish_spot_depth;
+    }
+
+    public void setFish_time(String fish_time) {
+        this.fish_time = fish_time;
+    }
+
+    public void setFish_total_depth(String fish_total_depth) {
+        this.fish_total_depth = fish_total_depth;
+    }
+
+    public void setFish_trolling_speed(String fish_trolling_speed) {
+        this.fish_trolling_speed = fish_trolling_speed;
+    }
+
+    public void setFish_undersize(String fish_undersize) {
+        this.fish_undersize = fish_undersize;
+    }
+
+    public void setFish_water_temp(String fish_water_temp) {
+        this.fish_water_temp = fish_water_temp;
+    }
+
+    public void setFish_weather(String fish_weather) {
+        this.fish_weather = fish_weather;
+    }
+
+    public void setFish_weight(String fish_weight) {
+        this.fish_weight = fish_weight;
+    }
+
+    public void setFish_wind(String fish_wind) {
+        this.fish_wind = fish_wind;
+    }
+
+    public void setFish_wind_direction(String fish_wind_direction) {
+        this.fish_wind_direction = fish_wind_direction;
+    }
+
+    public void setLure(String lure) {
+        this.lure = lure;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
 }
 

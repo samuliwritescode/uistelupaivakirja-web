@@ -18,9 +18,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Eventproperty;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingproperty;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -96,14 +94,9 @@ public class XMLReader {
                 String value = node.getChildNodes().item(0).getNodeValue();
 
                 if(value == null)
-                    value = "";
-                
-                Trollingproperty property = new Trollingproperty();                
-                property.setTrollingobject(object);
-                property.setKeyname(node.getNodeName());
-                property.setValue(value);
+                    value = "";                
                                 
-                object.getTrollingproperties().add(property);
+                object.setProperty(node.getNodeName(), value);
             }
         }                
     }
@@ -136,12 +129,8 @@ public class XMLReader {
                 if(value == null)
                     value = "";
                 String key = node.getNodeName();
-                
-                Eventproperty eventproperty = new Eventproperty();
-                eventproperty.setEvent(event);
-                eventproperty.setKeyname(key);
-                eventproperty.setValue(value);
-                event.getEventproperties().add(eventproperty);                                
+
+                event.setProperty(key, value);
             }
         }
     }

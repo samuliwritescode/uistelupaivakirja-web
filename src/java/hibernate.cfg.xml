@@ -14,12 +14,10 @@
     <property name="hibernate.c3p0.idle_test_period">10</property>
     <property name="hibernate.c3p0.acquire_increment">5</property>
     <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Trollingproperty.hbm.xml"/>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Type.hbm.xml"/>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Event.hbm.xml"/>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/User.hbm.xml"/>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Collection.hbm.xml"/>
     <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Trollingobject.hbm.xml"/>
-    <mapping resource="fi/capeismi/fish/uistelupaivakirja/web/dao/Eventproperty.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

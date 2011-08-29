@@ -49,9 +49,7 @@ public class DAOStoreTest {
         assertEquals(getNumberOfRowsInTable("User"), 0);
         assertEquals(getNumberOfRowsInTable("Collection"), 0);
         assertEquals(getNumberOfRowsInTable("Trollingobject"), 0);
-        assertEquals(getNumberOfRowsInTable("Trollingproperty"), 0);
         assertEquals(getNumberOfRowsInTable("Event"), 0);
-        assertEquals(getNumberOfRowsInTable("Eventproperty"), 0);        
         
     }        
     
