@@ -61,4 +61,16 @@ order by date desc
 limit 10
 ;
 
-select * from tripstat_view;
+drop view if exists fishmap_view;
+create view fishmap_view as
+select fish_species, trollingobject.date, fish_time, fish_coord_lat, fish_coord_lon, user_id
+from event 
+    join trollingobject on(event.trolling_id=trollingobject.id)
+    join collection on(trollingobject.collection_id=collection.id)
+where
+    type_id=1 and
+    type in('1', '3') and
+    fish_coord_lat is not null and
+    fish_coord_lon is not null
+;
+select * from fishmap_view;
