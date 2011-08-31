@@ -101,7 +101,7 @@ public class Trollingobject  implements java.io.Serializable {
                 }
             }
         }
-        //throw new RestfulException("Unknown property: "+property);
+        throw new RestfulException("Unknown property: "+property);
     }
    
     public Integer getId() {
