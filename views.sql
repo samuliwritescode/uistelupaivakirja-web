@@ -73,4 +73,3 @@ where
     fish_coord_lat is not null and
     fish_coord_lon is not null
 ;
-select * from fishmap_view;
