@@ -23,6 +23,8 @@
 .normaltext { font-family: "Times"; font-size: medium; color: #454545; vertical-align: text-bottom;}
 .capital { font-family: "Times"; font-size: x-large; color: #183e72;}
 .contentwidget { background-color: #ffffff; }
+.twitter { vertical-align: text-bottom; float: left;}
+.floatimage { float: right; margin: 0px;}
 body{ margin: 0px;}
 a { color: #193760;}
 td { vertical-align: top; }

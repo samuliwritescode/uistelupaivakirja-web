@@ -14,70 +14,66 @@ function initialize() {
       myOptions);
 }
 </script>
-<table width="100%" height="300" class="contentwidget">
+<table width="100%" height="300" class="contentwidget" cellspacing="15" border="0">
     <tr>
-        <td>
-            
-            <table cellpadding="0" cellspacing="0">
-                <tr>
-                    <td valign="top" class="normaltext">
-                        <span class="capital">U</span>istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi muille ja mahdollistaa
-                        puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.
-                        <p>
-                        Ja näin se toimii: kirjaa saaliisi puhelimella tai PC:llä kirjanpitoon ja
-                        saaliisi synkronoituvat automaattisesti verkkoon. Muut käyttäjät näkevät uusimmat reissusi ja saaliisi sekä pääset vertailemaan
-                        ennätyskalojasi muiden kanssa. 
-                        
-                        
-                        <p>
-                            
-                        Halutessasi voit estää saalistietojesi näkymisen muille käyttäjille profiilisi yksityisasetuksilla
-                        <p>
-                            
-                        Lataa työpöydälle tästä<br>
-                        <a href="http://sourceforge.net/projects/uistelu/files/Windows/">[Windows]</a><br>
-                        <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/">[Mac]</a><br>
-                        <a href="https://sourceforge.net/projects/uistelu/files/Source/Desktop/">[Linux]</a><br>
-                        <br>
-                        Puhelimeen<br>
-                        <a href="https://sourceforge.net/projects/uistelu/files/Android/">[Android]</a>
-                    </td>
-                    <td>                        
-                        <img src="/uistelu/static/howto.png"></img>
-                    </td>
-                </tr>
-            </table>
-            <script src="http://widgets.twimg.com/j/2/widget.js"></script>
-            <script>
-            new TWTR.Widget({     
-              version: 2,
-              type: 'profile',
-              rpp: 9,
-              interval: 6000,
-              width: 'auto',
-              height: 400,
-              theme: {
-                shell: {
-                  background: '#DDDDDD',
-                  color: '#000000'
-                },
-                tweets: {
-                  background: '#EFEFEF',
-                  color: '#3b5a4a',
-                  links: '#3b5a4a'
-                }
-              },
-              features: {
-                scrollbar: false,
-                loop: false,
-                live: false,
-                hashtags: true,
-                timestamp: true,
-                avatars: false,
-                behavior: 'all'
-              }
-            }).render().setUser('capeismi').start();
-            </script>                     
+        <td>            
+            <img src="/uistelu/static/howto.png" class="floatimage"></img>
+            <div class="normaltext">
+            <span class="capital">U</span>istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi muille ja mahdollistaa
+            puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.
+            <p>
+                
+            Ja näin se toimii: kirjaa saaliisi puhelimella tai PC:llä kirjanpitoon ja
+            saaliisi synkronoituvat automaattisesti verkkoon. Muut käyttäjät näkevät uusimmat reissusi ja saaliisi sekä pääset vertailemaan
+            ennätyskalojasi muiden kanssa. 
+
+            <p>
+
+            Halutessasi voit estää saalistietojesi näkymisen muille käyttäjille profiilisi yksityisasetuksilla
+            <p>
+
+            Lataa työpöydälle tästä<br>
+            <a href="http://sourceforge.net/projects/uistelu/files/Windows/">[Windows]</a><br>
+            <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/">[Mac]</a><br>
+            <a href="https://sourceforge.net/projects/uistelu/files/Source/Desktop/">[Linux]</a><br>
+            <br>
+            Puhelimeen<br>
+            <a href="https://sourceforge.net/projects/uistelu/files/Android/">[Android]</a>
+            </div>
+
+            <div class="twitter">
+                <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                <script>
+                new TWTR.Widget({     
+                  version: 2,
+                  type: 'profile',
+                  rpp: 9,
+                  interval: 6000,
+                  width: 'auto',
+                  height: 400,
+                  theme: {
+                    shell: {
+                      background: '#E5E5E5',
+                      color: '#000000'
+                    },
+                    tweets: {
+                      background: '#F5F5F5',
+                      color: '#3b5a4a',
+                      links: '#3b5a4a'
+                    }
+                  },
+                  features: {
+                    scrollbar: false,
+                    loop: false,
+                    live: false,
+                    hashtags: true,
+                    timestamp: true,
+                    avatars: false,
+                    behavior: 'all'
+                  }
+                }).render().setUser('capeismi').start();
+                </script>                     
+            </div>
         </td>
         <td>
         <div class="ui-widget-header">
