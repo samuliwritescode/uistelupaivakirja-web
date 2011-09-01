@@ -18,7 +18,7 @@
 .mainwidget { width:100%; height:100%;}
 .header { font-size: small; font-weight: bold; background-color: #EEEEEE;}
 .tabledataOdd { font-size: small; font-weight: normal; }
-.tabledataEven { font-size: small; font-weight: normal; background-color: #EEEFFF;}
+.tabledataEven { font-size: small; font-weight: normal; background-color: #EEEFFF; }
 .ui-widget-header { font-size: small; }
 .normaltext { font-family: "Times"; font-size: medium; color: #454545; vertical-align: text-bottom;}
 .capital { font-family: "Times"; font-size: x-large; color: #183e72;}

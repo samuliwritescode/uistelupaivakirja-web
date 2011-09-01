@@ -29,9 +29,11 @@ function initialize() {
 
             <p>
 
-            Halutessasi voit estää saalistietojesi näkymisen muille käyttäjille profiilisi yksityisasetuksilla
-            <p>
+            Halutessasi voit estää saalistietojesi näkymisen muille käyttäjille profiilisi yksityisasetuksilla.
 
+            </div>
+            
+            <div class="normaltext">
             Lataa työpöydälle tästä<br>
             <a href="http://sourceforge.net/projects/uistelu/files/Windows/">[Windows]</a><br>
             <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/">[Mac]</a><br>
@@ -75,7 +77,7 @@ function initialize() {
                 </script>                     
             </div>
         </td>
-        <td>
+        <td width="500">
         <div class="ui-widget-header">
             Uudet saaliit
         </div>
