@@ -36,7 +36,7 @@
                                
                                 <div class="titletext">Uistelupäiväkirja</div>
                             </td>
-                            <td align="right">
+                            <td class="loginbox">
                                 <div id="loginbox"></div>
                             </td>                        
                         </tr>

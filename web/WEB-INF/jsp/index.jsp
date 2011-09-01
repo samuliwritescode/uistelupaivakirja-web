@@ -14,144 +14,191 @@ function initialize() {
       myOptions);
 }
 </script>
-<table width="100%" height="300">
+<table width="100%" height="300" class="contentwidget">
     <tr>
         <td>
-            <div id="map_canvas" class="mainwidget"></div>
+            
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <td valign="top" class="normaltext">
+                        <span class="capital">U</span>istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi muille ja mahdollistaa
+                        puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.
+                        <p>
+                        Ja näin se toimii: kirjaa saaliisi puhelimella tai PC:llä kirjanpitoon ja
+                        saaliisi synkronoituvat automaattisesti verkkoon. Muut käyttäjät näkevät uusimmat reissusi ja saaliisi sekä pääset vertailemaan
+                        ennätyskalojasi muiden kanssa. 
+                        
+                        
+                        <p>
+                            
+                        Halutessasi voit estää saalistietojesi näkymisen muille käyttäjille profiilisi yksityisasetuksilla
+                        <p>
+                            
+                        Lataa työpöydälle tästä<br>
+                        <a href="http://sourceforge.net/projects/uistelu/files/Windows/">[Windows]</a><br>
+                        <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/">[Mac]</a><br>
+                        <a href="https://sourceforge.net/projects/uistelu/files/Source/Desktop/">[Linux]</a><br>
+                        <br>
+                        Puhelimeen<br>
+                        <a href="https://sourceforge.net/projects/uistelu/files/Android/">[Android]</a>
+                    </td>
+                    <td>                        
+                        <img src="/uistelu/static/howto.png"></img>
+                    </td>
+                </tr>
+            </table>
+            <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+            <script>
+            new TWTR.Widget({     
+              version: 2,
+              type: 'profile',
+              rpp: 9,
+              interval: 6000,
+              width: 'auto',
+              height: 400,
+              theme: {
+                shell: {
+                  background: '#DDDDDD',
+                  color: '#000000'
+                },
+                tweets: {
+                  background: '#EFEFEF',
+                  color: '#3b5a4a',
+                  links: '#3b5a4a'
+                }
+              },
+              features: {
+                scrollbar: false,
+                loop: false,
+                live: false,
+                hashtags: true,
+                timestamp: true,
+                avatars: false,
+                behavior: 'all'
+              }
+            }).render().setUser('capeismi').start();
+            </script>                     
         </td>
-    </tr>
-</table>
-
-<table width="100%" cellspacing="5">
-    <tr>
-    <td valign="top">
+        <td>
         <div class="ui-widget-header">
             Uudet saaliit
         </div>
-        <div class="ui-widget-content">
-            <table id="mynewest" class="tabledata" cellspacing="0" width="100%">
-                <tr class="header">
-                    <td>aika</td>
-                    <td>saaja</td>
-                    <td>laji</td>
-                    <td>viehe</td>
-                    <td>paikka</td>
-                    <td>paino</td>
-                    <td>pituus</td>
-                </tr>
-                <c:forEach var="row" items="${fishstat.table}" varStatus="loop">
-                    <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">                        
-                    <td>
-                        ${row['date']}
-                        ${row['fish_time']}
-                    </td>
-                    <td>
-                        ${row['username']}
-                    </td>
-                    <td>
-                        ${row['fish_species']}
-                    </td>
-                    <td>
-                        ${row['lure_maker']}
-                    </td>
-                    <td>
-                        ${row['place_name']}
-                    </td>
-                    <td>
-                        ${row['fish_weight']}
-                    </td>
-                    <td>
-                        ${row['fish_length']}
-                    </td>
-                </tr>
-                </c:forEach>                
-            </table>
-        </div>
-    </td>
-    <td>
+            <div class="ui-widget-content">
+                <table id="mynewest" class="tabledata" cellspacing="0" width="100%">
+                    <tr class="header">
+                        <td>aika</td>
+                        <td>saaja</td>
+                        <td>laji</td>
+                        <td>viehe</td>
+                        <td>paikka</td>
+                        <td>paino</td>
+                        <td>pituus</td>
+                    </tr>
+                    <c:forEach var="row" items="${fishstat.table}" varStatus="loop">
+                        <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">                        
+                        <td>
+                            ${row['date']}
+                            ${row['fish_time']}
+                        </td>
+                        <td>
+                            ${row['username']}
+                        </td>
+                        <td>
+                            ${row['fish_species']}
+                        </td>
+                        <td>
+                            ${row['lure_maker']}
+                        </td>
+                        <td>
+                            ${row['place_name']}
+                        </td>
+                        <td>
+                            ${row['fish_weight']}
+                        </td>
+                        <td>
+                            ${row['fish_length']}
+                        </td>
+                    </tr>
+                    </c:forEach>                
+                </table>
+            </div>
+            <p>
+            <div class="ui-widget-header">
+                Uudet reissut
+            </div>
+            <div class="ui-widget-content">
+                <table class="tabledata" cellspacing="0" width="100%">
+                    <tr class="header">
+                        <td>päivä</td>
+                        <td>kalamies</td>
+                        <td>paikkakunta</td>
+                        <td>kaloja</td>
+                    </tr>
+                    <c:forEach var="row" items="${tripstat.table}" varStatus="loop">
+                        <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">  
 
-        <div class="ui-widget-header">
-            Kalaennätykset
-        </div>
-        <div class="ui-widget-content">
-            <table class="tabledata" cellspacing="0" width="100%">
-                <tr class="header">
-                    <td>aika</td>
-                    <td>saaja</td>
-                    <td>laji</td>
-                    <td>paino</td>
-                    <td>pituus</td>
-                    <td>viehe</td>
-                    <td>paikka</td>
-                </tr>
-                <c:forEach var="row" items="${fishrecord.table}" varStatus="loop">
-                    <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">  
-                        
-                    <td>
-                        ${row['date']}
-                        ${row['fish_time']}
-                    </td>
-                    <td>
-                        ${row['username']}
-                    </td>
-                    <td>
-                        ${row['fish_species']}
-                    </td>
-                    <td>
-                        ${row['fish_weight']}
-                    </td>
-                    <td>
-                        ${row['fish_length']}
-                    </td>
-                    <td>
-                        ${row['lure_maker']}
-                    </td>
-                    <td>
-                        ${row['place_name']}
-                    </td>
-                </tr>
-                </c:forEach>    
-            </table>
-        </div>
+                        <td>
+                            ${row['date']}
+                        </td>
+                        <td>
+                            ${row['username']}
+                        </td>
+                        <td>
+                            ${row['place_name']}
+                        </td>
+                        <td>
+                            ${row['fish_amount']}
+                        </td>
+                    </tr>
+                    </c:forEach>    
 
-    </td>
-    
-        <td>
+                </table>
+            </div>
+            <p>
+            <div class="ui-widget-header">
+                Kalaennätykset
+            </div>
+            <div class="ui-widget-content">
+                <table class="tabledata" cellspacing="0" width="100%">
+                    <tr class="header">
+                        <td>aika</td>
+                        <td>saaja</td>
+                        <td>laji</td>
+                        <td>paino</td>
+                        <td>pituus</td>
+                        <td>viehe</td>
+                        <td>paikka</td>
+                    </tr>
+                    <c:forEach var="row" items="${fishrecord.table}" varStatus="loop">
+                        <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">  
 
-        <div class="ui-widget-header">
-            Uudet reissut
-        </div>
-        <div class="ui-widget-content">
-            <table class="tabledata" cellspacing="0" width="100%">
-                <tr class="header">
-                    <td>päivä</td>
-                    <td>kalamies</td>
-                    <td>paikkakunta</td>
-                    <td>kaloja</td>
-                </tr>
-                <c:forEach var="row" items="${tripstat.table}" varStatus="loop">
-                    <tr class="${loop.index%2 == 0?'tabledataEven':'tabledataOdd'}">  
-                        
-                    <td>
-                        ${row['date']}
-                    </td>
-                    <td>
-                        ${row['username']}
-                    </td>
-                    <td>
-                        ${row['place_name']}
-                    </td>
-                    <td>
-                        ${row['fish_amount']}
-                    </td>
-                </tr>
-                </c:forEach>    
-                
-            </table>
-        </div>
-
-    </td>
-    
+                        <td>
+                            ${row['date']}
+                            ${row['fish_time']}
+                        </td>
+                        <td>
+                            ${row['username']}
+                        </td>
+                        <td>
+                            ${row['fish_species']}
+                        </td>
+                        <td>
+                            ${row['fish_weight']}
+                        </td>
+                        <td>
+                            ${row['fish_length']}
+                        </td>
+                        <td>
+                            ${row['lure_maker']}
+                        </td>
+                        <td>
+                            ${row['place_name']}
+                        </td>
+                    </tr>
+                    </c:forEach>    
+                </table>
+            </div>
+        </td>
     </tr>
 </table>
 <jsp:include page="footer.jsp" />
