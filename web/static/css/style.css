@@ -19,14 +19,15 @@
 .header { font-size: small; font-weight: bold; background-color: #EEEEEE;}
 .tabledataOdd { font-size: small; font-weight: normal; }
 .tabledataEven { font-size: small; font-weight: normal; background-color: #EEEFFF; }
-.ui-widget-header { font-size: small; }
+.ui-widget-header { font-size: small;}
 .highlighttext { font-family: "Arial"; font-size: large; color: #454545; vertical-align: text-bottom; }
 .normaltext { font-family: "Times"; font-size: medium; color: #454545; vertical-align: text-bottom;}
 .capital { font-family: "Arial"; font-size: xx-large; color: #183e72;}
 .contentwidget { background-color: #ffffff; }
 .twitter { vertical-align: text-bottom; float: left;}
 .floatimage { float: right; margin: 0px;}
-.downloadbox { padding-right: 20px; background: #F5F5F5;}
+#downloadbox { float: right; margin-right: 20px; margin-left: 20px; padding: 5px; }
+#downloadboxheader {padding: 5px; font: normal;}
 body{ margin: 0px;}
 a { color: #193760;}
 td { vertical-align: top; }

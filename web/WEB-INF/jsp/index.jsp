@@ -19,8 +19,24 @@ function initialize() {
         <td>            
             <img src="/uistelu/static/howto.png" class="floatimage"></img>
             <div class="normaltext">
-            <span class="capital">U</span><span class="highlighttext">istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi muille ja mahdollistaa
+            <span class="capital">U</span><span class="highlighttext">istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi toisille ja mahdollistaa
                 puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.</span>
+            <p>
+            <table id="downloadbox">
+                <tr><td>
+                    <div id="downloadboxheader" class="ui-widget-header">
+                    Lataa PC:lle ja puhelimeen
+                    </div>
+                    <div class="ui-widget-content">
+                        <center>
+                        <a href="http://sourceforge.net/projects/uistelu/files/Windows/"><img src="/uistelu/static/windows.png"></img></a>
+                        <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/"><img src="/uistelu/static/mac.png"></img></a>
+                        <a href="https://sourceforge.net/projects/uistelu/files/Source/Desktop/"><img src="/uistelu/static/linux.png"></a>                        
+                        <a href="https://sourceforge.net/projects/uistelu/files/Android/"><img src="/uistelu/static/android.png"></img></a>  
+                        </center>
+                    </div>
+                </td></tr>
+            </table>
             <p>
                 
             Ja näin se toimii: kirjaa saaliisi puhelimella tai PC:llä kirjanpitoon ja
@@ -33,21 +49,9 @@ function initialize() {
 
             </div>
             
-            <div class="normaltext">
-                <table class="downloadbox">
-                    <tr><td class="downloadbox">
-                        Lataa työpöydälle tästä<br>
-                        <a href="http://sourceforge.net/projects/uistelu/files/Windows/"><img src="/uistelu/static/windows.png"></img></a>
-                        <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/"><img src="/uistelu/static/mac.png"></img></a>
-                        <a href="https://sourceforge.net/projects/uistelu/files/Source/Desktop/"><img src="/uistelu/static/linux.png"></a>
-                        </td>                            
-                        <td class="downloadbox">
-                        Puhelimeen<br>
-                        
-                        <a href="https://sourceforge.net/projects/uistelu/files/Android/"><img src="/uistelu/static/android.png"></img></a>                  
-                    </td></tr>
-                </table>
-            </div>
+
+
+
             <div class="twitter">
                 <script src="http://widgets.twimg.com/j/2/widget.js"></script>
                 <script>
