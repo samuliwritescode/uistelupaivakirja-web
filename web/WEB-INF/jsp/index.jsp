@@ -14,11 +14,9 @@ function initialize() {
       myOptions);
 }
 </script>
-<table width="100%" height="300" class="contentwidget" cellspacing="15" border="0">
+<table width="100%" height="300" cellspacing="15">
     <tr>
         <td>            
-            
-            
             <span class="capital">U</span><span class="highlighttext">istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi toisille ja mahdollistaa
                 puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.</span>
             <p>
@@ -51,9 +49,6 @@ function initialize() {
             Halutessasi voit estää saalistietojesi näkymisen muille käyttäjille profiilisi yksityisasetuksilla.
 
             </div>
-            
-
-
 
             <div class="twitter">
                 <script src="http://widgets.twimg.com/j/2/widget.js"></script>

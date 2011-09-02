@@ -52,7 +52,7 @@
 
                 </td>
                 <td width="1024">
-                    <table border="1" cellpadding="0" cellspacing="5" width="100%" class="contentwidget">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="contentwidget">
                         <tr>
                             <td>
                                 <script type="text/javascript">

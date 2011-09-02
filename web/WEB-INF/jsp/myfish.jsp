@@ -74,7 +74,7 @@ createTable("/uistelu/api/views/tripstat",
   </script>
   
   
-   <table width="100%" border="0">
+   <table width="100%" border="0" cellpadding="5">
         <tr><td  height="700">
             <div id="map_canvas" class="mapwidget"></div>
         </td>

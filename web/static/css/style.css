@@ -23,7 +23,7 @@
 .highlighttext { font-family: "Arial"; font-size: large; color: #454545; vertical-align: text-bottom; }
 .normaltext { font-family: "Times"; font-size: medium; color: #454545; vertical-align: text-bottom;}
 .capital { font-family: "Arial"; font-size: xx-large; color: #183e72;}
-.contentwidget { background-color: #ffffff; }
+.contentwidget { background-color: #ffffff; padding: 10px; border-width: 1px; border-color: #454545; border-style: solid;}
 .twitter { vertical-align: text-bottom; float: left;}
 .floatimage { float: right; margin: 0px;}
 #downloadbox { float: right; margin-right: 20px; margin-left: 20px; padding: 5px; }
