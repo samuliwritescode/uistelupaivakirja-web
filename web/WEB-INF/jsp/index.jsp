@@ -19,8 +19,8 @@ function initialize() {
         <td>            
             <img src="/uistelu/static/howto.png" class="floatimage"></img>
             <div class="normaltext">
-            <span class="capital">U</span>istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi muille ja mahdollistaa
-            puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.
+            <span class="capital">U</span><span class="highlighttext">istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi muille ja mahdollistaa
+                puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.</span>
             <p>
                 
             Ja näin se toimii: kirjaa saaliisi puhelimella tai PC:llä kirjanpitoon ja
@@ -34,15 +34,20 @@ function initialize() {
             </div>
             
             <div class="normaltext">
-            Lataa työpöydälle tästä<br>
-            <a href="http://sourceforge.net/projects/uistelu/files/Windows/">[Windows]</a><br>
-            <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/">[Mac]</a><br>
-            <a href="https://sourceforge.net/projects/uistelu/files/Source/Desktop/">[Linux]</a><br>
-            <br>
-            Puhelimeen<br>
-            <a href="https://sourceforge.net/projects/uistelu/files/Android/">[Android]</a>
+                <table class="downloadbox">
+                    <tr><td class="downloadbox">
+                        Lataa työpöydälle tästä<br>
+                        <a href="http://sourceforge.net/projects/uistelu/files/Windows/"><img src="/uistelu/static/windows.png"></img></a>
+                        <a href="https://sourceforge.net/projects/uistelu/files/Mac%20OS%20X/"><img src="/uistelu/static/mac.png"></img></a>
+                        <a href="https://sourceforge.net/projects/uistelu/files/Source/Desktop/"><img src="/uistelu/static/linux.png"></a>
+                        </td>                            
+                        <td class="downloadbox">
+                        Puhelimeen<br>
+                        
+                        <a href="https://sourceforge.net/projects/uistelu/files/Android/"><img src="/uistelu/static/android.png"></img></a>                  
+                    </td></tr>
+                </table>
             </div>
-
             <div class="twitter">
                 <script src="http://widgets.twimg.com/j/2/widget.js"></script>
                 <script>
