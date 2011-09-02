@@ -22,7 +22,7 @@
 
         <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
-                <td width="28" height="158" class="stretch" background="/uistelu/static/back-top-left.png" >
+                <td height="158" class="stretch" background="/uistelu/static/back-top-left.png" >
 
                 </td>
                 <td background="/uistelu/static/back-top.png" class="stretch" height="157">
@@ -43,7 +43,7 @@
                     </table>
 
                 </td>
-                <td width="28" height="158" class="stretch" background="/uistelu/static/back-top-right.png">
+                <td height="158" class="stretch" background="/uistelu/static/back-top-right.png">
 
                 </td>
             </tr>
@@ -51,8 +51,8 @@
                 <td class="stretch" background="/uistelu/static/back-mid-left.png">
 
                 </td>
-                <td>
-                    <table border="1" cellpadding="0" cellspacing="5" width="100%">
+                <td width="1024">
+                    <table border="1" cellpadding="0" cellspacing="5" width="100%" class="contentwidget">
                         <tr>
                             <td>
                                 <script type="text/javascript">

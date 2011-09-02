@@ -28,7 +28,7 @@ $.ajax({
   success: function(resp) {
     var myLatlng = new google.maps.LatLng(62, 25);
     var myOptions = {
-      zoom: 8,
+      zoom: 6,
       center: myLatlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -64,15 +64,21 @@ createTable("/uistelu/api/views/fishrecord",
     "fish",
     ["time", "species", "weight", "length", "luremaker", "place" ]
 );
+
+createTable("/uistelu/api/views/tripstat", 
+    "mytrips", 
+    "tripstat",
+    ["date", "place_name", "fish_amount"]
+);
     
   </script>
   
   
-   <table width="100%">
-        <tr><td width="75%" height="500">
-            <div id="map_canvas" class="mainwidget"></div>
+   <table width="100%" border="0">
+        <tr><td  height="700">
+            <div id="map_canvas" class="mapwidget"></div>
         </td>
-        <td valign="top">
+        <td valign="top" width="450">
             <div class="ui-widget-header">
                 Uusimmat kalani
             </div>
@@ -101,6 +107,20 @@ createTable("/uistelu/api/views/fishrecord",
                         <td>pituus</td>
                         <td>viehe</td>
                         <td>paikka</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <br>
+            <div class="ui-widget-header">
+                Uusimmat reissuni
+            </div>
+            <div class="ui-widget-content">
+                <table id="mytrips" class="tabledata" cellspacing="0" width="100%">
+                    <tr class="header">
+                        <td>aika</td>
+                        <td>paikka</td>
+                        <td>kaloja</td>
                     </tr>
                 </table>
             </div>

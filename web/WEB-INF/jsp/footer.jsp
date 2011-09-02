@@ -14,7 +14,7 @@
             </td>
             </tr>
             <tr>
-                <td width="28" class="stretch">
+                <td class="stretch">
                     <img src="/uistelu/static/back-bottom-left.png" width="100%" height="100%"></img>
                 </td>
                 <td background="/uistelu/static/back-bottom.png" height="180" class="stretch" valign="top">                   

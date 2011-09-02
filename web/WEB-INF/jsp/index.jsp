@@ -17,11 +17,13 @@ function initialize() {
 <table width="100%" height="300" class="contentwidget" cellspacing="15" border="0">
     <tr>
         <td>            
-            <img src="/uistelu/static/howto.png" class="floatimage"></img>
-            <div class="normaltext">
+            
+            
             <span class="capital">U</span><span class="highlighttext">istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi toisille ja mahdollistaa
                 puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.</span>
             <p>
+            <img src="/uistelu/static/howto.png" class="floatimage" width="300"></img>
+            
             <table id="downloadbox">
                 <tr><td>
                     <div id="downloadboxheader" class="ui-widget-header">
@@ -39,6 +41,7 @@ function initialize() {
             </table>
             <p>
                 
+            <div class="normaltext">
             Ja näin se toimii: kirjaa saaliisi puhelimella tai PC:llä kirjanpitoon ja
             saaliisi synkronoituvat automaattisesti verkkoon. Muut käyttäjät näkevät uusimmat reissusi ja saaliisi sekä pääset vertailemaan
             ennätyskalojasi muiden kanssa. 
@@ -86,7 +89,7 @@ function initialize() {
                 </script>                     
             </div>
         </td>
-        <td width="500">
+        <td width="450">
         <div class="ui-widget-header">
             Uudet saaliit
         </div>

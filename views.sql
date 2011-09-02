@@ -47,7 +47,8 @@ limit 10
 drop view if exists tripstat_view;
 create view tripstat_view as
 select trollingobject.date, 
-    username, 
+    username,
+    user.id as user_id,
     place.name as place_name, 
     coalesce((select sum(coalesce(cast(fish_group_amount as unsigned), 1)) from event where event.trolling_id=trollingobject.id and type in('1', '3')), 'MP') as fish_amount
 from trollingobject 

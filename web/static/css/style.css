@@ -15,7 +15,7 @@
 .titletext {font-family: "Futura"; font-size: xx-large;}
 .stretch {background-repeat: no-repeat; background-size: 100% 100%; vertical-align: middle;}
 .loginbox { vertical-align: middle; text-align: right;}
-.mainwidget { width:100%; height:100%;}
+.mapwidget { width:100%; height:100%;}
 .header { font-size: small; font-weight: bold; background-color: #EEEEEE;}
 .tabledataOdd { font-size: small; font-weight: normal; }
 .tabledataEven { font-size: small; font-weight: normal; background-color: #EEEFFF; }
