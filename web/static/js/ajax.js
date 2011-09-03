@@ -38,10 +38,7 @@ function createTable(url, renderTo, root, columns) {
                 for(var hdr in columns) {
                     var td = document.createElement("td");                          
                       var data = $(this).find(columns[hdr]).text();
-                      if(columns[hdr] == "time") {
-                          var date = new Date(data);
-                          data = date.getHours()+":"+date.getMinutes();
-                      }
+
                       td.appendChild(document.createTextNode(data));
                       tr.appendChild(td);
                   }

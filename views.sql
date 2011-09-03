@@ -10,7 +10,7 @@ order by keyname, value
 
 drop view if exists fishstat_view;
 create view fishstat_view as
-select fish_species, place.name as place_name, fish_weight, fish_length, lure.maker as lure_maker, user_id, trollingobject.date, username
+select fish_species, place.name as place_name, fish_weight, fish_length, lure.maker as lure_maker, user_id, trollingobject.date, fish_time, username
 from event 
     join trollingobject on(event.trolling_id=trollingobject.id)
     join collection on(trollingobject.collection_id=collection.id)

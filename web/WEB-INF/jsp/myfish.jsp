@@ -55,14 +55,14 @@ $.ajax({
 
 createTable("/uistelu/api/views/fishstat", 
     "mynewest", 
-    "fish",
-    ["time", "species","luremaker", "place", "weight", "length"]
+    "fishstat",
+    ["date", "fish_species","lure_maker", "place_name", "fish_weight", "fish_length"]
 );
 
 createTable("/uistelu/api/views/fishrecord", 
     "myrecord", 
-    "fish",
-    ["time", "species", "weight", "length", "luremaker", "place" ]
+    "fishrecord",
+    ["date", "fish_species", "fish_weight", "fish_length", "lure_maker", "place_name" ]
 );
 
 createTable("/uistelu/api/views/tripstat", 
