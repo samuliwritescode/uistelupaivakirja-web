@@ -18,7 +18,7 @@
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <link type="text/css" href="/uistelu/static/css/style.css" rel="stylesheet" />
     </head>
-    <body onload="initialize()">
+    <body>
 
         <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
@@ -69,4 +69,4 @@ $.ajax( {
         loginbox();
     }
 });
-                                </script>
+                                </script>                                

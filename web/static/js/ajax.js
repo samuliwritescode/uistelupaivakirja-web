@@ -68,7 +68,9 @@ function loginbox() {
     form.appendChild(username);
     form.appendChild(password);
     form.appendChild(submit);
-    loginBox.appendChild(form); 
+    loginBox.appendChild(form);
+    
+    registerError("Tämä sivu on tarkoitettu sisäänkirjautuneille. Ole hyvä ja kirjaudu tai luo tunnus.");
 }
 
 function logoutbox() {

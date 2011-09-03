@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="selected" value="myfish" scope="request" />
 <jsp:include page="header.jsp" />
-
+<jsp:include page="register.jsp" />  
 <script type="text/javascript">
 function initialize() {
   var latlng = new google.maps.LatLng(62, 25);
@@ -26,6 +26,7 @@ $.ajax({
   url: "/uistelu/api/views/fishmap",
   dataType: "xml",
   success: function(resp) {
+    initialize();
     var myLatlng = new google.maps.LatLng(62, 25);
     var myOptions = {
       zoom: 6,
@@ -138,18 +139,6 @@ createTable("/uistelu/api/views/tripstat",
                 </tr>
             </table>
         </div>
-
-        <!--
-        <div style="position: absolute; width: 400px; height: 200px;left: 35%; top: 100px; padding: 10px;" class="ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-dialog-content ui-widget-content" style="background: none; border: 0;">
-                <form action="/uistelu/api/login" method="get">
-                    <input name="j_username"></input>
-                    <input name="j_password" type="password"></input>
-                    <input type="submit" value="kirjaudu"></input>
-                </form>
-                Ole hyvä ja kirjaudu sisään tai rekisteröidy.
-            </div>
-        </div>-->
     </td></tr>
 </table>
   

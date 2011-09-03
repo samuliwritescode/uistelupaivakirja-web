@@ -28,6 +28,7 @@
 .floatimage { float: right; margin: 0px;}
 #downloadbox { float: right; margin-right: 20px; margin-left: 20px; padding: 5px; }
 #downloadboxheader {padding: 5px; font: normal;}
+#registerbox { visibility: hidden;}
 body{ margin: 0px;}
 a { color: #193760;}
 td { vertical-align: top; }
