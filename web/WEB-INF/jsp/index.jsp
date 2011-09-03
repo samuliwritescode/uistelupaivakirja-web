@@ -18,11 +18,11 @@ function initialize() {
     <tr>
         <td>            
             <span class="capital">U</span><span class="highlighttext">istelupäiväkirja webissä jakaa tiedon kalareissuistasi sekä saaliistasi toisille ja mahdollistaa
-                puhelinversiolla kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.</span>
+                puhelimella kirjattujen reissujen synkronoinnin ilman kaapelia verkon yli.</span>
             <p>
             <img src="/uistelu/static/howto.png" class="floatimage" width="300"></img>
-            
-            <table id="downloadbox">
+           
+            <table id="downloadbox" cellpadding="10">
                 <tr><td>
                     <div id="downloadboxheader" class="ui-widget-header">
                     Lataa PC:lle ja puhelimeen
@@ -50,13 +50,16 @@ function initialize() {
 
             </div>
 
+
+        </td>
+        <td width="450">
             <div class="twitter">
                 <script src="http://widgets.twimg.com/j/2/widget.js"></script>
                 <script>
                 new TWTR.Widget({     
                   version: 2,
                   type: 'profile',
-                  rpp: 9,
+                  rpp: 6,
                   interval: 6000,
                   width: 'auto',
                   height: 400,
@@ -83,13 +86,23 @@ function initialize() {
                 }).render().setUser('capeismi').start();
                 </script>                     
             </div>
+
         </td>
-        <td width="450">
-        <div class="ui-widget-header">
-            Uudet saaliit
-        </div>
-            <div class="ui-widget-content">
-                <table id="mynewest" class="tabledata" cellspacing="0" width="100%">
+    </tr>
+</table>
+		<script type="text/javascript">
+			$(function(){
+                            $('#tabs').tabs();
+                        			});
+		</script>
+<div id="tabs">
+        <ul>
+                <li><a href="#tabs-1">Uudet saaliit</a></li>
+                <li><a href="#tabs-2">Uudet reissut</a></li>
+                <li><a href="#tabs-3">Ennätyskalat</a></li>
+        </ul>
+        <div id="tabs-1">
+                <table id="mynewest" cellspacing="0" border="0" width="100%">
                     <tr class="header">
                         <td>aika</td>
                         <td>saaja</td>
@@ -126,9 +139,9 @@ function initialize() {
                     </tr>
                     </c:forEach>                
                 </table>
-            </div>
-            <p>
-            <div class="ui-widget-header">
+        </div>
+        <div id="tabs-2">
+                      <div class="ui-widget-header">
                 Uudet reissut
             </div>
             <div class="ui-widget-content">
@@ -158,9 +171,10 @@ function initialize() {
                     </c:forEach>    
 
                 </table>
-            </div>
-            <p>
-            <div class="ui-widget-header">
+            </div>  
+        </div>
+        <div id="tabs-3">
+                       <div class="ui-widget-header">
                 Kalaennätykset
             </div>
             <div class="ui-widget-content">
@@ -202,8 +216,7 @@ function initialize() {
                     </tr>
                     </c:forEach>    
                 </table>
-            </div>
-        </td>
-    </tr>
-</table>
+            </div> 
+        </div>
+</div>
 <jsp:include page="footer.jsp" />

@@ -12,7 +12,7 @@
 function initialize() {
   var latlng = new google.maps.LatLng(62, 25);
   var myOptions = {
-    zoom: 8,
+    zoom: 6,
     center: latlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
@@ -75,8 +75,22 @@ createTable("/uistelu/api/views/tripstat",
   
   
    <table width="100%" border="0" cellpadding="5">
-        <tr><td  height="700">
-            <div id="map_canvas" class="mapwidget"></div>
+        <tr><td height="700">
+            <div class="ui-widget-header">
+                Kalasaaliini kartalla
+            </div>
+            <div class="ui-widget-content">
+                <table width="100%" height="690" cellpadding="0" cellspacing="0">
+                    <tr><td>
+                      <div id="map_canvas" class="mapwidget"></div>
+                    </td></tr>
+                </table>
+                <center>
+                    <p>
+                        <a href="/uistelu/api/views/fishmap">tallenna GPX-tiedostona</a>
+                    </p>
+                </center>
+            </div>
         </td>
         <td valign="top" width="450">
             <div class="ui-widget-header">
