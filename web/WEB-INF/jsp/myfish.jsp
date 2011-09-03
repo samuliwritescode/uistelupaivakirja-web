@@ -71,86 +71,86 @@ createTable("/uistelu/api/views/tripstat",
     ["date", "place_name", "fish_amount"]
 );
     
-  </script>
+</script>
   
   
-   <table width="100%" border="0" cellpadding="5">
-        <tr><td height="700">
-            <div class="ui-widget-header">
-                Kalasaaliini kartalla
+<table width="100%" border="0" cellpadding="5">
+    <tr><td height="700">
+        <div class="ui-widget-header">
+            Kalasaaliini kartalla
+        </div>
+        <div class="ui-widget-content">
+            <table width="100%" height="690" cellpadding="0" cellspacing="0">
+                <tr><td>
+                  <div id="map_canvas" class="mapwidget"></div>
+                </td></tr>
+            </table>
+            <center>
+                <p>
+                    <a href="/uistelu/api/views/fishmap">tallenna GPX-tiedostona</a>
+                </p>
+            </center>
+        </div>
+    </td>
+    <td valign="top" width="450">
+        <div class="ui-widget-header">
+            Uusimmat kalani
+        </div>
+        <div class="ui-widget-content">
+            <table id="mynewest" class="tabledata" cellspacing="0" width="100%">
+                <tr class="header">
+                    <td>aika</td>
+                    <td>laji</td>
+                    <td>viehe</td>
+                    <td>paikka</td>
+                    <td>paino</td>
+                    <td>pituus</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <div class="ui-widget-header">
+            Kookkaimmat kalani
+        </div>
+        <div class="ui-widget-content">
+            <table id="myrecord" class="tabledata" cellspacing="0" width="100%">
+                <tr class="header">
+                    <td>aika</td>
+                    <td>laji</td>
+                    <td>paino</td>
+                    <td>pituus</td>
+                    <td>viehe</td>
+                    <td>paikka</td>
+                </tr>
+            </table>
+        </div>
+
+        <br>
+        <div class="ui-widget-header">
+            Uusimmat reissuni
+        </div>
+        <div class="ui-widget-content">
+            <table id="mytrips" class="tabledata" cellspacing="0" width="100%">
+                <tr class="header">
+                    <td>aika</td>
+                    <td>paikka</td>
+                    <td>kaloja</td>
+                </tr>
+            </table>
+        </div>
+
+        <!--
+        <div style="position: absolute; width: 400px; height: 200px;left: 35%; top: 100px; padding: 10px;" class="ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-dialog-content ui-widget-content" style="background: none; border: 0;">
+                <form action="/uistelu/api/login" method="get">
+                    <input name="j_username"></input>
+                    <input name="j_password" type="password"></input>
+                    <input type="submit" value="kirjaudu"></input>
+                </form>
+                Ole hyvä ja kirjaudu sisään tai rekisteröidy.
             </div>
-            <div class="ui-widget-content">
-                <table width="100%" height="690" cellpadding="0" cellspacing="0">
-                    <tr><td>
-                      <div id="map_canvas" class="mapwidget"></div>
-                    </td></tr>
-                </table>
-                <center>
-                    <p>
-                        <a href="/uistelu/api/views/fishmap">tallenna GPX-tiedostona</a>
-                    </p>
-                </center>
-            </div>
-        </td>
-        <td valign="top" width="450">
-            <div class="ui-widget-header">
-                Uusimmat kalani
-            </div>
-            <div class="ui-widget-content">
-                <table id="mynewest" class="tabledata" cellspacing="0" width="100%">
-                    <tr class="header">
-                        <td>aika</td>
-                        <td>laji</td>
-                        <td>viehe</td>
-                        <td>paikka</td>
-                        <td>paino</td>
-                        <td>pituus</td>
-                    </tr>
-                </table>
-            </div>
-            <br>
-            <div class="ui-widget-header">
-                Kookkaimmat kalani
-            </div>
-            <div class="ui-widget-content">
-                <table id="myrecord" class="tabledata" cellspacing="0" width="100%">
-                    <tr class="header">
-                        <td>aika</td>
-                        <td>laji</td>
-                        <td>paino</td>
-                        <td>pituus</td>
-                        <td>viehe</td>
-                        <td>paikka</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <br>
-            <div class="ui-widget-header">
-                Uusimmat reissuni
-            </div>
-            <div class="ui-widget-content">
-                <table id="mytrips" class="tabledata" cellspacing="0" width="100%">
-                    <tr class="header">
-                        <td>aika</td>
-                        <td>paikka</td>
-                        <td>kaloja</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <!--
-            <div style="position: absolute; width: 400px; height: 200px;left: 35%; top: 100px; padding: 10px;" class="ui-widget ui-widget-content ui-corner-all">
-                <div class="ui-dialog-content ui-widget-content" style="background: none; border: 0;">
-                    <form action="/uistelu/api/login" method="get">
-                        <input name="j_username"></input>
-                        <input name="j_password" type="password"></input>
-                        <input type="submit" value="kirjaudu"></input>
-                    </form>
-                    Ole hyvä ja kirjaudu sisään tai rekisteröidy.
-                </div>
-            </div>-->
-        </td></tr>
-    </table>
+        </div>-->
+    </td></tr>
+</table>
   
 <jsp:include page="footer.jsp" />
