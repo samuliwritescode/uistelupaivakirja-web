@@ -52,7 +52,7 @@
             <div class="ui-widget">
                 <div class="ui-state-highlight ui-corner-all" style="margin-top: 0px; padding: 0 .7em;"> 
                     <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-                    Luodaksesi profiilin annat vain tunnuksen ja salasanan. Asetuksesi voit myöhemmin säätää profiilistasi.</p>
+                    Luodaksesi profiilin annat vain tunnuksen ja salasanan. Muut asetukset voit myöhemmin asettaa profiilistasi.</p>
 
                     <small>
                     <form action="/uistelu/api/login" method="get">
