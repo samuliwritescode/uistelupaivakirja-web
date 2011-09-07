@@ -18,6 +18,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import java.io.UnsupportedEncodingException;
 import org.springframework.stereotype.Controller;
@@ -144,6 +145,14 @@ public class RestfulController
         RestfulModel model = m_loginService.getModel();        
         return XMLCreator.marshal(model.getUser());
     }
+    
+    
+    @RequestMapping(value="/userinfo", method= RequestMethod.PUT, headers="Accept=text/xml")
+    @ResponseBody
+    public DOMSource addUser(@RequestBody User user) {
+        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
+    }
+    
     
     @RequestMapping(value="/logout", method= RequestMethod.GET)
     @ResponseBody

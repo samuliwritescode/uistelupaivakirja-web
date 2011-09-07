@@ -26,7 +26,8 @@
             return;
         }
 
-        registerError("Käyttäjätunnus on jo olemassa");
+        sendRegistration(username, pass1);
+        //registerError("Käyttäjätunnus on jo olemassa");
     }
 
     function registerError(error) {
@@ -34,6 +35,32 @@
         $("#registerbox").css("visibility", "visible");
         $("#registererror").text(error);
         
+    }
+    
+    function sendRegistration(username, password) {
+        var doc = document.implementation.createDocument("", "", null);
+        var root = doc.createElement("userinfo");
+        var usernamenode = doc.createElement("username");
+        usernamenode.appendChild(doc.createTextNode(username));
+        root.appendChild(usernamenode);
+        doc.appendChild(root);
+        $.ajax( {
+            type: "PUT",
+            url: "/uistelu/api/userinfo",
+            dataType: "xml",
+            contentType: "text/xml",
+            data: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
+                    <userinfo>\n\
+                        <username>"+username+"</username>\n\
+                    </userinfo>",
+            success: function(resp) {
+                alert("rekisteröinti onnistui");
+            },
+
+            error: function(response) {
+                alert("ei onnistunut"+response.responseText);
+            }
+        });
     }
 </script>
 
