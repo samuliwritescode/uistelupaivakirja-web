@@ -32,7 +32,8 @@ public class PublicModel {
     }
     
     public void setUser(User user) {
-        String hash = LoginService.getMD5Hash(user.getPassword());
+        user.setSalt(LoginService.generateSalt());
+        String hash = LoginService.getMD5Hash(user.getPassword(), user.getSalt());
         user.setPassword(hash);
         this._daoStore.addUser(user);
     }

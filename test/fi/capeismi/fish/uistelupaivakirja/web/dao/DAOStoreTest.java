@@ -122,7 +122,8 @@ public class DAOStoreTest {
         DAOStore store = new DAOStore(null);
         User user = new User();
         user.setUsername(username);
-        user.setPassword(LoginService.getMD5Hash("pw"+username));
+        user.setSalt(LoginService.generateSalt());
+        user.setPassword(LoginService.getMD5Hash("pw"+username, user.getSalt()));
         store.addUser(user);
         
         assertEquals(usersBefore+1, getNumberOfRowsInTable("User"));

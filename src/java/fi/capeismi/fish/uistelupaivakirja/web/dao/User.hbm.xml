@@ -14,6 +14,9 @@
         <property name="password" type="string">
             <column name="PASSWORD" />
         </property>
+        <property name="salt" type="string">
+            <column name="SALT" />
+        </property>
         <property name="publishlocation" type="java.lang.Boolean">
             <column name="PUBLISHLOCATION" />
         </property>

@@ -23,6 +23,7 @@ import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,13 +43,24 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LoginService {
     private Map<String, RestfulModel> m_models = new HashMap<String, RestfulModel>();
     private static final String SALT = "SETTHISBEFOREBUILD";
-    private static final int ITERATIONS = 2263;
+    private static final int ITERATIONS = 8263;
     
-    public static String getMD5Hash(String from) {
+    public static String generateSalt() {
+        try {
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            byte[] salt = new byte[8];
+            random.nextBytes(salt);
+            return new BigInteger(1, salt).toString(16).toString();
+        } catch (Exception ex) {
+            throw new RestfulException(ex);
+        }
+    }
+    
+    public static String getMD5Hash(String from, String usersalt) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.reset();
-            messageDigest.update(SALT.getBytes());
+            messageDigest.update((SALT+usersalt).getBytes());
             byte[] input = messageDigest.digest(from.getBytes("UTF-8"));
             for(int loop=0; loop < ITERATIONS; loop++) {
                 messageDigest.reset();
@@ -79,7 +91,7 @@ public class LoginService {
             
             for(User var: (List<User>)users)
             {
-                String hashedPass = getMD5Hash(password);
+                String hashedPass = getMD5Hash(password, var.getSalt());
                 if(!var.getPassword().equalsIgnoreCase(hashedPass))
                 {
                     throw new RestfulException("incorrect password");
