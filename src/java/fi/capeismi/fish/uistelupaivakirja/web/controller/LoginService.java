@@ -41,18 +41,23 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public class LoginService {
     private Map<String, RestfulModel> m_models = new HashMap<String, RestfulModel>();
+    private static final String SALT = "SETTHISBEFOREBUILD";
+    private static final int ITERATIONS = 2263;
     
     public static String getMD5Hash(String from) {
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(from.getBytes(),0, from.length());  
-            String hashedPass = new BigInteger(1,messageDigest.digest()).toString(16);
-            return hashedPass;
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(LoginService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return "";
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.reset();
+            messageDigest.update(SALT.getBytes());
+            byte[] input = messageDigest.digest(from.getBytes("UTF-8"));
+            for(int loop=0; loop < ITERATIONS; loop++) {
+                messageDigest.reset();
+                input = messageDigest.digest(input);
+            }
+            return new BigInteger(1, input).toString(16).toString();
+        } catch (Exception ex) {
+            throw new RestfulException(ex);
+        }         
     }
     
     public void login(String username, String password)

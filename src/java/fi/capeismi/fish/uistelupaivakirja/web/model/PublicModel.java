@@ -16,17 +16,25 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public class UIModel {
+public class PublicModel {
     private DAOStore _daoStore = null;
     
-    public UIModel() {
+    public PublicModel() {
         this._daoStore = new DAOStore(null);
+    }
+    
+    public void setUser(User user) {
+        String hash = LoginService.getMD5Hash(user.getPassword());
+        user.setPassword(hash);
+        this._daoStore.addUser(user);
     }
     
     public TableView getView(String viewname) {

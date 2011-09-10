@@ -16,7 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.UIModel;
+import fi.capeismi.fish.uistelupaivakirja.web.model.PublicModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,7 +35,7 @@ public class UIController {
     {
         ModelAndView view = new ModelAndView();
         view.setViewName("index");
-        UIModel model = new UIModel();
+        PublicModel model = new PublicModel();
         
         view.addObject("fishstat",  model.getView("fishstat"));
         view.addObject("fishrecord", model.getView("fishrecord"));

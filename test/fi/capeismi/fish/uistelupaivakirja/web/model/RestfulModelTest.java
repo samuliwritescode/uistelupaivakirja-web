@@ -31,6 +31,7 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStoreTest;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 
+import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 import java.util.HashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import org.junit.After;
@@ -156,6 +157,18 @@ public class RestfulModelTest {
                 assertTrue(after > before && after > 10);                
             }
         } 
+    }
+    
+    @Test
+    public void createUser() {
+        PublicModel model = new PublicModel();
+        User user = new User();
+        user.setUsername("fakeuser");
+        user.setPassword("plaintext");
+        model.setUser(user);
+        RestfulModel usermodel = new RestfulModel("fakeuser");
+        assertEquals(usermodel.getUser().getUsername(), "fakeuser");
+        assertFalse(usermodel.getUser().getPassword().equals("plaintext"));
     }
     
     
