@@ -17,9 +17,7 @@
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.SearchObject;
-import junit.framework.TestSuite;
 import org.hibernate.SessionException;
-import org.hibernate.Transaction;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
@@ -80,9 +78,9 @@ public class DAOStoreTest {
 
     @Test
     public void testCreateUser() {        
-        createUser("cape");
-        createUser("testuser");
-        createUser("keijjo");
+        for(String user: getUsers()) {
+            createUser(user);
+        }
     }
     
     @Test
@@ -113,6 +111,10 @@ public class DAOStoreTest {
             }            
         };        
                 
+    }
+    
+    public static String[] getUsers() {
+        return new String[] {"cape", "testuser", "keijjo"};
     }
     
     private void createUser(String username) {

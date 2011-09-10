@@ -16,8 +16,11 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import java.io.FileInputStream;
+import java.io.File;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.RestfulController;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.XMLReader;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -25,21 +28,26 @@ import java.util.Map;
 import java.util.List;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Event;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStoreTest;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 
 import java.util.HashMap;
+import javax.xml.parsers.ParserConfigurationException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.xml.sax.SAXException;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public class RestfulModelTest {
+    
+    private static final String XMLFILELOCATION = "/Users/cape/uistelu/database/";
     
     public RestfulModelTest() {
     }
@@ -85,9 +93,7 @@ public class RestfulModelTest {
     
     @Test
     public void testSetCollections() {
-        String[] users = {"cape", "testuser", "keijjo"};
-                
-        for(String user: users) {
+        for(String user: DAOStoreTest.getUsers()) {
             RestfulModel model = new RestfulModel(user);
             Collection collection = new Collection();
             collection.setType(model.getType("trip"));
@@ -98,8 +104,7 @@ public class RestfulModelTest {
     
     @Test
     public void testBasicData() throws Exception {
-        String[] users = {"cape", "testuser", "keijjo"};
-        for(String user: users) { 
+        for(String user: DAOStoreTest.getUsers()) { 
             RestfulModel model = new RestfulModel(user);
             Collection collection = generateTestData("trip", 1, 5, "kekkuli"+user);   
             model.setTrollingObjects(collection);
@@ -125,14 +130,33 @@ public class RestfulModelTest {
     
     @Test
     public void testRemoveObject() throws Exception {
-        String[] users = {"cape", "testuser", "keijjo"};
-        for(String user: users) {
+        for(String user: DAOStoreTest.getUsers()) {
             RestfulModel model = new RestfulModel(user);            
             Collection collection = generateTestData("trip", 2, 1, user);
             model.setTrollingObjects(collection);
             assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());
         } 
     }    
+    
+    @Test
+    public void testFillWithRealData() throws ParserConfigurationException, SAXException, IOException {
+        
+        for(String user: DAOStoreTest.getUsers()) {
+            RestfulModel model = new RestfulModel(user);
+            for(String type : new String[] {"trip", "lure", "place"}) {
+                File file = new File(String.format("%s%s.xml", XMLFILELOCATION, type));
+                FileInputStream stream = new FileInputStream(file);
+                XMLReader reader = new XMLReader(stream);
+                Collection collection = reader.getTrollingObjects();
+                collection.setRevision(model.getTrollingObjects(type).getRevision());
+                collection.setType(model.getType(type));
+                int before = model.getTrollingObjects(type).getTrollingobjects().size();
+                model.setTrollingObjects(collection);
+                int after = model.getTrollingObjects(type).getTrollingobjects().size();
+                assertTrue(after > before && after > 10);                
+            }
+        } 
+    }
     
     
     private Collection generateTestData(String type, int revision, int count, String contentseed) throws Exception {
@@ -141,7 +165,6 @@ public class RestfulModelTest {
             content += String.format("<TrollingObject type=\"%s\" id=\"%d\">"
                         + "<date>%s</date>"
                         + "<description>%s%d</description>"
-                        + "<type>1</type>"
                     + "</TrollingObject>", type, loop, contentseed, contentseed, loop+666);
         }
         
