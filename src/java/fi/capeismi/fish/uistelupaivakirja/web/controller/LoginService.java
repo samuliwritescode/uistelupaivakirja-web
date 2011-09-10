@@ -60,7 +60,8 @@ public class LoginService {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.reset();
-            messageDigest.update((SALT+usersalt).getBytes());
+            messageDigest.update(usersalt.getBytes());
+            messageDigest.update(SALT.getBytes());
             byte[] input = messageDigest.digest(from.getBytes("UTF-8"));
             for(int loop=0; loop < ITERATIONS; loop++) {
                 messageDigest.reset();
