@@ -253,7 +253,7 @@ public class DAOStore {
                 searchSQL += kvpair.getKey()+"='"+kvpair.getValue()+"' AND ";                
             }
             
-            searchSQL += " 1=1";
+            searchSQL += " 1=1 limit 15";
             return searchSQL;
         }
 

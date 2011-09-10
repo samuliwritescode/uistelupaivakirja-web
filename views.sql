@@ -10,38 +10,32 @@ order by keyname, value
 
 drop view if exists fishstat_view;
 create view fishstat_view as
-select fish_species, place.name as place_name, fish_weight, fish_length, lure.maker as lure_maker, user_id, trollingobject.date, fish_time, username
+select fish_species, place.name as place_name, fish_weight, fish_length, lure.maker as lure_maker, collection.user_id, trollingobject.date, fish_time, username
 from event 
     join trollingobject on(event.trolling_id=trollingobject.id)
     join collection on(trollingobject.collection_id=collection.id)
     join user on(user_id=user.id)
-    join trollingobject place on(trollingobject.place=place.object_identifier)
-    join trollingobject lure on(event.lure=lure.object_identifier)
+    join trollingobject place on(trollingobject.place=place.object_identifier) join collection placecollection on(place.collection_id=placecollection.id and placecollection.user_id=collection.user_id and placecollection.type_id=2)
+    join trollingobject lure on(event.lure=lure.object_identifier) join collection lurecollection on(lure.collection_id=lurecollection.id and lurecollection.user_id=collection.user_id and lurecollection.type_id=3)
 where
     fish_species is not null and
-    place.id in(select trollingobject.id from trollingobject join collection on(collection_id=collection.id) and type_id=2) and
-    lure.id in(select trollingobject.id from trollingobject join collection on(collection_id=collection.id) and type_id=3) and
-    type_id=1
+    collection.type_id=1
 order by date desc, fish_time desc
-limit 10
 ;
 
 drop view if exists fishrecord_view;
 create view fishrecord_view as
-select fish_species, place.name as place_name, cast(fish_weight as unsigned) as fish_weight, fish_length, lure.maker as lure_maker, user_id, trollingobject.date, username
+select fish_species, place.name as place_name, cast(fish_weight as unsigned) as fish_weight, fish_length, lure.maker as lure_maker, collection.user_id, trollingobject.date, username
 from event 
     join trollingobject on(event.trolling_id=trollingobject.id)
     join collection on(trollingobject.collection_id=collection.id)
     join user on(user_id=user.id)
-    join trollingobject place on(trollingobject.place=place.object_identifier)
-    join trollingobject lure on(event.lure=lure.object_identifier)
+    join trollingobject place on(trollingobject.place=place.object_identifier) join collection placecollection on(place.collection_id=placecollection.id and placecollection.user_id=collection.user_id and placecollection.type_id=2)
+    join trollingobject lure on(event.lure=lure.object_identifier) join collection lurecollection on(lure.collection_id=lurecollection.id and lurecollection.user_id=collection.user_id and lurecollection.type_id=3)
 where
     fish_species is not null and
-    type_id=1 and
-    place.id in(select trollingobject.id from trollingobject join collection on(collection_id=collection.id) and type_id=2) and
-    lure.id in(select trollingobject.id from trollingobject join collection on(collection_id=collection.id) and type_id=3)
+    collection.type_id=1
 order by fish_weight desc, fish_time desc
-limit 10
 ;
 
 drop view if exists tripstat_view;
@@ -54,12 +48,11 @@ select trollingobject.date,
 from trollingobject 
     join collection on(trollingobject.collection_id=collection.id)
     join user on(user_id=user.id)
-    join trollingobject place on(trollingobject.place=place.object_identifier)
+    join trollingobject place on(trollingobject.place=place.object_identifier) join collection placecollection on(place.collection_id=placecollection.id and placecollection.user_id=collection.user_id)
 where
     place.id in(select trollingobject.id from trollingobject join collection on(collection_id=collection.id) and type_id=2) and
-    type_id=1
+    collection.type_id=1
 order by date desc
-limit 10
 ;
 
 drop view if exists fishmap_view;
