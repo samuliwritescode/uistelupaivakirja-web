@@ -87,6 +87,8 @@ public class User  implements java.io.Serializable, AnnotatedView {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    @XmlElement
     public Boolean getPublishlocation() {
         return this.publishlocation;
     }
@@ -94,6 +96,8 @@ public class User  implements java.io.Serializable, AnnotatedView {
     public void setPublishlocation(Boolean publishlocation) {
         this.publishlocation = publishlocation;
     }
+    
+    @XmlElement
     public Boolean getPublishplace() {
         return this.publishplace;
     }
@@ -101,6 +105,8 @@ public class User  implements java.io.Serializable, AnnotatedView {
     public void setPublishplace(Boolean publishplace) {
         this.publishplace = publishplace;
     }
+    
+    @XmlElement
     public Boolean getPublishlure() {
         return this.publishlure;
     }
@@ -108,6 +114,8 @@ public class User  implements java.io.Serializable, AnnotatedView {
     public void setPublishlure(Boolean publishlure) {
         this.publishlure = publishlure;
     }
+    
+    @XmlElement
     public Boolean getPublishfish() {
         return this.publishfish;
     }
@@ -115,6 +123,8 @@ public class User  implements java.io.Serializable, AnnotatedView {
     public void setPublishfish(Boolean publishfish) {
         this.publishfish = publishfish;
     }
+    
+    @XmlElement
     public Boolean getPublishtrip() {
         return this.publishtrip;
     }

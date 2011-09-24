@@ -156,6 +156,13 @@ public class RestfulController
         return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
     }
     
+    @RequestMapping(value="/userinfo", method= RequestMethod.POST, headers="Accept=text/xml")
+    @ResponseBody
+    public DOMSource setUser(@RequestBody User user) {
+        RestfulModel model = m_loginService.getModel();
+        model.setUser(user);
+        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
+    }
     
     @RequestMapping(value="/logout", method= RequestMethod.GET)
     @ResponseBody

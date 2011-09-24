@@ -159,6 +159,32 @@ public class RestfulModelTest {
         } 
     }
         
+    @Test
+    public void testModifyUser() {
+        RestfulModel model = new RestfulModel("cape");
+        User user = model.getUser();
+        assertNull(user.getPublishfish());        
+        
+        String originalPassword = user.getPassword();
+        user.setPlaintextpassword("new");
+        user.setPublishfish(Boolean.TRUE);
+        user.setId(6666);
+        model.setUser(user);
+        
+        User userafter = model.getUser();
+        assertTrue(userafter.getPublishfish());
+        assertFalse(userafter.getPassword().equalsIgnoreCase(originalPassword));
+        assertFalse(userafter.getId().intValue() == 6666);
+    }
+    
+    @Test
+    public void testChangeUsername() {
+        RestfulModel model = new RestfulModel("cape");
+        User user = model.getUser();
+        user.setUsername("thisisnotallowed");
+        model.setUser(user);
+        assertFalse(model.getUser().getUsername().equalsIgnoreCase("thisisnotallowed"));
+    }
     
     private Collection generateTestData(String type, int revision, int count, String contentseed) throws Exception {
         String content = String.format("<TrollingObjects revision=\"%d\">", revision);

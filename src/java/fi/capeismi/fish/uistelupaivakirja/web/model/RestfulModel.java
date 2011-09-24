@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Type;
@@ -37,7 +38,19 @@ public class RestfulModel {
         User user = this._daoStore.getUser();
         return user;
     }
-
+    
+    public void setUser(User user) {      
+        if(user.getPlaintextpassword() != null) {
+            user.setSalt(LoginService.generateSalt());
+            String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
+            user.setPassword(hash);
+        }
+        
+        user.setId(getUser().getId());
+        user.setUsername(getUser().getUsername());
+        
+        this._daoStore.setUser(user);
+    }
     
     public Collection getTrollingObjects(String type)
     {        

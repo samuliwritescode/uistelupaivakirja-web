@@ -85,6 +85,13 @@ public class DAOStore {
         }};
     }
     
+    public void setUser(final User user) {
+        new TransactionDecorator() { public Object doQuery() {
+            this.session.merge(user);
+            return null;
+        }};
+    }
+    
     public User getUser() {        
         return (User) new TransactionDecorator() {
             public Object doQuery() {
