@@ -19,6 +19,7 @@ public class User  implements java.io.Serializable, AnnotatedView {
      private Integer id;
      private String username;
      private String password;
+     private String plaintextpassword;
      private String salt;
 
      private Boolean publishlocation;
@@ -49,6 +50,15 @@ public class User  implements java.io.Serializable, AnnotatedView {
     
     public void setId(Integer id) {
         this.id = id;
+    }
+    
+    @XmlElement
+    public String getPlaintextpassword() {
+        return plaintextpassword;
+    }
+
+    public void setPlaintextpassword(String plaintextpassword) {
+        this.plaintextpassword = plaintextpassword;
     }
     
     @XmlTransient

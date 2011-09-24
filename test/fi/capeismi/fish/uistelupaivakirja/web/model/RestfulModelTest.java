@@ -158,19 +158,7 @@ public class RestfulModelTest {
             }
         } 
     }
-    
-    @Test
-    public void createUser() {
-        PublicModel model = new PublicModel();
-        User user = new User();
-        user.setUsername("fakeuser");
-        user.setPassword("plaintext");
-        model.setUser(user);
-        RestfulModel usermodel = new RestfulModel("fakeuser");
-        assertEquals(usermodel.getUser().getUsername(), "fakeuser");
-        assertFalse(usermodel.getUser().getPassword().equals("plaintext"));
-    }
-    
+        
     
     private Collection generateTestData(String type, int revision, int count, String contentseed) throws Exception {
         String content = String.format("<TrollingObjects revision=\"%d\">", revision);

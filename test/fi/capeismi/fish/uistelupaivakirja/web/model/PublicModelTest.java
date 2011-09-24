@@ -16,30 +16,29 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public class PublicModel {
-    private DAOStore _daoStore = null;
+public class PublicModelTest {
     
-    public PublicModel() {
-        this._daoStore = new DAOStore(null);
-    }
-    
-    public void setUser(User user) {
-        user.setSalt(LoginService.generateSalt());
-        String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
-        user.setPassword(hash);
-        this._daoStore.addUser(user);
-    }
-    
-    public TableView getView(String viewname) {
-        SearchObject search = this._daoStore.searchObject(viewname);
-        return search.doSearch();
+    @Test
+    public void testRegisterUser() {
+       String username = "kekkuli";
+       PublicModel model = new PublicModel();       
+       User user = new User();
+       user.setUsername(username);
+       user.setPlaintextpassword("passu");
+       model.setUser(user);
+       
+       RestfulModel rmodel = new RestfulModel(username);
+       User dbuser = rmodel.getUser();
+       assertEquals(dbuser.getUsername(), user.getUsername());
+       assertFalse(dbuser.getPassword().equalsIgnoreCase("passu"));
+       assertNull(dbuser.getPlaintextpassword());
     }
 }

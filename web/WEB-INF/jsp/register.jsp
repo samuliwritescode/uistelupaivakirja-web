@@ -52,6 +52,7 @@
             data: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
                     <userinfo>\n\
                         <username>"+username+"</username>\n\
+                        <plaintextpassword>"+password+"</plaintextpassword>\n\
                     </userinfo>",
             success: function(resp) {
                 alert("rekisteröinti onnistui");
