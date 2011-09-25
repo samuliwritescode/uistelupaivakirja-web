@@ -44,7 +44,11 @@ public class RestfulModel {
             user.setSalt(LoginService.generateSalt());
             String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
             user.setPassword(hash);
+        } else {
+            user.setSalt(getUser().getSalt());
+            user.setPassword(getUser().getPassword());
         }
+        
         
         user.setId(getUser().getId());
         user.setUsername(getUser().getUsername());

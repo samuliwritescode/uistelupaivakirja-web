@@ -162,11 +162,10 @@ public class RestfulModelTest {
     @Test
     public void testModifyUser() {
         RestfulModel model = new RestfulModel("cape");
-        User user = model.getUser();
+        User user = new User();
         assertNull(user.getPublishfish());        
         
         String originalPassword = user.getPassword();
-        user.setPlaintextpassword("new");
         user.setPublishfish(Boolean.TRUE);
         user.setId(6666);
         model.setUser(user);
@@ -175,6 +174,23 @@ public class RestfulModelTest {
         assertTrue(userafter.getPublishfish());
         assertFalse(userafter.getPassword().equalsIgnoreCase(originalPassword));
         assertFalse(userafter.getId().intValue() == 6666);
+        assertNotNull(userafter.getPassword());
+        assertNotNull(userafter.getSalt());
+    }
+    
+    @Test
+    public void testChangePassword() {
+        RestfulModel model = new RestfulModel("cape");
+        User user = new User();
+        String originalPassword = user.getPassword();
+        user.setPlaintextpassword("new");
+
+        model.setUser(user);
+        
+        User userafter = model.getUser();
+        assertFalse(userafter.getPassword().equalsIgnoreCase(originalPassword));
+        assertNotNull(userafter.getPassword());
+        assertNotNull(userafter.getSalt());
     }
     
     @Test
