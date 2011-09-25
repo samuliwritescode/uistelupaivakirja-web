@@ -100,15 +100,24 @@ function login() {
     var username = document.getElementById("j_username").value;
     var password= document.getElementById("j_password").value;
     $.ajax( {
-    type: "GET",
-    url: "/uistelu/api/login?j_username="+username+"&j_password="+password,
-    dataType: "xml",
-    success: function(resp) {
-        history.go(0);
-    },
-    
-    error: function() {
-        alert("invalid username or password");
-    }
-});
+        type: "GET",
+        url: "/uistelu/api/login?j_username="+username+"&j_password="+password,
+        dataType: "xml",
+        success: function(resp) {
+            history.go(0);
+        },
+
+        error: function() {
+            alert("invalid username or password");
+        }
+    });
+
+}
+
+function startAnimation(id) {
+    $(id).append("<img src=\"/uistelu/static/ajax-loader.gif\"/>");
+}
+
+function stopAnimation(id) {
+    $(id).empty();
 }

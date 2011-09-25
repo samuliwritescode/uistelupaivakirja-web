@@ -21,12 +21,14 @@
                 var pubplace = $(this).find("publishplace").text();
                 var publure = $(this).find("publishlure").text();
                 var pubfish = $(this).find("publishfish").text();
+                var pubtrip = $(this).find("publishtrip").text();
                 
                 $("#username").text(user);
                 $("#publocation").attr("checked", publocation=="true");
                 $("#pubplace").attr("checked", pubplace=="true");
                 $("#publure").attr("checked", publure=="true");
                 $("#pubfish").attr("checked", pubfish=="true");
+                $("#pubtrip").attr("checked", pubtrip=="true");
             });
         }
     });
@@ -34,6 +36,10 @@
     function setuserinfo() {
         var publocation = $("#publocation").is(":checked");
         var pubplace = $("#pubplace").is(":checked");
+        var publure = $("#publure").is(":checked");
+        var pubfish = $("#pubfish").is(":checked");
+        var pubtrip = $("#pubtrip").is(":checked");
+        startAnimation("#loadericon");
         $.ajax( {
             type: "POST",
             url: "/uistelu/api/userinfo",
@@ -43,29 +49,113 @@
                     <userinfo>\n\
                         <publishlocation>"+publocation+"</publishlocation>\n\
                         <publishplace>"+pubplace+"</publishplace>\n\
+                        <publishtrip>"+pubtrip+"</publishtrip>\n\
+                        <publishlure>"+publure+"</publishlure>\n\
+                        <publishfish>"+pubfish+"</publishfish>\n\
                     </userinfo>",
             success: function(resp) {
+                stopAnimation("#loadericon");
             },
 
             error: function(response) {
+                stopAnimation("#loadericon");
                 alert("ei onnistunut: "+response.responseText);
+            }
+        });
+    }
+    
+    function setpassword() {
+        
+        var password = $("#pass1").val();
+        
+        if(password.length == 0) {
+            alert("et voi antaa tyhjää salasanaa");
+            return;
+        }
+        
+        if($("#pass1").val() != $("#pass2").val()) {
+            alert("salasanat eivät täsmää");
+            return;
+        }
+               
+        
+        startAnimation("#passwordloader");
+        $.ajax( {
+            type: "POST",
+            url: "/uistelu/api/userinfo",
+            dataType: "xml",
+            contentType: "text/xml",
+            data: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
+                    <userinfo>\n\
+                        <plaintextpassword>"+password+"</plaintextpassword>\n\
+                    </userinfo>",
+            success: function(resp) {
+                stopAnimation("#passwordloader");
+            },
+
+            error: function(response) {
+                stopAnimation("#passwordloader");
             }
         });
     }
 </script>
 
-<form>
-    <span id="username">
-    </span>
-    <br>
-    Julkaise kalapaikkani koordinaatit
-    <input type="checkbox" id="publocation">
-    </input>
-    <br>
-    Julkaise kalapaikkani
-    <input type="checkbox" id="pubplace">
-    </input>
+<form>       
+    <table cellpadding="10">
+        <tr><td>
+            <div class="ui-widget-header">
+                Yksityisyysasetukset
+            </div>
+            <div class="ui-widget-content">
+                Näytä kalat
+                <input type="checkbox" id="pubfish" onclick="setuserinfo()"/><br>
+                paikkatiedot<input type="checkbox" id="publocation" onclick="setuserinfo()"/>
+                viehe<input type="checkbox" id="publure" onclick="setuserinfo()"/>
+                kalapaikka<input type="checkbox" id="pubplace" onclick="setuserinfo()"/>
+                <br>
+                Näytä reissut
+                <input type="checkbox" id="pubtrip" onclick="setuserinfo()"/>
+                <br>
+            </div>
+        </td></tr>
+    </table>
     
-    <input value="päivitä" type="button" onclick="setuserinfo()"></input>
+    <table cellpadding="10">
+        <tr><td>
+            <div class="ui-widget-header">
+                Salasana
+            </div>
+            <div class="ui-widget-content">
+                <table>
+                    <tr>
+                        <td>
+                            uusi salasana
+                        </td>
+                        <td>
+                            <input id="pass1" type="password" onclick="setuserinfo()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            salasana uudelleen
+                        </td>
+                        <td>
+                            <input id="pass2" type="password" onclick="setuserinfo()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" value="vaihda" onclick="setpassword()"/>
+                        </td>
+                        <td>
+                            <span id="passwordloader"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </td></tr>
+    </table>
 </form>
+
+<span id="loadericon"/>
 <jsp:include page="footer.jsp" />
