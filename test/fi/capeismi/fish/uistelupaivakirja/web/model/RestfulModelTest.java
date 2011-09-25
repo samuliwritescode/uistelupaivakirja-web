@@ -163,15 +163,28 @@ public class RestfulModelTest {
     public void testModifyUser() {
         RestfulModel model = new RestfulModel("cape");
         User user = new User();
-        assertNull(user.getPublishfish());        
+        assertNull(user.getPublishfish());
+        assertNull(user.getPublishlocation());
+        assertNull(user.getPublishlure());
+        assertNull(user.getPublishplace());
+        assertNull(user.getPublishtrip());
         
         String originalPassword = user.getPassword();
         user.setPublishfish(Boolean.TRUE);
+        user.setPublishlure(Boolean.FALSE);
+        user.setPublishlocation(Boolean.TRUE);
+        user.setPublishtrip(Boolean.TRUE);
+        user.setPublishplace(Boolean.FALSE);
         user.setId(6666);
         model.setUser(user);
         
         User userafter = model.getUser();
+        
         assertTrue(userafter.getPublishfish());
+        assertFalse(userafter.getPublishlure());
+        assertTrue(userafter.getPublishlocation());
+        assertTrue(userafter.getPublishtrip());
+        assertFalse(userafter.getPublishplace());        
         assertFalse(userafter.getPassword().equalsIgnoreCase(originalPassword));
         assertFalse(userafter.getId().intValue() == 6666);
         assertNotNull(userafter.getPassword());

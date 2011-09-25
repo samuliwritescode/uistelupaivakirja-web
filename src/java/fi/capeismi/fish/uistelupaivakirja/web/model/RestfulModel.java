@@ -39,16 +39,36 @@ public class RestfulModel {
         return user;
     }
     
-    public void setUser(User user) {      
+    public void setUser(User user) {
+        User template = getUser();
         if(user.getPlaintextpassword() != null) {
             user.setSalt(LoginService.generateSalt());
             String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
             user.setPassword(hash);
         } else {
-            user.setSalt(getUser().getSalt());
-            user.setPassword(getUser().getPassword());
+            user.setSalt(template.getSalt());
+            user.setPassword(template.getPassword());
         }
         
+        if(user.getPublishfish() == null) {
+            user.setPublishfish(template.getPublishfish());
+        }
+        
+        if(user.getPublishlocation() == null) {
+            user.setPublishlocation(template.getPublishlocation());
+        }
+        
+        if(user.getPublishlure() == null) {
+            user.setPublishlure(template.getPublishlocation());
+        }
+        
+        if(user.getPublishplace() == null) {
+            user.setPublishplace(template.getPublishplace());
+        }
+        
+        if(user.getPublishtrip() == null) {
+            user.setPublishtrip(template.getPublishtrip());
+        }        
         
         user.setId(getUser().getId());
         user.setUsername(getUser().getUsername());
