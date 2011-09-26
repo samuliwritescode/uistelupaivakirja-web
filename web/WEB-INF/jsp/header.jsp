@@ -61,8 +61,7 @@ $.ajax( {
     url: "/uistelu/api/userinfo",
     dataType: "xml",
     success: function(resp) {
-        //alert($(resp).find("username").text());
-        logoutbox();
+        logoutbox($(resp).find("username").text());
     },
     
     error: function() {

@@ -73,11 +73,13 @@ function loginbox() {
     registerError("Tämä sivu on tarkoitettu sisäänkirjautuneille. Ole hyvä ja kirjaudu tai luo tunnus.");
 }
 
-function logoutbox() {
+function logoutbox(username) {
   var loginBox = document.getElementById("loginbox");
   var link = document.createElement("A");
   link.setAttribute("href", "javascript: logout()");
-  link.appendChild(document.createTextNode("logout"));
+  link.appendChild(document.createTextNode("kirjaudu ulos"));
+  loginBox.appendChild(document.createTextNode("Terve "+username));
+  loginBox.appendChild(document.createElement("br"));
   loginBox.appendChild(link);
 }
 
