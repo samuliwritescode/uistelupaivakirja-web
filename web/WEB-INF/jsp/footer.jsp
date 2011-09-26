@@ -15,14 +15,14 @@
             </tr>
             <tr>
                 <td class="stretch">
-                    <img src="/uistelu/static/back-bottom-left.png" width="100%" height="100%"></img>
+                    <img src="/uistelu/static/back-bottom-left.png" width="100%" height="180"></img>
                 </td>
                 <td background="/uistelu/static/back-bottom.png" height="180" class="stretch" valign="top">                   
                     <center>
                         <small><br>Uistelupäiväkirja. Samuli Penttilä. 2011.</small>
                     </center>
                 </td>
-                <td class="stretch"><img src="/uistelu/static/back-bottom-right.png" width="100%" height="100%"></img></td>
+                <td class="stretch"><img src="/uistelu/static/back-bottom-right.png" width="100%" height="180"></img></td>
             </tr>
         </table>
         
