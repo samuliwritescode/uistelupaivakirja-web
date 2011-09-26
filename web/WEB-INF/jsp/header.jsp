@@ -20,7 +20,7 @@
     </head>
     <body>
 
-        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maincontent">
             <tr>
                 <td height="158" class="stretch" background="/uistelu/static/back-top-left.png" >
 
