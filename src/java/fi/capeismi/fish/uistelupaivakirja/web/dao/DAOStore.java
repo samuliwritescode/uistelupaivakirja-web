@@ -92,22 +92,30 @@ public class DAOStore {
         }};
     }
     
-    public User getUser() {        
+    public User getUser() {
+        User retval = getUser(this._user);
+        if(retval == null) {
+            throw new RestfulException("no user");
+        }
+        
+        return retval;                        
+    }
+    
+    public User getUser(final String username) {        
         return (User) new TransactionDecorator() {
             public Object doQuery() {
                 Query q = this.session.createQuery("from User where username=:user");
-                q.setParameter("user", _user);
+                q.setParameter("user", username);
 
                 List types = q.list();
                 for(Object o: types) {
                     return o;
                 }
                 
-                throw new RestfulException("no user");
+                return null;
             }
         }.getResult();                        
     }
-    
 
     
     private static abstract class TransactionDecorator {

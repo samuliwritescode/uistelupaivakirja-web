@@ -41,4 +41,19 @@ public class PublicModelTest {
        assertFalse(dbuser.getPassword().equalsIgnoreCase("passu"));
        assertNull(dbuser.getPlaintextpassword());
     }
+    
+    @Test
+    public void testDuplicateUser() {
+       String username = "kekkuli";
+       PublicModel model = new PublicModel();       
+       User user = new User();
+       user.setUsername(username);
+       user.setPlaintextpassword("passu");
+       try {
+           model.setUser(user);
+           fail("registration should not succeed");
+       } catch(RestfulException e) {
+           assertEquals(e.toString(), "user already exists");
+       }
+    }
 }

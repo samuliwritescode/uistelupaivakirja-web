@@ -29,16 +29,37 @@
                 $("#publure").attr("checked", publure=="true");
                 $("#pubfish").attr("checked", pubfish=="true");
                 $("#pubtrip").attr("checked", pubtrip=="true");
+                syncfish();
             });
         }
     });
     
-    function setuserinfo() {
+    function syncfish() {
         var publocation = $("#publocation").is(":checked");
         var pubplace = $("#pubplace").is(":checked");
         var publure = $("#publure").is(":checked");
         var pubfish = $("#pubfish").is(":checked");
         var pubtrip = $("#pubtrip").is(":checked");
+        
+        if(pubfish == false) {
+           $("#publocation").attr("checked", false);
+           $("#publure").attr("checked", false);
+           $("#pubplace").attr("checked", false);
+        }
+        
+        $("#publocation").attr("disabled", !pubfish);
+        $("#publure").attr("disabled", !pubfish);
+        $("#pubplace").attr("disabled", !pubfish);
+    }
+    
+    function setuserinfo() {
+        syncfish();
+        var publocation = $("#publocation").is(":checked");
+        var pubplace = $("#pubplace").is(":checked");
+        var publure = $("#publure").is(":checked");
+        var pubfish = $("#pubfish").is(":checked");
+        var pubtrip = $("#pubtrip").is(":checked");
+                
         startAnimation("#loadericon");
         $.ajax( {
             type: "POST",
@@ -107,15 +128,46 @@
                 Yksityisyysasetukset
             </div>
             <div class="ui-widget-content">
-                Näytä kalat
-                <input type="checkbox" id="pubfish" onclick="setuserinfo()"/><br>
-                paikkatiedot<input type="checkbox" id="publocation" onclick="setuserinfo()"/>
-                viehe<input type="checkbox" id="publure" onclick="setuserinfo()"/>
-                kalapaikka<input type="checkbox" id="pubplace" onclick="setuserinfo()"/>
-                <br>
-                Näytä reissut
-                <input type="checkbox" id="pubtrip" onclick="setuserinfo()"/>
-                <br>
+                <table>
+                    <tr>
+                        <td>
+                            Näytä kalat
+                        </td>
+                        <td>
+                            <input type="checkbox" id="pubfish" onclick="setuserinfo()"/><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>koordinaatit</td>
+                        <td>
+                            <input type="checkbox" id="publocation" onclick="setuserinfo()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>viehetiedot</td>
+                        <td>
+                            <input type="checkbox" id="publure" onclick="setuserinfo()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>kalapaikat</td>
+                        <td>
+                            <input type="checkbox" id="pubplace" onclick="setuserinfo()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Näytä reissut
+                        </td>
+                        <td>                            
+                            <input type="checkbox" id="pubtrip" onclick="setuserinfo()"/>
+                        </td>
+                    </tr>
+                </table>
+                <span id="loadericon"/>
             </div>
         </td></tr>
     </table>
@@ -123,7 +175,7 @@
     <table cellpadding="10">
         <tr><td>
             <div class="ui-widget-header">
-                Salasana
+                Salasanan vaihto
             </div>
             <div class="ui-widget-content">
                 <table>
@@ -132,7 +184,7 @@
                             uusi salasana
                         </td>
                         <td>
-                            <input id="pass1" type="password" onclick="setuserinfo()"/>
+                            <input id="pass1" type="password"/>
                         </td>
                     </tr>
                     <tr>
@@ -140,7 +192,7 @@
                             salasana uudelleen
                         </td>
                         <td>
-                            <input id="pass2" type="password" onclick="setuserinfo()"/>
+                            <input id="pass2" type="password"/>
                         </td>
                     </tr>
                     <tr>
@@ -157,5 +209,5 @@
     </table>
 </form>
 
-<span id="loadericon"/>
+
 <jsp:include page="footer.jsp" />

@@ -38,12 +38,6 @@
     }
     
     function sendRegistration(username, password) {
-        var doc = document.implementation.createDocument("", "", null);
-        var root = doc.createElement("userinfo");
-        var usernamenode = doc.createElement("username");
-        usernamenode.appendChild(doc.createTextNode(username));
-        root.appendChild(usernamenode);
-        doc.appendChild(root);
         $.ajax( {
             type: "PUT",
             url: "/uistelu/api/userinfo",
@@ -53,9 +47,16 @@
                     <userinfo>\n\
                         <username>"+username+"</username>\n\
                         <plaintextpassword>"+password+"</plaintextpassword>\n\
+                        <publishlocation>true</publishlocation>\n\
+                        <publishplace>true</publishplace>\n\
+                        <publishtrip>true</publishtrip>\n\
+                        <publishlure>true</publishlure>\n\
+                        <publishfish>true</publishfish>\n\
                     </userinfo>",
             success: function(resp) {
-                alert("rekisteröinti onnistui");
+                $("#j_username").val(username);
+                $("#j_password").val(password);
+                login();
             },
 
             error: function(response) {

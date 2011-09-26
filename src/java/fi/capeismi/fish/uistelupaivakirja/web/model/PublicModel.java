@@ -32,6 +32,10 @@ public class PublicModel {
     }
     
     public void setUser(User user) {
+        if(this._daoStore.getUser(user.getUsername()) != null) {
+            throw new RestfulException("user already exists");
+        }
+        
         user.setSalt(LoginService.generateSalt());
         String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
         user.setPassword(hash);
