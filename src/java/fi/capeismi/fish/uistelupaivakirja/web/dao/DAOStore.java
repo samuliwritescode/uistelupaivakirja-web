@@ -117,6 +117,68 @@ public class DAOStore {
         }.getResult();                        
     }
 
+    public void deleteObject(final int identifier, final int revision, final String type) {
+        final Collection collection = getCollection(type);
+        new TransactionDecorator() { public Object doQuery() {
+            
+            if(collection.getRevision() != revision) {
+                System.out.println(collection.getRevision()+" != " +revision);
+                throw new RestfulException("Cannot commit. Conflict with revision");
+            }
+                        
+            for(Object o: collection.getTrollingobjects()) {
+                Trollingobject to = (Trollingobject)o;
+                if(to.getObjectIdentifier() == identifier) {
+                    collection.getTrollingobjects().remove(o);
+                    this.session.delete(o);
+                    break;
+                }
+            }
+            
+            collection.setRevision(revision+1);
+            this.session.update(collection);            
+            
+            return null;
+        }};
+    }
+    
+    private Trollingobject containsTrollingobject(Collection collection, int identifier) {
+        for(Object o: collection.getTrollingobjects()) {
+            Trollingobject object = (Trollingobject)o;
+            if(object.getObjectIdentifier() == identifier) {
+                return object;
+            }
+        }
+        
+        return null;
+    }
+
+    public void updateObject(final Trollingobject object, final int revision) {
+        new TransactionDecorator() { public Object doQuery() {
+            Collection collection = object.getCollection();
+            if(collection.getRevision() != revision) {
+                System.out.println(collection.getRevision()+" != " +revision);
+                throw new RestfulException("Cannot commit. Conflict with revision");
+            }
+            
+            for(Trollingobject o: collection.getTrollingobjects()) {
+                //find if already exist, then remove old
+                if(o.getObjectIdentifier() == object.getObjectIdentifier()) {
+                    collection.getTrollingobjects().remove(o);
+                    this.session.delete(o);
+                    break;
+                }
+            }
+            
+            collection.getTrollingobjects().add(object);
+            this.session.persist(object);
+            
+            collection.setRevision(collection.getRevision()+1);
+            this.session.merge(collection);
+            return null;
+        }};
+    }
+
     
     private static abstract class TransactionDecorator {
         Object result;
@@ -132,6 +194,7 @@ public class DAOStore {
                 this.result = doQuery();
                 tx.commit();
             } catch (Exception e) {
+                e.printStackTrace();
                 tx.rollback();
                 throw new RestfulException(e);
             }
@@ -167,6 +230,13 @@ public class DAOStore {
                 System.out.println(collectionDAO.getRevision()+" != " +oldRevision);
                 throw new RestfulException("Cannot commit. Conflict with revision");
             }
+            
+            for(Trollingobject to: collectionDAO.getTrollingobjects()) {
+                to.setCollection(collectionDAO);
+                for(Event e: to.getEvents()) {
+                    e.setTrollingobject(to);
+                }
+            }
                 
             collectionDAO.setUser(user);
             collectionDAO.setRevision(oldRevision+1);
@@ -180,7 +250,7 @@ public class DAOStore {
         new TransactionDecorator() { public Object doQuery() {
             Query q = this.session.createQuery("from Collection where user_id=:user and type_id=:type");
             q.setParameter("user", user);
-            q.setParameter("type", collectionDAO.getType());
+            q.setParameter("type", collectionDAO.getType());            
                         
             Collection oldCollection = null;
             for(Object o: q.list()) {
@@ -198,7 +268,6 @@ public class DAOStore {
             
             oldCollection.setRevision(oldCollection.getRevision()+1);
             this.session.persist(oldCollection);
-            this.session.getTransaction().commit();        
             collectionDAO.setRevision(oldCollection.getRevision());
             return null;
         }};

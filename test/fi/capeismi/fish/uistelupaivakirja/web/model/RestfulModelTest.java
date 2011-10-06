@@ -137,7 +137,53 @@ public class RestfulModelTest {
             model.setTrollingObjects(collection);
             assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());
         } 
-    }    
+    }
+    
+    @Test
+    public void testModifyObjectWithId() throws Exception {
+        for(String user: DAOStoreTest.getUsers()) {
+            RestfulModel model = new RestfulModel(user);
+            Trollingobject o1 = new Trollingobject();
+            o1.setObjectIdentifier(0);
+            o1.setCollection(model.getTrollingObjects("trip"));
+            o1.setDate(user+"modified");
+            model.updateTrollingObject(o1, 3);
+            
+            Trollingobject o2 = new Trollingobject();
+            o2.setObjectIdentifier(1);
+            o2.setCollection(model.getTrollingObjects("trip"));
+            o2.setDate(user+"modified");                        
+            model.updateTrollingObject(o2, 4);
+            
+            assertEquals(2, model.getTrollingObjects("trip").getTrollingobjects().size());
+            for(Trollingobject t: model.getTrollingObjects("trip").getTrollingobjects()) {
+                assertEquals(t.getDate(), user+"modified");
+            }
+        } 
+    }
+    
+    @Test
+    public void testRemoveObjectWithId() {
+        for(String user: DAOStoreTest.getUsers()) {
+            RestfulModel model = new RestfulModel(user);
+            model.deleteTrollingObject(1, 5, "trip");
+            assertEquals(1, model.getTrollingObjects("trip").getTrollingobjects().size());
+        } 
+    }
+    
+    @Test
+    public void testAppendObjects() throws Exception {
+        for(String user: DAOStoreTest.getUsers()) {
+            RestfulModel model = new RestfulModel(user);
+            Collection collection = generateTestData("trip", 6, 1, "appended");
+            model.appendTrollingObjects(collection);
+            assertEquals(2, model.getTrollingObjects("trip").getTrollingobjects().size());
+            Trollingobject[] fromDB = (Trollingobject[])model.getTrollingObjects("trip").getTrollingobjects().toArray(new Trollingobject[0]);
+            assertEquals(fromDB[0].getDate(), user+"modified");
+            assertEquals(fromDB[1].getDate(), "appended");
+        } 
+    }
+    
     
     @Test
     public void testFillWithRealData() throws ParserConfigurationException, SAXException, IOException {

@@ -18,6 +18,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
 import fi.capeismi.fish.uistelupaivakirja.web.model.AnnotatedView;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 import fi.capeismi.fish.uistelupaivakirja.web.model.PublicModel;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
@@ -60,11 +61,11 @@ public class RestfulController
     
     @RequestMapping(value="/{collection}", method=RequestMethod.GET)
     @ResponseBody
-    public DOMSource getItems(@PathVariable String collection) 
+    public Collection getItems(@PathVariable String collection) 
     {                        
         RestfulModel model = m_loginService.getModel();
-
-        return XMLCreator.marshal(model.getTrollingObjects(collection));        
+        return model.getTrollingObjects(collection);
+        //return XMLCreator.marshal(model.getTrollingObjects(collection));        
     }
     
     @RequestMapping(value="/views/{view}", method=RequestMethod.GET)
@@ -83,49 +84,44 @@ public class RestfulController
     @RequestMapping(value="/{doctype}", method=RequestMethod.POST)
     @ResponseBody
     public DOMSource postItems(
-        @RequestBody String content, 
+        @RequestBody Collection content, 
         @PathVariable String doctype)
     {
-        return putOrPostTrips(content, doctype, true);
+        RestfulModel model = m_loginService.getModel();
+        RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
+        content.setType(model.getType(doctype));
+        response.setContent(model.appendTrollingObjects(content).toString());        
+        return response.getBody();
     }
     
     @RequestMapping(value="/{doctype}", method=RequestMethod.PUT)
     @ResponseBody
     public DOMSource putItems(
-        @RequestBody String content, 
+        @RequestBody Collection content, 
         @PathVariable String doctype)
     {
-        return putOrPostTrips(content, doctype, false);
-    }
-    
-    private DOMSource putOrPostTrips(String content, String doctype, boolean append)
-    {
-       
         RestfulModel model = m_loginService.getModel();
         RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
-        try {            
-            InputStream in = stringToInputStream(content);
-            XMLReader reader = new XMLReader(in);
-            Collection objects = reader.getTrollingObjects();
-            objects.setType(model.getType(doctype));
-                        
-            Integer commitId = null;
-            if(append)
-            {
-                commitId = model.appendTrollingObjects(objects);
-            }else
-            {
-               commitId = model.setTrollingObjects(objects); 
-            }
-            
-            response.setContent(commitId.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RestfulException(e.toString());
-        }
-        
+        content.setType(model.getType(doctype));
+        response.setContent(model.setTrollingObjects(content).toString());        
         return response.getBody();
     }
+    
+    @RequestMapping(value="/{doctype}/{identifier}", method=RequestMethod.PUT)
+    @ResponseBody
+    public DOMSource putItem(
+        @RequestBody Trollingobject object,
+        @RequestParam Integer revision,
+        @PathVariable String doctype,
+        @PathVariable Integer identifier)
+    {
+        RestfulModel model = m_loginService.getModel();
+        object.setObjectIdentifier(identifier.intValue());
+        object.setCollection(model.getTrollingObjects(doctype));
+        model.updateTrollingObject(object, revision.intValue());
+        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
+    }
+
     
     public static InputStream stringToInputStream(String content) throws UnsupportedEncodingException {
         return new ByteArrayInputStream(content.getBytes("ISO-8859-1"));

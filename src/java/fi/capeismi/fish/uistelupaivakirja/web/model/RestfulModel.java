@@ -19,6 +19,7 @@ package fi.capeismi.fish.uistelupaivakirja.web.model;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Type;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 
@@ -104,5 +105,13 @@ public class RestfulModel {
         
         this._daoStore.setCollection(objects);
         return new Integer(objects.getRevision());
+    }
+
+    public void updateTrollingObject(Trollingobject object, int revision) {
+        this._daoStore.updateObject(object, revision);
+    }
+
+    public void deleteTrollingObject(int identifier, int revision, String type) {
+        this._daoStore.deleteObject(identifier, revision, type);
     }
 }
