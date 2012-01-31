@@ -42,7 +42,7 @@
 		</copy>
 	</target>
 	
-	<target name="test" depends="compile, compiletest">
+	<target name="test" depends="compile, compiletest, copystatic">
 		 <junit>
 	        <classpath> 
                 <pathelement path="${build}/classes"/> 
