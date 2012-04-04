@@ -19,8 +19,14 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import fi.capeismi.fish.uistelupaivakirja.web.model.SearchObject;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +35,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 
 
 
@@ -305,10 +314,11 @@ public class DAOStore {
     private TableView getView(final String view, final ConcreteSearchObject search) {
         return (TableView) new TransactionDecorator() { public Object doQuery() throws Exception{
             //TODO: SQL injection hardening
+        	//TODO: godafwul hack to get the hibernate session.
             final ViewContainer orm = new ViewContainer(view);
 
-            /*
-            this.session.doWork(new Work() {
+            Session session = this.session.unwrap(Session.class);
+            session.doWork(new Work() {
 
 				@Override
 				public void execute(Connection conn) throws SQLException {
@@ -333,7 +343,7 @@ public class DAOStore {
 				}
             	
             });
-*/
+
             return orm;
         }}.getResult();
     }
