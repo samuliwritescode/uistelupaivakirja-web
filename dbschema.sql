@@ -91,12 +91,6 @@ TROLLING_ID INTEGER not null,
     FOREIGN KEY(TROLLING_ID) REFERENCES trollingobject(ID) 
 );
 
-
-INSERT INTO user(USERNAME, PASSWORD) VALUES(
-'cape',
-MD5('pwcape')
-);
-
 INSERT INTO type (NAME) VALUES('trip');
 INSERT INTO type (NAME) VALUES('place');
 INSERT INTO type (NAME) VALUES('lure');
