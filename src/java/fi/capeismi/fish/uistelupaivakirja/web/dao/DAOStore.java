@@ -19,18 +19,18 @@ package fi.capeismi.fish.uistelupaivakirja.web.dao;
 import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import fi.capeismi.fish.uistelupaivakirja.web.model.SearchObject;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+
 
 /**
  *
@@ -49,7 +49,7 @@ public class DAOStore {
         return (Type) new TransactionDecorator() { public Object doQuery() {
             Query q = this.session.createQuery("from Type where name=:name");
             q.setParameter("name", type);
-            List types = q.list();
+            List types = q.getResultList();
             for(Object o: types) {
                 return o;
             }
@@ -69,7 +69,7 @@ public class DAOStore {
             Query q = this.session.createQuery("from Collection where user_id=:user and type_id=:type");
             q.setParameter("type", typeDAO);
             q.setParameter("user", user);
-            List types = q.list();
+            List types = q.getResultList();
             for(Object o: types) {
                 return o;
             }
@@ -107,7 +107,7 @@ public class DAOStore {
                 Query q = this.session.createQuery("from User where username=:user");
                 q.setParameter("user", username);
 
-                List types = q.list();
+                List types = q.getResultList();
                 for(Object o: types) {
                     return o;
                 }
@@ -130,13 +130,16 @@ public class DAOStore {
                 Trollingobject to = (Trollingobject)o;
                 if(to.getObjectIdentifier() == identifier) {
                     collection.getTrollingobjects().remove(o);
-                    this.session.delete(o);
+                    Trollingobject attached = this.session.find(Trollingobject.class, to.getId());
+                    this.session.remove(attached);
+                    //this.session.delete(o);
                     break;
                 }
             }
             
+            collection.getTrollingobjects().clear();
             collection.setRevision(revision+1);
-            this.session.update(collection);            
+            this.session.merge(collection);            
             
             return null;
         }};
@@ -161,19 +164,32 @@ public class DAOStore {
                 throw new RestfulException("Cannot commit. Conflict with revision");
             }
             
+            Query query = this.session.createQuery("from Trollingobject where collection_id=:collection and object_identifier=:obid");
+            query.setParameter("collection", collection);
+            query.setParameter("obid", object.getObjectIdentifier());
+            
+            for(Object o: query.getResultList()) {
+            	Trollingobject tobject = (Trollingobject)o;
+            	System.out.println("deleting "+tobject.getObjectIdentifier());
+            	this.session.remove(tobject);
+            }
+            
             for(Trollingobject o: collection.getTrollingobjects()) {
                 //find if already exist, then remove old
                 if(o.getObjectIdentifier() == object.getObjectIdentifier()) {
                     collection.getTrollingobjects().remove(o);
-                    this.session.delete(o);
-                    break;
+                    //this.session.remove(o);
+                    //break;
                 }
             }
+            
+            System.out.println("collection size: "+collection.getTrollingobjects().size());
             
             collection.getTrollingobjects().add(object);
             this.session.persist(object);
             
-            collection.setRevision(collection.getRevision()+1);
+            collection.getTrollingobjects().clear();
+            collection.setRevision(collection.getRevision()+1);            
             this.session.merge(collection);
             return null;
         }};
@@ -182,14 +198,17 @@ public class DAOStore {
     
     private static abstract class TransactionDecorator {
         Object result;
-        Session session;
+        EntityManager session;
+        private static EntityManagerFactory factory = Persistence.createEntityManagerFactory("uisteluweb");
+        
         public TransactionDecorator() {
             doTransaction();
         }
         
         private void doTransaction() {
             this.session = getSession();
-            Transaction tx = this.session.beginTransaction();
+            EntityTransaction tx = this.session.getTransaction();
+            tx.begin();
             try {
                 this.result = doQuery();
                 tx.commit();
@@ -206,9 +225,9 @@ public class DAOStore {
             return this.result;
         }
         
-        private Session getSession() {
-            SessionFactory fac = TrollingHibernateUtil.getSessionFactory();
-            return fac.getCurrentSession();
+        private EntityManager getSession() {
+        	//EntityManager entityManager = Persistence.createEntityManagerFactory("uisteluweb").createEntityManager();
+        	return factory.createEntityManager();
         }
     }
     
@@ -220,10 +239,10 @@ public class DAOStore {
             q.setParameter("type", collectionDAO.getType());
             
             int oldRevision = 0;
-            for(Object o: q.list()) {
+            for(Object o: q.getResultList()) {
                 Collection oldCollection = (Collection)o;
                 oldRevision = oldCollection.getRevision();
-                this.session.delete(o);
+                this.session.remove(o);
             }
             
             if(collectionDAO.getRevision() != oldRevision) {
@@ -253,7 +272,7 @@ public class DAOStore {
             q.setParameter("type", collectionDAO.getType());            
                         
             Collection oldCollection = null;
-            for(Object o: q.list()) {
+            for(Object o: q.getResultList()) {
                 oldCollection = (Collection)o;            
             }
             
@@ -286,26 +305,35 @@ public class DAOStore {
     private TableView getView(final String view, final ConcreteSearchObject search) {
         return (TableView) new TransactionDecorator() { public Object doQuery() throws Exception{
             //TODO: SQL injection hardening
-            ViewContainer orm = new ViewContainer(view);
-            
-            Connection conn = this.session.connection();
-            Statement st = conn.createStatement();
-            String searchSQL = "select * from " +view+ "_view "+search.getSQL();
-            
-            ResultSet res = st.executeQuery(searchSQL);           
-            List<String> columns = new ArrayList<String>();
-            for(int loop=1; loop <= res.getMetaData().getColumnCount(); loop++) {                
-                String colname = res.getMetaData().getColumnName(loop);
-                columns.add(colname);
-            }            
-            
-            while(res.next()) {
-                Map<String, String> row = new HashMap<String, String>();
-                for(String colname: columns) {
-                    row.put(colname, res.getString(colname));
-                }
-                orm.add(row);
-            }
+            final ViewContainer orm = new ViewContainer(view);
+
+            /*
+            this.session.doWork(new Work() {
+
+				@Override
+				public void execute(Connection conn) throws SQLException {
+		            Statement st = conn.createStatement();
+		            String searchSQL = "select * from " +view+ "_view "+search.getSQL();
+		            
+		            ResultSet res = st.executeQuery(searchSQL);           
+		            List<String> columns = new ArrayList<String>();
+		            for(int loop=1; loop <= res.getMetaData().getColumnCount(); loop++) {                
+		                String colname = res.getMetaData().getColumnName(loop);
+		                columns.add(colname);
+		            }            
+		            
+		            while(res.next()) {
+		                Map<String, String> row = new HashMap<String, String>();
+		                for(String colname: columns) {
+		                    row.put(colname, res.getString(colname));
+		                }
+		                orm.add(row);
+		            }
+					
+				}
+            	
+            });
+*/
             return orm;
         }}.getResult();
     }

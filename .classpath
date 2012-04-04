@@ -39,7 +39,18 @@
 	<classpathentry kind="lib" path="lib/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.web.struts-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.web-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
+	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/MySQL JDBC Driver"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/EclipseLink 2.3.2 - Indigo">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+			<attribute name="owner.project.facets" value="jpt.jpa"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jdbc2_0-stdext.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-c3p0-4.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-commons-annotations-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-core-4.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-entitymanager-4.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

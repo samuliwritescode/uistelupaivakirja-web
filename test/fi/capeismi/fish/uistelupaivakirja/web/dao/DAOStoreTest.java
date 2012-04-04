@@ -16,11 +16,14 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.dao;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
 import fi.capeismi.fish.uistelupaivakirja.web.model.SearchObject;
-import org.hibernate.SessionException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,11 +41,13 @@ public class DAOStoreTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        getSession().beginTransaction();
-        for(Object item: getSession().createQuery("from User").list()) {
-            getSession().delete(item);
+    	EntityManager em = getSession();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        for(Object item: em.createQuery("from User").getResultList()) {
+        	em.remove(item);
         }
-        getSession().getTransaction().commit();
+        tx.commit();
         
         assertEquals(getNumberOfRowsInTable("User"), 0);
         assertEquals(getNumberOfRowsInTable("Collection"), 0);
@@ -51,16 +56,17 @@ public class DAOStoreTest {
         
     }        
     
-    private static Session getSession() {
-        SessionFactory fac = TrollingHibernateUtil.getSessionFactory();
-        return fac.getCurrentSession();
+    private static EntityManager getSession() {
+    	EntityManager entityManager = Persistence.createEntityManagerFactory("uisteluweb").createEntityManager();
+    	return entityManager;
     }
     
     
     private static int getNumberOfRowsInTable(String table) {
-        getSession().beginTransaction();
-        int retval = getSession().createQuery("from "+table).list().size();
-        getSession().getTransaction().commit();
+        EntityTransaction transaction = getSession().getTransaction();
+        transaction.begin();
+        int retval = getSession().createQuery("from "+table).getResultList().size();
+        transaction.commit();
         return retval;
     }
 
@@ -112,6 +118,7 @@ public class DAOStoreTest {
         };        
                 
     }
+        
     
     public static String[] getUsers() {
         return new String[] {"cape", "testuser", "keijjo"};
@@ -131,7 +138,7 @@ public class DAOStoreTest {
     }
     
     private abstract class Runner {
-        private Session session;
+        private EntityManager session;
         public Runner() {
             before();
             runInTx();
@@ -145,11 +152,8 @@ public class DAOStoreTest {
         }
         
         private void after() {
-            try {
-                assertFalse(this.session.getTransaction().isActive());            
-            } catch(SessionException e) {
-                
-            }
+        	assertFalse(this.session.getTransaction().isActive());            
+
         }
     }
 }

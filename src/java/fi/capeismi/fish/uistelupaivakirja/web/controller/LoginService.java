@@ -16,7 +16,6 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.dao.TrollingHibernateUtil;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
@@ -29,10 +28,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.servlet.http.HttpSession;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -75,15 +77,16 @@ public class LoginService {
     
     public void login(String username, String password)
     {
-        Session session = TrollingHibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction t = null;
+    	EntityManager em = Persistence.createEntityManagerFactory("uisteluweb").createEntityManager();
+        EntityTransaction t = null;
         try
         {
-            t = session.beginTransaction();
-            Query userquery = session.createQuery("from User u where u.username = :usr");
-            userquery.setString("usr", username);
+            t = em.getTransaction();
+            t.begin();
+            Query userquery = em.createQuery("from User u where u.username = :usr");            
+            userquery.setParameter("usr", username);
             
-            List users = userquery.list();
+            List users = userquery.getResultList();
             
             if(users.size() == 0)
             {
