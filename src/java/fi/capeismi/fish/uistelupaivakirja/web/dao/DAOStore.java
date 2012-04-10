@@ -63,7 +63,7 @@ public class DAOStore {
                 return o;
             }
 
-            throw new RestfulException("no such collection");
+            throw new RestfulException("no such collection: "+type);
         }}.getResult();       
     }
 
@@ -292,10 +292,14 @@ public class DAOStore {
                 inserted.setCollection(oldCollection);
                 inserted.setObjectIdentifier(id);
                 oldCollection.getTrollingobjects().add(inserted);
+                for(Event ev: inserted.getEvents()) {
+                	ev.setTrollingobject(inserted);
+                }
             }
             
             oldCollection.setRevision(oldCollection.getRevision()+1);
             this.session.persist(oldCollection);
+            
             collectionDAO.setRevision(oldCollection.getRevision());
             return null;
         }};

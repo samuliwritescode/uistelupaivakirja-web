@@ -88,7 +88,7 @@ public class RestfulModelTest {
             model.getTrollingObjects("idontexist").getTrollingobjects();
             fail("exception was expected");
         } catch(RestfulException e) {
-            assertEquals("no such collection", e.toString());
+            assertEquals("no such collection: idontexist", e.toString());
         }
     }
     
@@ -176,11 +176,14 @@ public class RestfulModelTest {
         for(String user: DAOStoreTest.getUsers()) {
             RestfulModel model = new RestfulModel(user);
             Collection collection = generateTestData("trip", 6, 1, "appended");
+            assertEquals(1, collection.getTrollingobjects().iterator().next().getEvents().size());
             model.appendTrollingObjects(collection);
             assertEquals(2, model.getTrollingObjects("trip").getTrollingobjects().size());
             Trollingobject[] fromDB = (Trollingobject[])model.getTrollingObjects("trip").getTrollingobjects().toArray(new Trollingobject[0]);
             assertEquals(fromDB[0].getDate(), user+"modified");
             assertEquals(fromDB[1].getDate(), "appended");
+            assertEquals(1, fromDB[1].getEvents().size());
+            assertEquals(fromDB[1].getEvents().iterator().next().getFish_species(), "hauki");
         } 
     }
     
@@ -267,6 +270,9 @@ public class RestfulModelTest {
             content += String.format("<TrollingObject type=\"%s\" id=\"%d\">"
                         + "<date>%s</date>"
                         + "<description>%s%d</description>"
+                        + "<PropertyList>" 
+                        + "<PropertyListItem><fish_species>hauki</fish_species></PropertyListItem>"
+                        + "</PropertyList>" 
                     + "</TrollingObject>", type, loop, contentseed, contentseed, loop+666);
         }
         

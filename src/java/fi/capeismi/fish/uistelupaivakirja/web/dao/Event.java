@@ -166,7 +166,8 @@ public class Event  implements java.io.Serializable {
                     throw new RestfulException(e);
                 }
             }
-        }    
+        } 
+        throw new RestfulException("Unknown event property: "+property);
     }
 
     //Getters

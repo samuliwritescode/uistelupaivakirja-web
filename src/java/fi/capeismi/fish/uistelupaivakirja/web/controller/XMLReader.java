@@ -109,8 +109,8 @@ public class XMLReader {
             Node node = children.item(loop);
             if(node.getNodeName().equalsIgnoreCase("PropertyListItem"))
             {
-                Event event = new Event();
-                event.setTrollingobject(object);
+                Event event = new Event(object);
+                //event.setTrollingobject(object);
                 object.getEvents().add(event);                
                 readPropertyListItem(event, node);
             }

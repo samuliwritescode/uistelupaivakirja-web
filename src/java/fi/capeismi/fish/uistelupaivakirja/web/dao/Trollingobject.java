@@ -58,7 +58,8 @@ public class Trollingobject  implements java.io.Serializable {
     private String model;          
     private String name;           
     private String nickname;       
-    private String notvisible;     
+    private String invisible;
+    private String notvisible;
     private String place;          
     private String routefile;      
     private String size;           
@@ -111,7 +112,7 @@ public class Trollingobject  implements java.io.Serializable {
         retval.put("model", model);           
         retval.put("name", name);            
         retval.put("nickname", nickname);        
-        retval.put("notvisible", notvisible);      
+        retval.put("invisible", invisible);      
         retval.put("place", place);           
         retval.put("routefile", routefile);       
         retval.put("size", size);            
@@ -241,8 +242,8 @@ public class Trollingobject  implements java.io.Serializable {
         return nickname;
     }
 
-    public String getNotvisible() {
-        return notvisible;
+    public String getInvisible() {
+        return invisible;
     }
 
     public String getPlace() {
@@ -331,8 +332,8 @@ public class Trollingobject  implements java.io.Serializable {
         this.nickname = nickname;
     }
 
-    public void setNotvisible(String notvisible) {
-        this.notvisible = notvisible;
+    public void setInvisible(String notvisible) {
+        this.invisible = notvisible;
     }
 
     public void setPlace(String place) {
@@ -358,6 +359,16 @@ public class Trollingobject  implements java.io.Serializable {
     public void setWaypointfile(String waypointfile) {
         this.waypointfile = waypointfile;
     }
+
+
+	public String getNotvisible() {
+		return notvisible;
+	}
+
+
+	public void setNotvisible(String notvisible) {
+		this.notvisible = notvisible;
+	}
 
 }
 
