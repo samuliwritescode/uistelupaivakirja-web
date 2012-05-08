@@ -5,7 +5,7 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2012-04-10T17:56:44.160+0300")
+@Generated(value="Dali", date="2012-04-16T21:30:58.094+0300")
 @StaticMetamodel(Trollingobject.class)
 public class Trollingobject_ {
 	public static volatile SingularAttribute<Trollingobject, Integer> id;
@@ -26,6 +26,8 @@ public class Trollingobject_ {
 	public static volatile SingularAttribute<Trollingobject, String> model;
 	public static volatile SingularAttribute<Trollingobject, String> name;
 	public static volatile SingularAttribute<Trollingobject, String> nickname;
+	public static volatile SingularAttribute<Trollingobject, String> invisible;
+	public static volatile SingularAttribute<Trollingobject, String> notvisible;
 	public static volatile SingularAttribute<Trollingobject, String> place;
 	public static volatile SingularAttribute<Trollingobject, String> routefile;
 	public static volatile SingularAttribute<Trollingobject, String> size;
@@ -33,6 +35,4 @@ public class Trollingobject_ {
 	public static volatile SingularAttribute<Trollingobject, String> time_start;
 	public static volatile SingularAttribute<Trollingobject, String> waypointfile;
 	public static volatile SetAttribute<Trollingobject, Event> events;
-	public static volatile SingularAttribute<Trollingobject, String> invisible;
-	public static volatile SingularAttribute<Trollingobject, String> notvisible;
 }
