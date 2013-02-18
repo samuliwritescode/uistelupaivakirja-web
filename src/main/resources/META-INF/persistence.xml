@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" 
+xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="uisteluweb" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>fi.capeismi.fish.uistelupaivakirja.web.dao.Event</class>
+		<class>fi.capeismi.fish.uistelupaivakirja.web.dao.User</class>
+		<class>fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject</class>
+		<class>fi.capeismi.fish.uistelupaivakirja.web.dao.Type</class>
+		<class>fi.capeismi.fish.uistelupaivakirja.web.dao.Collection</class>
+			 
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
+			<property name="javax.persistence.jdbc.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://dev.capeismi.fi:3306/trolling"/>
+			<property name="javax.persistence.jdbc.user" value="root"/>
+			<property name="javax.persistence.jdbc.password" value=""/>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+		</properties>
+	</persistence-unit>
+</persistence>
