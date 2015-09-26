@@ -42,8 +42,8 @@ public class PublicModel {
         this._daoStore.addUser(user);
     }
     
-    public TableView getView(String viewname) {
-        SearchObject search = this._daoStore.searchObject(viewname);
-        return search.doSearch();
-    }
+//    public TableView getView(String viewname) {
+//        SearchObject search = this._daoStore.searchObject(viewname);
+//        return search.doSearch();
+//    }
 }

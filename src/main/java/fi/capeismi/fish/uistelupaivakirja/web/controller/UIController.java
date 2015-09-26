@@ -16,7 +16,8 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.PublicModel;
+import java.sql.SQLException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,33 +30,29 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/")
 public class UIController {
-    
-    @RequestMapping(value="/", method=RequestMethod.GET)
-    public ModelAndView getMainPage()
-    {
-        ModelAndView view = new ModelAndView();
-        view.setViewName("index");
-        PublicModel model = new PublicModel();
-        
-        view.addObject("fishstat",  model.getView("fishstat"));
-        view.addObject("fishrecord", model.getView("fishrecord"));
-        view.addObject("tripstat",  model.getView("tripstat"));
-        return view;
-    }
-    
-    @RequestMapping(value="/myfish", method=RequestMethod.GET)
-    public ModelAndView getMyFish()
-    {
-        ModelAndView view = new ModelAndView();
-        view.setViewName("myfish");
-        return view;
-    }
-    
-    @RequestMapping(value="/profile", method=RequestMethod.GET)
-    public ModelAndView getProfile()
-    {
-        ModelAndView view = new ModelAndView();
-        view.setViewName("profile");
-        return view;
-    }
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView getMainPage() throws SQLException {
+		ModelAndView view = new ModelAndView();
+		view.setViewName("index");
+
+		view.addObject("fishstat", Transformers.sqlToTableView("select * from fishstat_view limit 25", "fishstat"));
+		view.addObject("fishrecord", Transformers.sqlToTableView("select * from fishstat_view limit 25", "fishrecord"));
+		view.addObject("tripstat", Transformers.sqlToTableView("select * from fishstat_view limit 25", "tripstat"));
+		return view;
+	}
+
+	@RequestMapping(value = "/myfish", method = RequestMethod.GET)
+	public ModelAndView getMyFish() {
+		ModelAndView view = new ModelAndView();
+		view.setViewName("myfish");
+		return view;
+	}
+
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public ModelAndView getProfile() {
+		ModelAndView view = new ModelAndView();
+		view.setViewName("profile");
+		return view;
+	}
 }

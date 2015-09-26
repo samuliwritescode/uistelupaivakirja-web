@@ -14,39 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fi.capeismi.fish.uistelupaivakirja.web.dao;
+package fi.capeismi.fish.uistelupaivakirja.web.model;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
-public class ViewContainer implements TableView {
-    private List<Map<String, String>> items;
-    private String name;
-    
-    public ViewContainer(String name) {
-        this.items = new ArrayList<Map<String, String>>();
-        this.name = name;
-    }
-
-    public void add(Map<String, String> row) {
-        this.items.add(row);
-    }
-    
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public List<Map<String, String>> getTable() {
-        return Collections.unmodifiableList(this.items);
-    }
+public interface ContainsMap {
+	void add(Map<String, String> row);
+	String getName();
 }
-

@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS trolling;
-CREATE DATABASE trolling;
-USE trolling;
 
 CREATE TABLE user (
 ID INTEGER not null auto_increment primary key,

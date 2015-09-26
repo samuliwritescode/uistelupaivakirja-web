@@ -16,20 +16,22 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.FillableAnnotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import fi.capeismi.fish.uistelupaivakirja.web.model.ContainsMap;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="TrollingObjects")
-public class SpinnerItems implements FillableAnnotation {        
+public class SpinnerItems implements ContainsMap {        
     List<SpinnerItem> _items;    
     
     public SpinnerItems() {
@@ -51,6 +53,11 @@ public class SpinnerItems implements FillableAnnotation {
     public void add(Map<String, String> row) {
         this._items.add(new SpinnerItem(row.get("keyname"), row.get("value"), this._items.size()+1));
     }
+    
+	@Override
+	public String getName() {
+		return "spinneritem";
+	}
      
     public static class SpinnerItem {
         private String _key;

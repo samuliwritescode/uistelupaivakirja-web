@@ -19,7 +19,6 @@ package fi.capeismi.fish.uistelupaivakirja.web.model;
 import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Type;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 
@@ -28,90 +27,74 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public class RestfulModel {
-    private DAOStore _daoStore = null;      
-    
-    public RestfulModel(String user)
-    {
-        this._daoStore = new DAOStore(user);
-    }
-    
-    public User getUser() {
-        User user = this._daoStore.getUser();
-        return user;
-    }
-    
-    public void setUser(User user) {
-        User template = getUser();
-        if(user.getPlaintextpassword() != null) {
-            user.setSalt(LoginService.generateSalt());
-            String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
-            user.setPassword(hash);
-        } else {
-            user.setSalt(template.getSalt());
-            user.setPassword(template.getPassword());
-        }
-        
-        if(user.getPublishfish() == null) {
-            user.setPublishfish(template.getPublishfish());
-        }
-        
-        if(user.getPublishlocation() == null) {
-            user.setPublishlocation(template.getPublishlocation());
-        }
-        
-        if(user.getPublishlure() == null) {
-            user.setPublishlure(template.getPublishlocation());
-        }
-        
-        if(user.getPublishplace() == null) {
-            user.setPublishplace(template.getPublishplace());
-        }
-        
-        if(user.getPublishtrip() == null) {
-            user.setPublishtrip(template.getPublishtrip());
-        }        
-        
-        user.setId(getUser().getId());
-        user.setUsername(getUser().getUsername());
-        
-        this._daoStore.setUser(user);
-    }
-    
-    public Collection getTrollingObjects(String type)
-    {        
-        Collection dao = this._daoStore.getCollection(type);
-        return dao;
-    }
-    
-    public TableView getView(String viewname) {
-        SearchObject search = this._daoStore.searchObject(viewname);
-        search.setUser(this._daoStore.getUser());
-        return search.doSearch();
-    }
-    
-    public Type getType(String typename) {
-        return this._daoStore.getType(typename);
-    }
+	private DAOStore daoStore = null;
 
+	public RestfulModel(String user) {
+		this.daoStore = new DAOStore(user);
+	}
 
-    public Integer appendTrollingObjects(Collection objects)
-    {              
-        this._daoStore.appendCollection(objects);
-        return new Integer(objects.getRevision());
-    }
-    
-    public Integer setTrollingObjects(Collection objects)
-    {                
-        
-        this._daoStore.setCollection(objects);
-        return new Integer(objects.getRevision());
-    }
+	public User getUser() {
+		User user = this.daoStore.getUser();
+		return user;
+	}
 
-    public void updateTrollingObject(Trollingobject object, int revision) {
-        this._daoStore.updateObject(object, revision);
-    }
+	public void setUser(User user) {
+		User template = getUser();
+		if (user.getPlaintextpassword() != null) {
+			user.setSalt(LoginService.generateSalt());
+			String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
+			user.setPassword(hash);
+		} else {
+			user.setSalt(template.getSalt());
+			user.setPassword(template.getPassword());
+		}
 
-    public void deleteTrollingObject(int identifier, int revision, String type) {
-        this._daoStore.deleteObject(identifier, revision, type);
-    }
+		if (user.getPublishfish() == null) {
+			user.setPublishfish(template.getPublishfish());
+		}
+
+		if (user.getPublishlocation() == null) {
+			user.setPublishlocation(template.getPublishlocation());
+		}
+
+		if (user.getPublishlure() == null) {
+			user.setPublishlure(template.getPublishlocation());
+		}
+
+		if (user.getPublishplace() == null) {
+			user.setPublishplace(template.getPublishplace());
+		}
+
+		if (user.getPublishtrip() == null) {
+			user.setPublishtrip(template.getPublishtrip());
+		}
+
+		user.setId(getUser().getId());
+		user.setUsername(getUser().getUsername());
+
+		this.daoStore.setUser(user);
+	}
+
+	public Collection getTrollingObjects(String type) {
+		Collection dao = this.daoStore.getCollection(type);
+		return dao;
+	}
+
+	public Type getType(String typename) {
+		return DAOStore.getType(typename);
+	}
+
+	public Integer appendTrollingObjects(Collection objects) {
+		this.daoStore.appendCollection(objects);
+		return new Integer(objects.getRevision());
+	}
+
+	public Integer setTrollingObjects(Collection objects) {
+		this.daoStore.setCollection(objects);
+		return new Integer(objects.getRevision());
+	}
+
+	public void deleteTrollingObject(int identifier, int revision, String type) {
+		this.daoStore.deleteObject(identifier, revision, type);
+	}
 }

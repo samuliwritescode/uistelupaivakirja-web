@@ -16,28 +16,26 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.FillableAnnotation;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import fi.capeismi.fish.uistelupaivakirja.web.model.ContainsMap;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 @XmlRootElement(name="gpx")
-public class WayPoints implements FillableAnnotation {
+public class WayPoints implements ContainsMap {
     private List<WayPoint> _waypoints = new ArrayList<WayPoint>();
-    
-    public WayPoints() {
-        super();
-    }
     
     @XmlElement
     public List<WayPoint> getWpt() {
@@ -54,14 +52,19 @@ public class WayPoints implements FillableAnnotation {
                 row.get("fish_species")
                 ));
     }
+    
+	@Override
+	public String getName() {
+		return "fishmap";
+	}
 
     @XmlRootElement
     public static class WayPoint {
         
         private String _lat, _lon, _date, _time, _name;
-        
+
         public WayPoint() {
-            
+        	
         }
         
         public WayPoint(String lat, String lon, String date, String time, String name) {

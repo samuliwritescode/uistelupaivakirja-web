@@ -16,34 +16,36 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.controller;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.AnnotatedView;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.Trollingobject;
-import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
-import fi.capeismi.fish.uistelupaivakirja.web.model.PublicModel;
-import fi.capeismi.fish.uistelupaivakirja.web.model.TableView;
-import java.io.UnsupportedEncodingException;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
-import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
-import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.PropertyException;
+import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
+import fi.capeismi.fish.uistelupaivakirja.web.model.ContainsMap;
+import fi.capeismi.fish.uistelupaivakirja.web.model.PublicModel;
+import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
+import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
 
 /**
  *
@@ -51,139 +53,125 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Controller
 @RequestMapping("/api")
-public class RestfulController 
-{
-    private LoginService m_loginService = null;
-    
-    private static final String RESPONSE_EXCEPTION = "TrollingException";
-    private static final String RESPONSE_TRANSACTIONTICKET = "TransactionTicket";
-    private static final String RESPONSE_RESPONSE = "TrollingResponse";     
-    
-    @RequestMapping(value="/{collection}", method=RequestMethod.GET)
-    @ResponseBody
-    public Collection getItems(@PathVariable String collection) 
-    {                        
-        RestfulModel model = m_loginService.getModel();
-        return model.getTrollingObjects(collection);
-        //return XMLCreator.marshal(model.getTrollingObjects(collection));        
-    }
-    
-    @RequestMapping(value="/views/{view}", method=RequestMethod.GET)
-    @ResponseBody
-    public DOMSource getView(@PathVariable String view) 
-    {                        
-        RestfulModel model = m_loginService.getModel();
-        TableView viewobject = model.getView(view);
-        AnnotatedView annotated = new Adapter().decorate(viewobject);
-        if(annotated == null)
-            return XMLCreator.marshal(viewobject);
-        else
-            return XMLCreator.marshal(annotated);
-    }
-    
-    @RequestMapping(value="/{doctype}", method=RequestMethod.POST)
-    @ResponseBody
-    public DOMSource postItems(
-        @RequestBody Collection content, 
-        @PathVariable String doctype)
-    {
-        RestfulModel model = m_loginService.getModel();
-        RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
-        content.setType(model.getType(doctype));
-        response.setContent(model.appendTrollingObjects(content).toString());        
-        return response.getBody();
-    }
-    
-    @RequestMapping(value="/{doctype}", method=RequestMethod.PUT)
-    @ResponseBody
-    public DOMSource putItems(
-        @RequestBody Collection content, 
-        @PathVariable String doctype)
-    {
-        RestfulModel model = m_loginService.getModel();
-        RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
-        content.setType(model.getType(doctype));
-        response.setContent(model.setTrollingObjects(content).toString());        
-        return response.getBody();
-    }
-    
-    @RequestMapping(value="/{doctype}/{identifier}", method=RequestMethod.PUT)
-    @ResponseBody
-    public DOMSource putItem(
-        @RequestBody Trollingobject object,
-        @RequestParam Integer revision,
-        @PathVariable String doctype,
-        @PathVariable Integer identifier)
-    {
-        RestfulModel model = m_loginService.getModel();
-        object.setObjectIdentifier(identifier.intValue());
-        object.setCollection(model.getTrollingObjects(doctype));
-        model.updateTrollingObject(object, revision.intValue());
-        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
-    }
+public class RestfulController {
+	
+	@Autowired
+	private LoginService loginService;
 
-    
-    public static InputStream stringToInputStream(String content) throws UnsupportedEncodingException {
-        return new ByteArrayInputStream(content.getBytes("ISO-8859-1"));
-    }
-    
-    
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(RestfulException.class)
-    @ResponseBody
-    public DOMSource handleException(RestfulException ex) 
-    {
-        return RestfulResponse.getResponse(RESPONSE_EXCEPTION, ex.toString());             
-    }
-    
-    @RequestMapping(value="/userinfo", method=RequestMethod.GET)
-    @ResponseBody
-    public DOMSource userinfo() {
-        RestfulModel model = m_loginService.getModel();        
-        return XMLCreator.marshal(model.getUser());
-    }
-    
-    
-    @RequestMapping(value="/userinfo", method= RequestMethod.PUT, headers="Accept=text/xml")
-    @ResponseBody
-    public DOMSource addUser(@RequestBody User user) {
-        PublicModel model = new PublicModel();
-        model.setUser(user);
-        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
-    }
-    
-    @RequestMapping(value="/userinfo", method= RequestMethod.POST, headers="Accept=text/xml")
-    @ResponseBody
-    public DOMSource setUser(@RequestBody User user) {
-        RestfulModel model = m_loginService.getModel();
-        model.setUser(user);
-        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
-    }
-    
-    @RequestMapping(value="/logout", method= RequestMethod.GET)
-    @ResponseBody
-    public DOMSource logout()
-    {
-        m_loginService.logout();
-        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");       
-    }
-    
-    
-    @RequestMapping(value="/login", method=RequestMethod.GET)
-    @ResponseBody
-    public DOMSource login(
-        @RequestParam String j_username, 
-        @RequestParam String j_password)
-    {                
-        m_loginService.login(j_username, j_password);
-        return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");            
-    }
-    
-    @Autowired
-    public void setLoginService(LoginService service) 
-    {
-        m_loginService = service;
-    }
-    
+	private static final String RESPONSE_EXCEPTION = "TrollingException";
+	private static final String RESPONSE_TRANSACTIONTICKET = "TransactionTicket";
+	private static final String RESPONSE_RESPONSE = "TrollingResponse";
 
+	@RequestMapping(value = "/{collection}", method = RequestMethod.GET)
+	@ResponseBody
+	public Collection getItems(@PathVariable String collection) {
+		RestfulModel model = loginService.getModel();
+		return model.getTrollingObjects(collection);
+	}
+
+	@RequestMapping(value = "/views/{view}", method = RequestMethod.GET)
+	@ResponseBody
+	public DOMSource getSome(@PathVariable String view)
+			throws SQLException, ParserConfigurationException, FactoryConfigurationError, JAXBException {
+		ResultSet res = getSQLWithUser(view, "limit 12");
+		ResultSetMetaData meta = res.getMetaData();
+
+		return new DOMSource(Transformers.resultSetToXml(view, res, meta));
+	}
+
+	@RequestMapping(value = "/views/fishmap", method = RequestMethod.GET)
+	@ResponseBody
+	public DOMSource getWaypoints()
+			throws SQLException, ParserConfigurationException, FactoryConfigurationError, JAXBException {
+		return mapContainerToDomSource("", new WayPoints());
+	}
+
+	@RequestMapping(value = "/views/spinneritem", method = RequestMethod.GET)
+	@ResponseBody
+	public DOMSource getSpinnerItem()
+			throws SQLException, ParserConfigurationException, FactoryConfigurationError, JAXBException {
+		return mapContainerToDomSource("", new SpinnerItems());
+	}
+
+	private DOMSource mapContainerToDomSource(String wheres, ContainsMap fillable) throws SQLException,
+			JAXBException, PropertyException, ParserConfigurationException, FactoryConfigurationError {
+		ResultSet res = getSQLWithUser(fillable.getName(), wheres);
+		Transformers.resultSetToMapContainer(res, res.getMetaData(), fillable);
+
+		return Transformers.objectToDomSource(fillable);
+	}
+
+	private ResultSet getSQLWithUser(String view, String wheres) throws SQLException {
+		EntityManager em = Persistence.createEntityManagerFactory("uisteluweb").createEntityManager();
+		User user = em.createQuery("from User where username = :luser", User.class)
+				.setParameter("luser", loginService.getUserName()).getSingleResult();
+
+		return Transformers.sqlToResultSet("select * from " + view + "_view where user_id = " + user.getId() + " " + wheres);
+	}
+
+	@RequestMapping(value = "/{doctype}", method = RequestMethod.POST)
+	@ResponseBody
+	public DOMSource postItems(@RequestBody Collection content, @PathVariable String doctype) {
+		RestfulModel model = loginService.getModel();
+		RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
+		content.setType(model.getType(doctype));
+		response.setContent(model.appendTrollingObjects(content).toString());
+		return response.getBody();
+	}
+
+	@RequestMapping(value = "/{doctype}", method = RequestMethod.PUT)
+	@ResponseBody
+	public DOMSource putItems(@RequestBody Collection content, @PathVariable String doctype) {
+		RestfulModel model = loginService.getModel();
+		RestfulResponse response = new RestfulResponse(RESPONSE_TRANSACTIONTICKET);
+		content.setType(model.getType(doctype));
+		response.setContent(model.setTrollingObjects(content).toString());
+		return response.getBody();
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(RestfulException.class)
+	@ResponseBody
+	public DOMSource handleException(RestfulException ex) {
+		return RestfulResponse.getResponse(RESPONSE_EXCEPTION, ex.toString());
+	}
+
+	@RequestMapping(value = "/userinfo", method = RequestMethod.GET)
+	@ResponseBody
+	public DOMSource userinfo()
+			throws PropertyException, JAXBException, ParserConfigurationException, FactoryConfigurationError {
+		RestfulModel model = loginService.getModel();
+
+		return Transformers.objectToDomSource(model.getUser());
+	}
+
+	@RequestMapping(value = "/userinfo", method = RequestMethod.PUT, headers = "Accept=text/xml")
+	@ResponseBody
+	public DOMSource addUser(@RequestBody User user) {
+		PublicModel model = new PublicModel();
+		model.setUser(user);
+		return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
+	}
+
+	@RequestMapping(value = "/userinfo", method = RequestMethod.POST, headers = "Accept=text/xml")
+	@ResponseBody
+	public DOMSource setUser(@RequestBody User user) {
+		RestfulModel model = loginService.getModel();
+		model.setUser(user);
+		return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@ResponseBody
+	public DOMSource logout() {
+		loginService.logout();
+		return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@ResponseBody
+	public DOMSource login(@RequestParam String j_username, @RequestParam String j_password) {
+		loginService.login(j_username, j_password);
+		return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
+	}
 }
