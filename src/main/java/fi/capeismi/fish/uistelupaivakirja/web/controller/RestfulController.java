@@ -54,9 +54,14 @@ import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
 @Controller
 @RequestMapping("/api")
 public class RestfulController {
-	
+
 	@Autowired
 	private LoginService loginService;
+
+	@Autowired
+	private PublicModel publicModel;
+
+	private EntityManager em = Persistence.createEntityManagerFactory("uisteluweb").createEntityManager();
 
 	private static final String RESPONSE_EXCEPTION = "TrollingException";
 	private static final String RESPONSE_TRANSACTIONTICKET = "TransactionTicket";
@@ -93,8 +98,8 @@ public class RestfulController {
 		return mapContainerToDomSource("", new SpinnerItems());
 	}
 
-	private DOMSource mapContainerToDomSource(String wheres, ContainsMap fillable) throws SQLException,
-			JAXBException, PropertyException, ParserConfigurationException, FactoryConfigurationError {
+	private DOMSource mapContainerToDomSource(String wheres, ContainsMap fillable) throws SQLException, JAXBException,
+			PropertyException, ParserConfigurationException, FactoryConfigurationError {
 		ResultSet res = getSQLWithUser(fillable.getName(), wheres);
 		Transformers.resultSetToMapContainer(res, res.getMetaData(), fillable);
 
@@ -102,11 +107,11 @@ public class RestfulController {
 	}
 
 	private ResultSet getSQLWithUser(String view, String wheres) throws SQLException {
-		EntityManager em = Persistence.createEntityManagerFactory("uisteluweb").createEntityManager();
 		User user = em.createQuery("from User where username = :luser", User.class)
 				.setParameter("luser", loginService.getUserName()).getSingleResult();
 
-		return Transformers.sqlToResultSet("select * from " + view + "_view where user_id = " + user.getId() + " " + wheres);
+		return Transformers
+				.sqlToResultSet("select * from " + view + "_view where user_id = " + user.getId() + " " + wheres);
 	}
 
 	@RequestMapping(value = "/{doctype}", method = RequestMethod.POST)
@@ -148,8 +153,7 @@ public class RestfulController {
 	@RequestMapping(value = "/userinfo", method = RequestMethod.PUT, headers = "Accept=text/xml")
 	@ResponseBody
 	public DOMSource addUser(@RequestBody User user) {
-		PublicModel model = new PublicModel();
-		model.setUser(user);
+		publicModel.addUser(user);
 		return RestfulResponse.getResponse(RESPONSE_RESPONSE, "OK");
 	}
 

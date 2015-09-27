@@ -83,13 +83,10 @@ public class Transformers {
 		return new DOMSource(node);
 	}
 
-	public static TableView sqlToTableView(String sql, String name) throws SQLException {
-		return resultSetToTableView(sqlToResultSet(sql), name);
-	}
-
-	private static TableView resultSetToTableView(ResultSet res, final String name) {
+	public static TableView sqlToTableView(final String sql, final String name) throws SQLException {
+		final ResultSet res = sqlToResultSet(sql);
 		return new TableView() {
-
+		
 			@Override
 			public List<Map<String, String>> getTable() {
 				List<Map<String, String>> retval = new ArrayList<>();
@@ -109,15 +106,14 @@ public class Transformers {
 				} catch (Exception e) {
 					// Well snap.
 				}
-
+		
 				return retval;
 			}
-
+		
 			@Override
 			public String getName() {
 				return name;
 			}
 		};
 	}
-
 }

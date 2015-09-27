@@ -16,6 +16,8 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import org.springframework.stereotype.Component;
+
 import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
@@ -24,26 +26,22 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
+@Component
 public class PublicModel {
-    private DAOStore _daoStore = null;
-    
-    public PublicModel() {
-        this._daoStore = new DAOStore(null);
-    }
-    
-    public void setUser(User user) {
-        if(this._daoStore.getUser(user.getUsername()) != null) {
-            throw new RestfulException("user already exists");
-        }
-        
-        user.setSalt(LoginService.generateSalt());
-        String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
-        user.setPassword(hash);
-        this._daoStore.addUser(user);
-    }
-    
-//    public TableView getView(String viewname) {
-//        SearchObject search = this._daoStore.searchObject(viewname);
-//        return search.doSearch();
-//    }
+	private DAOStore _daoStore = null;
+
+	public PublicModel() {
+		this._daoStore = new DAOStore(null);
+	}
+
+	public void addUser(User user) {
+		if (this._daoStore.getUser(user.getUsername()) != null) {
+			throw new RestfulException("user already exists");
+		}
+
+		user.setSalt(LoginService.generateSalt());
+		String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
+		user.setPassword(hash);
+		this._daoStore.addUser(user);
+	}
 }
