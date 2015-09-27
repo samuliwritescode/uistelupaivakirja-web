@@ -27,14 +27,19 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
 public class RestfulModel {
-	private DAOStore daoStore = null;
+
+	private DAOStore daoStore;
+	private User user;
 
 	public RestfulModel(String user) {
-		this.daoStore = new DAOStore(user);
+		this.daoStore = new DAOStore();
+		this.user = daoStore.getUser(user);
+		if (user == null) {
+			throw new RestfulException("no such user");
+		}
 	}
 
 	public User getUser() {
-		User user = this.daoStore.getUser();
 		return user;
 	}
 
@@ -76,7 +81,7 @@ public class RestfulModel {
 	}
 
 	public Collection getTrollingObjects(String type) {
-		Collection dao = this.daoStore.getCollection(type);
+		Collection dao = this.daoStore.getCollection(type, getUser());
 		return dao;
 	}
 
@@ -85,16 +90,16 @@ public class RestfulModel {
 	}
 
 	public Integer appendTrollingObjects(Collection objects) {
-		this.daoStore.appendCollection(objects);
+		this.daoStore.appendCollection(objects, getUser());
 		return new Integer(objects.getRevision());
 	}
 
 	public Integer setTrollingObjects(Collection objects) {
-		this.daoStore.setCollection(objects);
+		this.daoStore.setCollection(objects, getUser());
 		return new Integer(objects.getRevision());
 	}
 
 	public void deleteTrollingObject(int identifier, int revision, String type) {
-		this.daoStore.deleteObject(identifier, revision, type);
+		this.daoStore.deleteObject(identifier, revision, type, getUser());
 	}
 }

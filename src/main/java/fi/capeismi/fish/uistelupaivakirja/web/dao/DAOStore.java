@@ -24,19 +24,16 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.springframework.stereotype.Component;
+
 import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
 
 /**
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
+@Component
 public class DAOStore {
-
-	private String _user = null;
-
-	public DAOStore(String user) {
-		this._user = user;
-	}
 
 	public static Type getType(final String type) {
 		return (Type) new TransactionDecorator() {
@@ -54,13 +51,12 @@ public class DAOStore {
 		}.getResult();
 	}
 
-	public Collection getCollection(String typename) {
+	public Collection getCollection(String typename, final User user) {
 		Type type = getType(typename);
-		return getCollection(type);
+		return getCollection(type, user);
 	}
 
-	private Collection getCollection(final Type typeDAO) {
-		final User user = getUser();
+	private Collection getCollection(final Type typeDAO, final User user) {
 		return (Collection) new TransactionDecorator() {
 			@Override
 			public Object doQuery() {
@@ -97,15 +93,6 @@ public class DAOStore {
 		};
 	}
 
-	public User getUser() {
-		User retval = getUser(this._user);
-		if (retval == null) {
-			throw new RestfulException("no user");
-		}
-
-		return retval;
-	}
-
 	public User getUser(final String username) {
 		return (User) new TransactionDecorator() {
 			@Override
@@ -123,8 +110,8 @@ public class DAOStore {
 		}.getResult();
 	}
 
-	public void deleteObject(final int identifier, final int revision, final String type) {
-		final Collection collection = getCollection(type);
+	public void deleteObject(final int identifier, final int revision, final String type, final User user) {
+		final Collection collection = getCollection(type, user);
 		new TransactionDecorator() {
 			@Override
 			public Object doQuery() {
@@ -188,8 +175,7 @@ public class DAOStore {
 		}
 	}
 
-	public void setCollection(final Collection collectionDAO) {
-		final User user = getUser();
+	public void setCollection(final Collection collectionDAO, final User user) {
 		new TransactionDecorator() {
 			@Override
 			public Object doQuery() {
@@ -224,8 +210,7 @@ public class DAOStore {
 		};
 	}
 
-	public void appendCollection(final Collection collectionDAO) {
-		final User user = getUser();
+	public void appendCollection(final Collection collectionDAO, final User user) {
 		new TransactionDecorator() {
 			@Override
 			public Object doQuery() {

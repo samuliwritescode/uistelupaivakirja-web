@@ -16,6 +16,7 @@
  */
 package fi.capeismi.fish.uistelupaivakirja.web.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fi.capeismi.fish.uistelupaivakirja.web.controller.LoginService;
@@ -28,20 +29,18 @@ import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
  */
 @Component
 public class PublicModel {
-	private DAOStore _daoStore = null;
 
-	public PublicModel() {
-		this._daoStore = new DAOStore(null);
-	}
+	@Autowired
+	private DAOStore daoStore = null;
 
 	public void addUser(User user) {
-		if (this._daoStore.getUser(user.getUsername()) != null) {
+		if (this.daoStore.getUser(user.getUsername()) != null) {
 			throw new RestfulException("user already exists");
 		}
 
 		user.setSalt(LoginService.generateSalt());
 		String hash = LoginService.getMD5Hash(user.getPlaintextpassword(), user.getSalt());
 		user.setPassword(hash);
-		this._daoStore.addUser(user);
+		this.daoStore.addUser(user);
 	}
 }
