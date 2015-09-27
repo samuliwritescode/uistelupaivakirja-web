@@ -20,8 +20,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.PropertyException;
 import javax.xml.parsers.FactoryConfigurationError;
@@ -41,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import fi.capeismi.fish.uistelupaivakirja.web.dao.Collection;
+import fi.capeismi.fish.uistelupaivakirja.web.dao.DAOStore;
 import fi.capeismi.fish.uistelupaivakirja.web.dao.User;
 import fi.capeismi.fish.uistelupaivakirja.web.model.ContainsMap;
 import fi.capeismi.fish.uistelupaivakirja.web.model.PublicModel;
@@ -60,8 +59,9 @@ public class RestfulController {
 
 	@Autowired
 	private PublicModel publicModel;
-
-	private EntityManager em = Persistence.createEntityManagerFactory("uisteluweb").createEntityManager();
+	
+	@Autowired
+	private DAOStore daoStore;
 
 	private static final String RESPONSE_EXCEPTION = "TrollingException";
 	private static final String RESPONSE_TRANSACTIONTICKET = "TransactionTicket";
@@ -107,8 +107,7 @@ public class RestfulController {
 	}
 
 	private ResultSet getSQLWithUser(String view, String wheres) throws SQLException {
-		User user = em.createQuery("from User where username = :luser", User.class)
-				.setParameter("luser", loginService.getUserName()).getSingleResult();
+		User user = daoStore.getUser(loginService.getUserName());
 
 		return Transformers
 				.sqlToResultSet("select * from " + view + "_view where user_id = " + user.getId() + " " + wheres);
