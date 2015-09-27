@@ -29,6 +29,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -40,6 +41,7 @@ import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulModel;
  *
  * @author Samuli Penttilä <samuli.penttila@gmail.com>
  */
+@Component
 public class LoginService {
 	private Map<String, RestfulModel> models = new HashMap<String, RestfulModel>();
 	private static final String SALT = "SETTHISBEFOREBUILD";

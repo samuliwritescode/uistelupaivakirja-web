@@ -32,7 +32,6 @@ import fi.capeismi.fish.uistelupaivakirja.web.model.RestfulException;
  */
 public class DAOStore {
 
-	private static DAOStore _instance = null;
 	private String _user = null;
 
 	public DAOStore(String user) {
